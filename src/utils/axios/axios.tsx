@@ -4,7 +4,6 @@ const instance = axios.create({ withCredentials: true });
 
 instance.defaults.baseURL = "http://localhost:4000/systemApi/";
 instance.defaults.headers.common["Content-Type"] = "application/json";
-instance.defaults.headers.post["Access-Control-Allow-Origin"] = "*";
 
 instance.interceptors.response.use(
   (resp) => resp,
@@ -15,7 +14,6 @@ instance.interceptors.response.use(
         {},
         { withCredentials: true }
       );
-      console.log(response);
 
       if (response.status === 200) {
         instance.defaults.headers.common[
@@ -25,6 +23,7 @@ instance.interceptors.response.use(
         return instance(error.config);
       }
     }
+    console.log("a");
     return error;
   }
 );
