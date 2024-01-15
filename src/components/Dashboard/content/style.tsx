@@ -10,7 +10,9 @@ interface Style {
 const styles: Style = {
   Paddings: { paddingTop: "1.8rem" },
   LogoFontSize: { fontSize: "3rem" },
-  FlexBoxDirection: { flexDirection: "column" },
+  FlexBoxDirection: {
+    flexDirection: "column",
+  },
   IconButton: {
     width: "4rem",
     height: "4rem",

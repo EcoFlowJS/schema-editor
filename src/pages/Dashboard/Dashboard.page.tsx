@@ -3,6 +3,7 @@ import { Container, Content, Footer, Header } from "rsuite";
 import DashboardHeader from "../../components/Dashboard/header/Header.component";
 import DashboardContents from "../../components/Dashboard/content/Contents.component";
 import DashboardFooter from "../../components/Dashboard/footer/Footer.component";
+import Drawer from "../../components/Dashboard/Drawer/Drawer";
 
 export default function Dashboard() {
   return (
@@ -18,6 +19,7 @@ export default function Dashboard() {
           <DashboardFooter />
         </Footer>
       </Container>
+      <Drawer />
     </>
   );
 }

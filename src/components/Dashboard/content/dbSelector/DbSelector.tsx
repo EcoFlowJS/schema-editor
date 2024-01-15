@@ -1,40 +1,36 @@
-import React from "react";
-
-import { RiAdminLine } from "react-icons/ri";
-import { BsDatabaseFill } from "react-icons/bs";
-import { TbBinaryTree2 } from "react-icons/tb";
+import React, { useEffect, useState } from "react";
+import { TbPlus } from "react-icons/tb";
 import getConnections from "../../../../service/connections/getConnections.service";
 import { Stack } from "rsuite";
-import Button from "../button/Button";
+import Button from "../Button/Button";
 import styles from "../style";
+import ArrayLoop from "../../../../utils/ArrayLoop/ArrayLoop";
+import DbButton from "../DbButton/DbButton";
+import { useAtom } from "jotai";
+import { createConnectionDrawerOpenClose } from "../../../../store/satabaseConnections.store";
 
 export default function DbSelector() {
-  const getConnectionsList = getConnections();
-  console.log(getConnectionsList);
+  const [getConnectionsList, setgetConnectionsList] = useState(
+    getConnections()
+  );
+
+  const [open, setOpen] = useAtom(createConnectionDrawerOpenClose);
+
   return (
-    <Stack style={{ maxWidth: "85vw" }}>
-      <Button
-        appearance="primary"
-        icon={<RiAdminLine />}
-        labletext="Admin Panel"
-        style={styles.IconButton}
-        circle
+    <Stack spacing={15} style={{ maxWidth: "85vw" }} alignItems="flex-start">
+      <ArrayLoop
+        of={getConnectionsList.payload}
+        render={(item: any, index: any) => (
+          <DbButton iconName={item.driver} lable={item.connectionsName} />
+        )}
       />
       <Button
-        color="orange"
-        appearance="primary"
-        icon={<BsDatabaseFill />}
-        labletext="Schema Panel"
-        style={styles.IconButton}
-        circle
-      />
-      <Button
-        color="yellow"
-        appearance="primary"
-        icon={<TbBinaryTree2 />}
+        appearance="default"
+        icon={<TbPlus />}
         style={{ ...styles.IconButton }}
         circle
-        labletext="Flow Panel"
+        labletext="New Connection"
+        onClick={() => setOpen(true)}
       />
     </Stack>
   );

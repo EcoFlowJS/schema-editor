@@ -16,7 +16,7 @@ export default function Button(contents: DashboardButtonProps) {
       <FlexboxGrid.Item>
         <IconButton {...contents} />
       </FlexboxGrid.Item>
-      <FlexboxGrid.Item style={{ padding: "1rem" }}>
+      <FlexboxGrid.Item style={{ paddingTop: "0.8rem", maxWidth: "4.5rem" }}>
         <strong>
           <span>{labletext}</span>
         </strong>
