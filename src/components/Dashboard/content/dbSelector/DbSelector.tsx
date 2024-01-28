@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { TbPlus } from "react-icons/tb";
 import getConnections from "../../../../service/connections/getConnections.service";
 import { Stack } from "rsuite";
-import Button from "../Button/Button";
+import Button from "../button/Button";
 import styles from "../style";
 import ArrayLoop from "../../../../utils/ArrayLoop/ArrayLoop";
 import DbButton from "../DbButton/DbButton";

@@ -45,14 +45,14 @@ export default function () {
               console.log(value);
               if (Object.keys(value).length > 0) {
                 setIsLoading(true);
-                // setTimeout(() => {
-                //   setIsLoading(false);
-                //   setOpenSuccessModal(true);
-                // }, 3000);
                 setTimeout(() => {
                   setIsLoading(false);
-                  noti.show();
-                }, 100);
+                  setOpenSuccessModal(true);
+                }, 3000);
+                // setTimeout(() => {
+                //   setIsLoading(false);
+                //   noti.show();
+                // }, 100);
               }
             }}
             disabled={isLoading}
