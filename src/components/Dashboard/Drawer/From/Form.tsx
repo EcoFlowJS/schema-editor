@@ -4,8 +4,10 @@ import {
   Form,
   Input,
   InputNumber,
-  Schema,
+  Modal,
   SelectPicker,
+  Stack,
+  Toggle,
 } from "rsuite";
 import FormGroup from "../../../Form/FromGroup/FromGroup";
 import Validator from "./Validator";
@@ -14,12 +16,20 @@ import InputPassword from "../../../Form/InputPassword/InputPassword";
 
 interface FromGroupProps {
   Ref?: MutableRefObject<null>;
-  OnSubmit(value: any): void;
+  OnSubmit?: (value: any) => void;
+  disabled?: boolean;
+  reset?: boolean;
 }
 
-export default function ({ OnSubmit, Ref }: FromGroupProps) {
+export default function ({
+  OnSubmit = () => {},
+  Ref,
+  disabled = false,
+  reset = false,
+}: FromGroupProps) {
   const [dbDriverValue, setDbDriverValue] = useState("");
   const [value, setValue] = useState({
+    ConnectionName: "",
     dbDriver: "",
     mongoConnectionStrinng: "",
     SqliteFileName: "",
@@ -28,7 +38,9 @@ export default function ({ OnSubmit, Ref }: FromGroupProps) {
     Port: 0,
     Username: "",
     Password: "",
+    isSSL: false,
   });
+  const [isSSL, setIsSSL] = React.useState(false);
 
   useEffect(() => {
     if (value.dbDriver === "MySQL") setValue({ ...value, Port: 3306 });
@@ -36,10 +48,31 @@ export default function ({ OnSubmit, Ref }: FromGroupProps) {
     if (value.dbDriver === "PostgreSQL") setValue({ ...value, Port: 5432 });
   }, [value.dbDriver]);
 
+  useEffect(() => {
+    if (reset) {
+      reset = false;
+      setDbDriverValue("");
+      setValue({
+        ConnectionName: "",
+        dbDriver: "",
+        mongoConnectionStrinng: "",
+        SqliteFileName: "",
+        SqliteFileLoc: "",
+        Host: "localhost",
+        Port: 0,
+        Username: "",
+        Password: "",
+        isSSL: false,
+      });
+      setIsSSL(false);
+    }
+  }, [reset]);
+
   return (
     <>
       <Container style={{ minHeight: "100%" }}>
         <Form
+          disabled={disabled}
           model={Validator}
           checkTrigger="none"
           style={{ minHeight: "100%" }}
@@ -50,6 +83,14 @@ export default function ({ OnSubmit, Ref }: FromGroupProps) {
             status ? OnSubmit(value) : OnSubmit({});
           }}
         >
+          <FormGroup
+            name="ConnectionName"
+            label="Name"
+            accepter={Input}
+            autoComplete="off"
+            placeholder="Name"
+            size="lg"
+          />
           <FormGroup
             name="dbDriver"
             label="Databse Driver"
@@ -134,6 +175,17 @@ export default function ({ OnSubmit, Ref }: FromGroupProps) {
                   placeholder="Database Name"
                   size="lg"
                 />
+                <Stack spacing={20}>
+                  Enable SSL:
+                  <Toggle
+                    disabled={disabled}
+                    onChange={(val) => {
+                      setIsSSL(val);
+                      setValue({ ...value, isSSL: val });
+                    }}
+                    checked={isSSL}
+                  />
+                </Stack>
               </>
             )
           ) : null}
