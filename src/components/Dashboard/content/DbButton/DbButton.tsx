@@ -4,7 +4,7 @@ import { SiSqlite } from "react-icons/si";
 import { SiMysql } from "react-icons/si";
 import { BiLogoPostgresql } from "react-icons/bi";
 import styles from "../style";
-import Button from "../button/Button";
+import Button from "../Button/Button";
 import { TypeAttributes } from "rsuite/esm/@types/common";
 import { Link } from "react-router-dom";
 

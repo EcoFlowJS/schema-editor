@@ -1,7 +1,7 @@
 import { MdOutlineDashboardCustomize } from "react-icons/md";
 import { FlexboxGrid, Stack } from "rsuite";
 import styles from "./style";
-import DbSelector from "./dbSelector/DbSelector";
+import DbSelector from "./DbSelector/DbSelector";
 import { Suspense } from "react";
 import Loading from "./Loading/Loading";
 

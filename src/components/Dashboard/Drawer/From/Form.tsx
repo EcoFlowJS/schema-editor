@@ -1,18 +1,21 @@
 import React, { MutableRefObject, useEffect, useState } from "react";
 import {
   Container,
-  Form,
   Input,
   InputNumber,
-  Modal,
   SelectPicker,
   Stack,
   Toggle,
 } from "rsuite";
-import FormGroup from "../../../Form/FromGroup/FromGroup";
 import Validator from "./Validator";
 import DB_DriverList from "./DB_DriverList";
-import InputPassword from "../../../Form/InputPassword/InputPassword";
+import { ConnectionDefinations } from "@eco-flow/types";
+import {
+  Form,
+  FormGroup,
+  InputEnv,
+  InputPasswordEnv,
+} from "@eco-flow/components-lib";
 
 interface FromGroupProps {
   Ref?: MutableRefObject<null>;
@@ -28,10 +31,10 @@ export default function ({
   reset = false,
 }: FromGroupProps) {
   const [dbDriverValue, setDbDriverValue] = useState("");
-  const [value, setValue] = useState({
+  const [value, setValue] = useState<ConnectionDefinations>({
     ConnectionName: "",
     dbDriver: "",
-    mongoConnectionStrinng: "",
+    mongoConnectionString: "",
     SqliteFileName: "",
     SqliteFileLoc: "",
     Host: "localhost",
@@ -39,8 +42,14 @@ export default function ({
     Username: "",
     Password: "",
     isSSL: false,
+    Database: "",
   });
-  const [isSSL, setIsSSL] = React.useState(false);
+  const [isSSL, setIsSSL] = useState(false);
+  const [isEnvMongoConnectionString, setEnvMongoConnectionString] =
+    useState(false);
+  const [isEnvUsername, setEnvUsername] = useState(false);
+  const [isEnvPassword, setEnvPassword] = useState(false);
+  const [isEnvDatabase, setEnvDatabase] = useState(false);
 
   useEffect(() => {
     if (value.dbDriver === "MySQL") setValue({ ...value, Port: 3306 });
@@ -55,7 +64,7 @@ export default function ({
       setValue({
         ConnectionName: "",
         dbDriver: "",
-        mongoConnectionStrinng: "",
+        mongoConnectionString: "",
         SqliteFileName: "",
         SqliteFileLoc: "",
         Host: "localhost",
@@ -63,6 +72,7 @@ export default function ({
         Username: "",
         Password: "",
         isSSL: false,
+        Database: "",
       });
       setIsSSL(false);
     }
@@ -80,7 +90,13 @@ export default function ({
           formValue={value}
           onSubmit={(status, event) => {
             event.preventDefault();
-            status ? OnSubmit(value) : OnSubmit({});
+            const Data: ConnectionDefinations = { ...value };
+            if (isEnvMongoConnectionString)
+              Data.mongoConnectionString = `env(${Data.mongoConnectionString})`;
+            if (isEnvUsername) Data.Username = `env(${Data.Username})`;
+            if (isEnvPassword) Data.Password = `env(${Data.Password})`;
+            if (isEnvDatabase) Data.Database = `env(${Data.Database})`;
+            status ? OnSubmit(Data) : OnSubmit({});
           }}
         >
           <FormGroup
@@ -106,12 +122,14 @@ export default function ({
             dbDriverValue === "MongoDB" ? (
               <>
                 <FormGroup
-                  name="mongoConnectionStrinng"
+                  name="mongoConnectionString"
                   label="Connection String"
-                  accepter={Input}
+                  accepter={InputEnv}
                   autoComplete="off"
                   placeholder="Connection String"
                   size="lg"
+                  envCheckbox
+                  envCheckboxOnChange={setEnvMongoConnectionString}
                 />
               </>
             ) : dbDriverValue === "Sqlite" ? (
@@ -155,25 +173,31 @@ export default function ({
                 <FormGroup
                   name="Username"
                   label="Username"
-                  accepter={Input}
+                  accepter={InputEnv}
                   autoComplete="off"
                   placeholder="Username"
                   size="lg"
+                  envCheckbox
+                  envCheckboxOnChange={setEnvUsername}
                 />
                 <FormGroup
                   name="Password"
                   label="Password"
-                  accepter={InputPassword}
+                  accepter={InputPasswordEnv}
                   placeholder="Password"
                   size="lg"
+                  envCheckbox
+                  envCheckboxOnChange={setEnvPassword}
                 />
                 <FormGroup
                   name="Database"
                   label="Database Name"
-                  accepter={Input}
+                  accepter={InputEnv}
                   autoComplete="off"
                   placeholder="Database Name"
                   size="lg"
+                  envCheckbox
+                  envCheckboxOnChange={setEnvDatabase}
                 />
                 <Stack spacing={20}>
                   Enable SSL:

@@ -1,12 +1,9 @@
 import axios from "../../utils/axios/axios";
-import wrapPromise from "../../utils/suspense/wrapPromise";
 
-const promise = new Promise<any>(async (resolve, reject) => {
-  try {
-    resolve((await axios.get("schema/connections")).data);
-  } catch (error) {
-    reject(error);
-  }
-});
+const getConnectionsService = () => {
+  return new Promise<any>(async (resolve) =>
+    resolve((await axios.get("schema/connections")).data)
+  );
+};
 
-export default wrapPromise(promise);
+export default getConnectionsService;

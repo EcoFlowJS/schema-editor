@@ -1,3 +1,4 @@
+import { ConnectionDefinations } from "@eco-flow/types";
 import { Schema } from "rsuite";
 
 const { StringType, NumberType } = Schema.Types;
@@ -5,7 +6,7 @@ const { StringType, NumberType } = Schema.Types;
 const Validator = Schema.Model({
   ConnectionName: StringType().isRequired("Please provide Connection Name."),
   dbDriver: StringType().isRequired("Select Database Driver"),
-  mongoConnectionStrinng: StringType().when((schema) => {
+  mongoConnectionString: StringType().when((schema) => {
     const checkResult = schema.dbDriver.value;
     return checkResult === "MongoDB"
       ? StringType().isRequired("Please provide Connection String.")

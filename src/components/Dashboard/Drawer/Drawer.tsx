@@ -1,30 +1,58 @@
 import { useAtom } from "jotai";
 import React, { useEffect, useRef, useState } from "react";
 import { Drawer, Button, Divider } from "rsuite";
-import { createConnectionDrawerOpenClose } from "../../../store/satabaseConnections.store";
+import { createConnectionDrawerOpenClose } from "../../../store/databaseConnections.store";
 import Form from "./From/Form";
 import { AlertModal } from "@eco-flow/components-lib";
 import "@eco-flow/components-lib/style.css";
 import { useNotification } from "@eco-flow/components-lib";
+import createConnectionService from "../../../service/connections/createConnection.service";
+import { ConnectionResponse } from "@eco-flow/types";
+import { databaseGetConnectionList } from "../../../store/databaseGetConnectionList.store";
+import getConnectionsService from "../../../service/connections/getConnections.service";
 
 export default function () {
+  const [_databaseConnectionList, setDatabaseConnectionList] = useAtom(
+    databaseGetConnectionList
+  );
+
   const [open, setOpen] = useAtom(createConnectionDrawerOpenClose);
   const [isLoading, setIsLoading] = useState(false);
   const [openSuccessModal, setOpenSuccessModal] = useState(false);
   const [resetForm, setReaetForm] = useState(false);
   const formRef = useRef(null);
+  const [response, setResponse] = useState<ConnectionResponse>({});
 
   useEffect(() => setReaetForm(false), [resetForm]);
+  useEffect(() => {
+    setIsLoading(false);
+    if (response.error) errorNoti.show();
+    if (response.success) {
+      setOpenSuccessModal(true);
+      getConnectionsService().then((val) => {
+        setDatabaseConnectionList(val);
+        console.log(val);
+      });
+    }
+    // if (Object.keys(response).length > 0) setResponse({});
+  }, [response]);
 
-  const noti = useNotification({
+  const errorNoti = useNotification({
     header: "Connection Creation Error",
     type: "error",
-    children: <>sdf</>,
+    placement: "bottomEnd",
+    children: <>{response.error ? response.payload.message : <></>}</>,
   });
 
   return (
     <>
-      <Drawer backdrop="static" open={open} onClose={() => setOpen(false)}>
+      <Drawer
+        backdrop="static"
+        open={open}
+        onClose={async () => {
+          setOpen(false);
+        }}
+      >
         <Drawer.Header>
           <Drawer.Title>Create New Connection</Drawer.Title>
           <Drawer.Actions>
@@ -41,18 +69,11 @@ export default function () {
         <Drawer.Body>
           <Form
             Ref={formRef}
-            OnSubmit={(value) => {
+            OnSubmit={async (value) => {
               console.log(value);
               if (Object.keys(value).length > 0) {
                 setIsLoading(true);
-                setTimeout(() => {
-                  setIsLoading(false);
-                  setOpenSuccessModal(true);
-                }, 3000);
-                // setTimeout(() => {
-                //   setIsLoading(false);
-                //   noti.show();
-                // }, 100);
+                setResponse(await createConnectionService(value));
               }
             }}
             disabled={isLoading}
