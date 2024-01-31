@@ -16,12 +16,14 @@ import {
   InputEnv,
   InputPasswordEnv,
 } from "@eco-flow/components-lib";
+import isEnv from "../../../../utils/isEnv/inEnv";
 
 interface FromGroupProps {
   Ref?: MutableRefObject<null>;
   OnSubmit?: (value: any) => void;
   disabled?: boolean;
   reset?: boolean;
+  defaultValue?: ConnectionDefinations;
 }
 
 export default function ({
@@ -29,6 +31,7 @@ export default function ({
   Ref,
   disabled = false,
   reset = false,
+  defaultValue,
 }: FromGroupProps) {
   const [dbDriverValue, setDbDriverValue] = useState("");
   const [value, setValue] = useState<ConnectionDefinations>({
@@ -47,9 +50,16 @@ export default function ({
   const [isSSL, setIsSSL] = useState(false);
   const [isEnvMongoConnectionString, setEnvMongoConnectionString] =
     useState(false);
+  const [
+    isEnvMongoConnectionStringChecked,
+    setEnvMongoConnectionStringChecked,
+  ] = useState(false);
   const [isEnvUsername, setEnvUsername] = useState(false);
+  const [isEnvUsernameChecked, setEnvUsernameChecked] = useState(false);
   const [isEnvPassword, setEnvPassword] = useState(false);
+  const [isEnvPasswordChecked, setEnvPasswordChecked] = useState(false);
   const [isEnvDatabase, setEnvDatabase] = useState(false);
+  const [isEnvDatabaseChecked, setEnvDatabaseChecked] = useState(false);
 
   useEffect(() => {
     if (value.dbDriver === "MySQL") setValue({ ...value, Port: 3306 });
@@ -77,6 +87,37 @@ export default function ({
       setIsSSL(false);
     }
   }, [reset]);
+
+  useEffect(() => {
+    if (typeof defaultValue !== "undefined") {
+      const [isEnvMongoString, EnvMongoString] = isEnv(
+        defaultValue.mongoConnectionString
+      );
+      defaultValue = { ...defaultValue, mongoConnectionString: EnvMongoString };
+      setEnvMongoConnectionStringChecked(isEnvMongoString);
+      setEnvMongoConnectionString(isEnvMongoString);
+
+      const [isEnvUsername, EnvUsername] = isEnv(defaultValue.Username);
+      defaultValue = { ...defaultValue, Username: EnvUsername };
+      setEnvUsernameChecked(isEnvUsername);
+      setEnvUsername(isEnvUsername);
+
+      const [isEnvPassword, EnvPassword] = isEnv(defaultValue.Password);
+      defaultValue = { ...defaultValue, Password: EnvPassword };
+      setEnvPasswordChecked(isEnvPassword);
+      setEnvPassword(isEnvPassword);
+
+      const [isEnvDatabase, EnvDatabase] = isEnv(defaultValue.Database);
+      defaultValue = { ...defaultValue, Database: EnvDatabase };
+      setEnvDatabaseChecked(isEnvDatabase);
+      setEnvDatabase(isEnvDatabase);
+
+      defaultValue.dbDriver !== ""
+        ? setDbDriverValue(defaultValue.dbDriver)
+        : setDbDriverValue("");
+      setValue(defaultValue);
+    }
+  }, [defaultValue]);
 
   return (
     <>
@@ -117,6 +158,7 @@ export default function ({
             defaultValue={dbDriverValue}
             placeholder="Select Database Driver"
             onSelect={setDbDriverValue}
+            onClean={() => setDbDriverValue("")}
           />
           {dbDriverValue !== "" ? (
             dbDriverValue === "MongoDB" ? (
@@ -130,6 +172,7 @@ export default function ({
                   size="lg"
                   envCheckbox
                   envCheckboxOnChange={setEnvMongoConnectionString}
+                  defaultChecked={isEnvMongoConnectionStringChecked}
                 />
               </>
             ) : dbDriverValue === "Sqlite" ? (
@@ -179,6 +222,7 @@ export default function ({
                   size="lg"
                   envCheckbox
                   envCheckboxOnChange={setEnvUsername}
+                  defaultChecked={isEnvUsernameChecked}
                 />
                 <FormGroup
                   name="Password"
@@ -188,6 +232,7 @@ export default function ({
                   size="lg"
                   envCheckbox
                   envCheckboxOnChange={setEnvPassword}
+                  defaultChecked={isEnvPasswordChecked}
                 />
                 <FormGroup
                   name="Database"
@@ -198,6 +243,7 @@ export default function ({
                   size="lg"
                   envCheckbox
                   envCheckboxOnChange={setEnvDatabase}
+                  defaultChecked={isEnvDatabaseChecked}
                 />
                 <Stack spacing={20}>
                   Enable SSL:
@@ -212,7 +258,9 @@ export default function ({
                 </Stack>
               </>
             )
-          ) : null}
+          ) : (
+            <></>
+          )}
           <input type="submit" hidden ref={Ref} />
         </Form>
       </Container>

@@ -1,14 +1,16 @@
 import { useAtom } from "jotai";
 import React, { useEffect, useRef, useState } from "react";
 import { Drawer, Button, Divider } from "rsuite";
-import { createConnectionDrawerOpenClose } from "../../../store/databaseConnections.store";
+import {
+  createConnectionDrawerOpenClose,
+  databaseGetConnectionList,
+} from "../../../store/Connections.store";
 import Form from "./From/Form";
 import { AlertModal } from "@eco-flow/components-lib";
 import "@eco-flow/components-lib/style.css";
 import { useNotification } from "@eco-flow/components-lib";
 import createConnectionService from "../../../service/connections/createConnection.service";
 import { ConnectionResponse } from "@eco-flow/types";
-import { databaseGetConnectionList } from "../../../store/databaseGetConnectionList.store";
 import getConnectionsService from "../../../service/connections/getConnections.service";
 
 export default function () {
@@ -70,7 +72,6 @@ export default function () {
           <Form
             Ref={formRef}
             OnSubmit={async (value) => {
-              console.log(value);
               if (Object.keys(value).length > 0) {
                 setIsLoading(true);
                 setResponse(await createConnectionService(value));

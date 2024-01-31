@@ -7,15 +7,21 @@ import styles from "../style";
 import Button from "../Button/Button";
 import { TypeAttributes } from "rsuite/esm/@types/common";
 import { Link } from "react-router-dom";
+import { IconButtonProps } from "rsuite";
+import { editConnectionName } from "../../../../store/Connections.store";
+import { useAtom } from "jotai";
 
-interface DbButtonProps {
+interface DbButtonProps extends IconButtonProps {
   iconName?: string;
   lable?: string;
 }
 
-export default function DbButton(props: DbButtonProps) {
-  const { iconName = "", lable = "" } = props;
-
+export default function DbButton({
+  iconName = "",
+  lable = "",
+  ...props
+}: DbButtonProps) {
+  const [connectionName] = useAtom(editConnectionName);
   const icon =
     iconName === "MYSQL" ? (
       <SiMysql />
@@ -43,15 +49,30 @@ export default function DbButton(props: DbButtonProps) {
   ] as TypeAttributes.Color;
 
   return (
-    <Link to={`/editor/schema/database/${lable}`}>
-      <Button
-        color={color}
-        appearance="primary"
-        icon={icon}
-        style={{ ...styles.IconButton }}
-        circle
-        labletext={lable}
-      />
-    </Link>
+    <>
+      {lable !== connectionName ? (
+        <Link to={`/editor/schema/database/${lable}`}>
+          <Button
+            color={color}
+            appearance="primary"
+            icon={icon}
+            style={{ ...styles.IconButton }}
+            circle
+            labletext={lable}
+            {...props}
+          />
+        </Link>
+      ) : (
+        <Button
+          color={color}
+          appearance="primary"
+          icon={icon}
+          style={{ ...styles.IconButton }}
+          circle
+          labletext={lable}
+          {...props}
+        />
+      )}
+    </>
   );
 }

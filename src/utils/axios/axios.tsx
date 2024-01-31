@@ -23,7 +23,6 @@ instance.interceptors.response.use(
         return instance(error.config);
       }
     }
-    console.log("a");
     return error;
   }
 );
