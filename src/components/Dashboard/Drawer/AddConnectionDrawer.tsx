@@ -31,10 +31,7 @@ export default function () {
     if (response.error) errorNoti.show();
     if (response.success) {
       setOpenSuccessModal(true);
-      getConnectionsService().then((val) => {
-        setDatabaseConnectionList(val);
-        console.log(val);
-      });
+      setDatabaseConnectionList(response.payload.connectionList);
     }
     // if (Object.keys(response).length > 0) setResponse({});
   }, [response]);

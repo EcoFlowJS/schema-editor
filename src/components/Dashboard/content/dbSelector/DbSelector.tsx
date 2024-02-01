@@ -1,7 +1,7 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { TbPlus } from "react-icons/tb";
 import getConnectionsPromise from "../../../../service/connections/getConnectionsPromise.service";
-import { Stack } from "rsuite";
+import { Stack, Tooltip, Whisper } from "rsuite";
 import Button from "../Button/Button";
 import styles from "../style";
 import DbButton from "../DbButton/DbButton";
@@ -12,9 +12,11 @@ import {
   editConnectionDrawerOpenClose,
   editConnectionName,
 } from "../../../../store/Connections.store";
+import getConnectionsService from "../../../../service/connections/getConnections.service";
+import Loading from "../Loading/Loading";
 
 export default function DbSelector() {
-  const list = getConnectionsPromise();
+  const [isLoading, setLoading] = useState(true);
   const [getConnectionsList, setGetConnectionsList] = useAtom(
     databaseGetConnectionList
   );
@@ -24,9 +26,14 @@ export default function DbSelector() {
   const [_editNewConnectionDraawer, setEditNewConnectionDrawer] = useAtom(
     editConnectionDrawerOpenClose
   );
-  const [connectionName, setConnectionName] = useAtom(editConnectionName);
+  const [_connectionName, setConnectionName] = useAtom(editConnectionName);
 
-  useEffect(() => setGetConnectionsList(list), []);
+  useEffect(() => {
+    getConnectionsService().then((val) => {
+      setLoading(false);
+      setGetConnectionsList(val);
+    });
+  }, []);
 
   let timeout: NodeJS.Timeout = setTimeout(() => {});
 
@@ -37,26 +44,37 @@ export default function DbSelector() {
     }, 3000);
   };
   return (
-    <Stack spacing={15} style={{ maxWidth: "85vw" }} alignItems="flex-start">
-      {getConnectionsList.payload.map((item: any, index: any) => {
-        return (
-          <DbButton
-            key={index}
-            onMouseUp={() => clearTimeout(timeout)}
-            onMouseDown={() => triggerEditConnections(item.connectionsName)}
-            iconName={item.driver}
-            lable={item.connectionsName}
+    <>
+      {isLoading ? (
+        <Loading />
+      ) : (
+        <Stack
+          spacing={15}
+          style={{ maxWidth: "85vw" }}
+          alignItems="flex-start"
+        >
+          {getConnectionsList.payload.map((item: any, index: any) => {
+            return (
+              <DbButton
+                key={index}
+                onMouseUp={() => clearTimeout(timeout)}
+                onMouseDown={() => triggerEditConnections(item.connectionsName)}
+                iconName={item.driver}
+                lable={item.connectionsName}
+              />
+            );
+          })}
+
+          <Button
+            appearance="default"
+            icon={<TbPlus />}
+            style={{ ...styles.IconButton }}
+            circle
+            labletext="New Connection"
+            onClick={() => setOpenNewConnectionDrawer(true)}
           />
-        );
-      })}
-      <Button
-        appearance="default"
-        icon={<TbPlus />}
-        style={{ ...styles.IconButton }}
-        circle
-        labletext="New Connection"
-        onClick={() => setOpenNewConnectionDrawer(true)}
-      />
-    </Stack>
+        </Stack>
+      )}
+    </>
   );
 }

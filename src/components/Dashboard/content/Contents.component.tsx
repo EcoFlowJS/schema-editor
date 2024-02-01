@@ -2,8 +2,6 @@ import { MdOutlineDashboardCustomize } from "react-icons/md";
 import { FlexboxGrid, Stack } from "rsuite";
 import styles from "./style";
 import DbSelector from "./DbSelector/DbSelector";
-import { Suspense } from "react";
-import Loading from "./Loading/Loading";
 
 export default function DashboardContents() {
   return (
@@ -20,9 +18,7 @@ export default function DashboardContents() {
       </FlexboxGrid.Item>
       <FlexboxGrid.Item>
         <div style={{ paddingTop: "4rem" }}>
-          <Suspense fallback={<Loading />}>
-            <DbSelector />
-          </Suspense>
+          <DbSelector />
         </div>
       </FlexboxGrid.Item>
     </FlexboxGrid>

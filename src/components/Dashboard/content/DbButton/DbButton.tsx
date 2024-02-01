@@ -7,7 +7,7 @@ import styles from "../style";
 import Button from "../Button/Button";
 import { TypeAttributes } from "rsuite/esm/@types/common";
 import { Link } from "react-router-dom";
-import { IconButtonProps } from "rsuite";
+import { IconButtonProps, Tooltip, Whisper } from "rsuite";
 import { editConnectionName } from "../../../../store/Connections.store";
 import { useAtom } from "jotai";
 
@@ -51,17 +51,29 @@ export default function DbButton({
   return (
     <>
       {lable !== connectionName ? (
-        <Link to={`/editor/schema/database/${lable}`}>
-          <Button
-            color={color}
-            appearance="primary"
-            icon={icon}
-            style={{ ...styles.IconButton }}
-            circle
-            labletext={lable}
-            {...props}
-          />
-        </Link>
+        <Whisper
+          placement="top"
+          speaker={
+            <Tooltip>
+              <strong>Click</strong> and <strong>Hold</strong> to open
+              modificator.
+            </Tooltip>
+          }
+        >
+          <span>
+            <Link to={`/editor/schema/database/${lable}`}>
+              <Button
+                color={color}
+                appearance="primary"
+                icon={icon}
+                style={{ ...styles.IconButton }}
+                circle
+                labletext={lable}
+                {...props}
+              />
+            </Link>
+          </span>
+        </Whisper>
       ) : (
         <Button
           color={color}
