@@ -5,11 +5,14 @@ import wrapPromise from "../../utils/suspense/wrapPromise";
 const promise = new Promise<any>(async (resolve, reject) => {
   try {
     let result = {
+      isAuth: false,
       isNew: false,
       isLoggedIn: false,
       userID: undefined,
     };
     const res = (await axios.get("init/status")).data;
+    result.isAuth = res.isAuth;
+
     if (!res.isAuth) {
       if (_.has(res, "getAccessToken"))
         axios.defaults.headers.common[

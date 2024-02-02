@@ -2,6 +2,8 @@ import { Outlet, useLocation } from "react-router-dom";
 import initService from "../../service/init/init.service";
 import useNavagator from "../../utils/redirect/redirect";
 import { useEffect } from "react";
+import { useAtom } from "jotai";
+import initStatus from "../../store/initStatus.store";
 
 export default function BaseLayout() {
   const redirect = (url: string) => () => {
@@ -10,8 +12,10 @@ export default function BaseLayout() {
   const status = initService();
   const navigate = useNavagator();
   const location = useLocation();
+  const [_initStatus, setinitStatus] = useAtom(initStatus);
 
   useEffect(() => {
+    setinitStatus({ ...status });
     if (status.isNew && !status.isLoggedIn) redirect("/auth/setup");
     if (!status.isNew && !status.isLoggedIn) redirect("/auth/login");
     if (!status.isNew && status.isLoggedIn)
