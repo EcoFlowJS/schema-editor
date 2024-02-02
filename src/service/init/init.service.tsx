@@ -7,29 +7,29 @@ const promise = new Promise<any>(async (resolve, reject) => {
     let result = {
       isNew: false,
       isLoggedIn: false,
+      userID: undefined,
     };
     const res = (await axios.get("init/status")).data;
     if (!res.isAuth) {
-      axios.defaults.headers.common[
-        "Authorization"
-      ] = `Bearer ${res.getAccessToken}`;
+      if (_.has(res, "getAccessToken"))
+        axios.defaults.headers.common[
+          "Authorization"
+        ] = `Bearer ${res.getAccessToken}`;
       result.isLoggedIn = true;
+      result.userID = res.userID;
     }
 
     if (res.isAuth && res.isNewClient) result.isNew = true;
 
     if (res.isAuth && !res.isNewClient)
       try {
-        if ((await axios.get("auth/users/isAuthenticated")).data.success)
+        if ((await axios.get("auth/users/isAuthenticated")).data.success) {
           result.isLoggedIn = true;
+          //To-Do: get user information;
+        }
       } catch {
         result.isLoggedIn = false;
       }
-
-    if (_.has(res, "getAccessToken"))
-      axios.defaults.headers.common[
-        "Authorization"
-      ] = `Bearer ${res.getAccessToken}`;
 
     setTimeout(() => resolve(result), 200);
   } catch (err) {
