@@ -8,6 +8,11 @@ instance.defaults.headers.common["Content-Type"] = "application/json";
 instance.interceptors.response.use(
   (resp) => resp,
   async (error) => {
+    switch (error.code) {
+      case "ERR_NETWORK":
+        throw { error: true, code: 504, payload: error };
+    }
+
     if (error.response.status === 401) {
       const response = await instance.patch(
         "auth/users/refreshToken",

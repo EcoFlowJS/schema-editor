@@ -36,7 +36,7 @@ const promise = new Promise<any>(async (resolve, reject) => {
 
     setTimeout(() => resolve(result), 200);
   } catch (err) {
-    reject(err);
+    reject({ error: true, code: 504, payload: err });
   }
 });
 
