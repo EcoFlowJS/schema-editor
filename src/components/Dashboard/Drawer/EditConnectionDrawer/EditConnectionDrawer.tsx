@@ -6,7 +6,7 @@ import {
   editConnectionDrawerOpenClose,
   editConnectionName,
 } from "../../../../store/Connections.store";
-import { ConnectionResponse } from "@eco-flow/types";
+import { ApiResponse } from "@eco-flow/types";
 import DrawerBody from "./DrawerBody";
 import getConnectionConfigService from "../../../../service/connections/getConnectionConfig.service";
 import { AlertModal, useNotification } from "@eco-flow/components-lib";
@@ -24,9 +24,9 @@ export default function EditConnectionDrawer() {
 
   const [isConfigloading, setIsConfigloading] = useState(false);
   const [connectionName, setConnectionName] = useAtom(editConnectionName);
-  const [updateResponse, setUpdateResponse] = useState<ConnectionResponse>({});
+  const [updateResponse, setUpdateResponse] = useState<ApiResponse>({});
   const [updateLoading, setUpdateLoading] = useState(false);
-  const [deleteResponse, setDeleteResponse] = useState<ConnectionResponse>({});
+  const [deleteResponse, setDeleteResponse] = useState<ApiResponse>({});
   const [deleteLoading, setDeleteLoading] = useState(false);
   const formRef = useRef(null);
   const [openDeleteConfirmModal, setOpenDeleteConfirmModal] = useState(false);

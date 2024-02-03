@@ -10,8 +10,7 @@ import { AlertModal } from "@eco-flow/components-lib";
 import "@eco-flow/components-lib/style.css";
 import { useNotification } from "@eco-flow/components-lib";
 import createConnectionService from "../../../service/connections/createConnection.service";
-import { ConnectionResponse } from "@eco-flow/types";
-import getConnectionsService from "../../../service/connections/getConnections.service";
+import { ApiResponse } from "@eco-flow/types";
 
 export default function () {
   const [_databaseConnectionList, setDatabaseConnectionList] = useAtom(
@@ -23,7 +22,7 @@ export default function () {
   const [openSuccessModal, setOpenSuccessModal] = useState(false);
   const [resetForm, setReaetForm] = useState(false);
   const formRef = useRef(null);
-  const [response, setResponse] = useState<ConnectionResponse>({});
+  const [response, setResponse] = useState<ApiResponse>({});
 
   useEffect(() => setReaetForm(false), [resetForm]);
   useEffect(() => {
