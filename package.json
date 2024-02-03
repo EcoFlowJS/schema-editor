@@ -25,7 +25,7 @@
     "react-dom": "^18.2.0",
     "react-error-boundary": "^4.0.12",
     "react-router-dom": "^6.21.2",
-    "rsuite": "^5.50.0"
+    "rsuite": "^5.53.0"
   },
   "devDependencies": {
     "@types/react": "^18.2.15",
