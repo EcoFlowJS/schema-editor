@@ -82,6 +82,7 @@ export default function EditConnectionDrawer() {
     if (updateResponse.success) {
       setEditNewConnectionDrawer(false);
       setDatabaseConnectionList(updateResponse.payload.connectionList);
+      successUpdateNotification.show();
     }
   }, [updateResponse]);
 
