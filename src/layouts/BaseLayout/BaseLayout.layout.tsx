@@ -3,7 +3,7 @@ import initService from "../../service/init/init.service";
 import useNavagator from "../../utils/redirect/redirect";
 import { useEffect } from "react";
 import { useAtom } from "jotai";
-import initStatus from "../../store/initStatus.store";
+import initStatusState from "../../store/initStatusState.store";
 
 export default function BaseLayout() {
   const redirect = (url: string) => () => {
@@ -12,7 +12,7 @@ export default function BaseLayout() {
   const status = initService();
   const navigate = useNavagator();
   const location = useLocation();
-  const [_initStatus, setinitStatus] = useAtom(initStatus);
+  const [_initStatus, setinitStatus] = useAtom(initStatusState);
 
   useEffect(() => {
     setinitStatus({ ...status });
