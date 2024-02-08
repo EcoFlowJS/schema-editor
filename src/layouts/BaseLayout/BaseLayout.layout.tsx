@@ -4,9 +4,10 @@ import useNavagator from "../../utils/redirect/redirect";
 import { useEffect } from "react";
 import { useAtom } from "jotai";
 import initStatusState from "../../store/initStatusState.store";
+import { FlexboxGrid } from "rsuite";
 
 export default function BaseLayout() {
-  const redirect = (url: string) => () => {
+  const redirect = (url: string) => {
     window.location.replace(window.location.origin + url);
   };
   const status = initService();
@@ -27,5 +28,23 @@ export default function BaseLayout() {
       navigate("dashboard");
   }, [location.pathname]);
 
-  return <Outlet />;
+  return (
+    <>
+      {(!status.isNew && status.isLoggedIn) ||
+      (status.isNew && status.isLoggedIn) ? (
+        <Outlet />
+      ) : (
+        <>
+          <FlexboxGrid
+            style={{ height: "100vh" }}
+            justify="center"
+            align="middle"
+          >
+            {status.isNew && !status.isLoggedIn ? "Redirecting to setup" : ""}
+            {!status.isNew && !status.isLoggedIn ? "Redirecting to Login" : ""}
+          </FlexboxGrid>
+        </>
+      )}
+    </>
+  );
 }
