@@ -9,5 +9,6 @@ const initStatus = atom({
 });
 
 export const isLoggedOut = atomWithStorage("isLoggedOut", false);
+export const isLoggedIn = atomWithStorage("isLoggedIn", false);
 
 export default initStatus;
