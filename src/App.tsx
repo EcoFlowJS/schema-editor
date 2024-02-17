@@ -1,8 +1,7 @@
 import { useAtom } from "jotai";
-import { Suspense, useEffect } from "react";
+import { useEffect } from "react";
 import themeMode from "./store/theme.mode";
 import { CustomProvider, Loader } from "rsuite";
-import Loading from "./components/Loading/Loading.component";
 import { ErrorBoundary } from "react-error-boundary";
 import ErrorFallback from "./components/ErrorFallback/ErrorFallback.componennt";
 import Routes from "./routes/Routes";
@@ -28,11 +27,9 @@ function App() {
           {typeof restartingServer === "boolean" && restartingServer ? (
             <Loader backdrop content="loading..." />
           ) : (
-            <Suspense fallback={<Loading />}>
-              <ErrorBoundary FallbackComponent={ErrorFallback}>
-                <Routes />
-              </ErrorBoundary>
-            </Suspense>
+            <ErrorBoundary FallbackComponent={ErrorFallback}>
+              <Routes />
+            </ErrorBoundary>
           )}
         </CustomProvider>
       )}
