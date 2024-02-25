@@ -27,7 +27,7 @@ const promise = async (): Promise<any> => {
     const ress: ApiResponse = (await axios.get("auth/users/isAuthenticated"))
       .data;
 
-    if (ress.success) {
+    if (ress && ress.success) {
       result.isLoggedIn = true;
       result.userID = ress.payload._id;
     }
