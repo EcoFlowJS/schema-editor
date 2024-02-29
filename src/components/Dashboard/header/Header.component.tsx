@@ -6,7 +6,7 @@ import styles from "./style";
 import initStatus, { isLoggedOut } from "../../../store/initStatusState.store";
 import { IconWrapper } from "@eco-flow/components-lib";
 import { LuLogOut } from "react-icons/lu";
-import logoutHandler from "./logoutHaandler";
+import logoutHandler from "../../../helpers/logoutHaandler.helper";
 
 export default function DashboardHeader() {
   const [darkMode, setDarkMode] = useAtom(themeMode);

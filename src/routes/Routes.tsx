@@ -24,7 +24,10 @@ export default function () {
           <Route path="dashboard" element={<DashboardLayout />} />
           <Route path="database" element={<DatabaseBaseLayout />}>
             <Route index element={<Redirect />} />
-            <Route path=":id" element={<DatabaseLayout />}></Route>
+            <Route path=":id" element={<DatabaseLayout />}>
+              <Route index element={"indexd"} />
+              <Route path=":name" element={"name"} />
+            </Route>
           </Route>
         </Route>
         <Route path="*" element={<Error404 />} />
