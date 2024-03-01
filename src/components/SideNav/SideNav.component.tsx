@@ -6,7 +6,8 @@ import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { Nav, Navbar, Placeholder, Sidebar, Sidenav } from "rsuite";
 import "./style.less";
 import getCollectionOrTable from "../../service/database/getCollectionOrTable.service";
-import { ApiResponse, DB_Drivers } from "@eco-flow/types";
+import { ApiResponse } from "@eco-flow/types";
+import { FaTableList } from "react-icons/fa6";
 
 export default function SideNav() {
   const loc = useLocation();
@@ -75,6 +76,7 @@ export default function SideNav() {
                       key={index}
                       eventKey={`Table-${index}`}
                       active={loc.pathname.endsWith(`/${collectionORtable}`)}
+                      icon={<IconWrapper icon={FaTableList} />}
                     >
                       {collectionORtable}
                     </Nav.Item>

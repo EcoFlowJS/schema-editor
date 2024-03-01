@@ -14,7 +14,12 @@ import {
 import { SortType } from "rsuite/esm/Table";
 import getDatabaseData from "../../../service/database/showDatabaseData.service";
 import { useNavigate, useParams } from "react-router-dom";
-const { Column, HeaderCell, Cell } = Table;
+import CellActionButton from "./DatabaseDataTable/CellActionButton.component";
+import CustomCell from "./DatabaseDataTable/CustomCell.component";
+import { DatabaseDataResult } from "@eco-flow/types";
+import { GrTableAdd } from "react-icons/gr";
+import { FaGears } from "react-icons/fa6";
+const { Column, HeaderCell } = Table;
 
 export default function DatabaseData() {
   const navigate = useNavigate();
@@ -25,11 +30,36 @@ export default function DatabaseData() {
   const [sortType, setSortType] = React.useState<SortType>();
 
   const [databaseData, setDatabaseData] = React.useState([]);
-  const [databaseColumns, setDatabaseColumns] = React.useState([]);
+  const [databaseColumns, setDatabaseColumns] = React.useState<
+    DatabaseDataResult["columns"]
+  >([]);
 
   useEffect(() => {
     (async () => await fetchDatabaseData())();
   }, [collectonORtable]);
+
+  const fetchDatabaseData = async () => {
+    setLoading(true);
+    try {
+      const response = await getDatabaseData(id!, collectonORtable!);
+      if (response.success) {
+        setLoading(false);
+        setDatabaseColumns(
+          response.payload.columns ? response.payload.columns : []
+        );
+        setDatabaseData(
+          response.payload.data.map((value: any, index: number) => {
+            return {
+              id: index,
+              data: value,
+            };
+          })
+        );
+      }
+    } catch {
+      navigate("/editor/schema/404");
+    }
+  };
 
   const ProcessData = (data: Array<any>) => {
     if (sortColumn && sortType) {
@@ -64,30 +94,14 @@ export default function DatabaseData() {
     }, 500);
   };
 
-  const fetchDatabaseData = async () => {
-    setLoading(true);
-    try {
-      const response = await getDatabaseData(id!, collectonORtable!);
-      if (response.success) {
-        setLoading(false);
-        setDatabaseColumns(
-          response.payload.columns ? response.payload.columns : []
-        );
-        setDatabaseData(response.payload.data);
-      }
-    } catch {
-      navigate("/editor/schema/404");
-    }
-  };
-
   return (
     <Panel>
       <FlexboxGrid
-        justify="space-between"
+        justify="end"
         align="middle"
         style={{ paddingBottom: "1rem" }}
       >
-        <FlexboxGrid.Item>
+        {/* <FlexboxGrid.Item>
           <Stack spacing={10}>
             <SelectPicker
               searchable={false}
@@ -99,8 +113,16 @@ export default function DatabaseData() {
             <Input />
             <Button>filter</Button>
           </Stack>
-        </FlexboxGrid.Item>
+        </FlexboxGrid.Item> */}
         <FlexboxGrid.Item>
+          <Button
+            appearance="subtle"
+            size="sm"
+            startIcon={<IconWrapper icon={GrTableAdd} />}
+            onClick={() => {}}
+          >
+            Insert
+          </Button>
           <Button
             appearance="subtle"
             size="sm"
@@ -121,14 +143,23 @@ export default function DatabaseData() {
           sortType={sortType}
           onSortColumn={handleSortColumn}
         >
-          {databaseColumns.map((column) => {
+          {databaseColumns!.map((column) => {
             return (
-              <Column key={column} flexGrow={1} resizable sortable>
-                <HeaderCell>{column}</HeaderCell>
-                <Cell dataKey={column} />
+              <Column key={column.name} flexGrow={1} resizable sortable>
+                <HeaderCell>{column.name}</HeaderCell>
+                <CustomCell dataKey={column.name} />
               </Column>
             );
           })}
+          <Column width={110}>
+            <HeaderCell align="center" style={{ fontSize: "1.3rem" }}>
+              <FaGears />
+            </HeaderCell>
+            <CellActionButton
+              onClickEdit={console.log}
+              onClickDelete={console.log}
+            />
+          </Column>
         </Table>
       ) : driver === "mongo" ? (
         <PanelGroup>
