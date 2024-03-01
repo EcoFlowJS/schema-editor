@@ -1,7 +1,7 @@
 import { IconWrapper } from "@eco-flow/components-lib";
 import React, { useEffect, useState } from "react";
 import { FaCaretLeft, FaCaretRight } from "react-icons/fa6";
-import { CiViewTable, CiViewTimeline, CiSquarePlus } from "react-icons/ci";
+import { CiViewTable, CiSquarePlus } from "react-icons/ci";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { Nav, Navbar, Placeholder, Sidebar, Sidenav } from "rsuite";
 import "./style.less";
@@ -40,7 +40,7 @@ export default function SideNav() {
   const navigationHandler = (eventKey: string) => {
     if (eventKey && eventKey.startsWith("Table-")) {
       const index = Number(eventKey.substring("Table-".length));
-      navigate(collectionORtable[index]);
+      navigate(`${DB_Type.toLowerCase()}/${collectionORtable[index]}`);
     }
   };
 

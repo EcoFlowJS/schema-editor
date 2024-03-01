@@ -5,6 +5,8 @@ import BaseLayout from "../layouts/BaseLayout/BaseLayout.layout";
 import DashboardLayout from "../layouts/DashboardLayout/DashboardLayout.layout";
 import DatabaseBaseLayout from "../layouts/DatabaseBaseLayout/DatabaseBaseLayout.layout";
 import DatabaseLayout from "../layouts/DatabaseLayout/DatabaseLayout.layout";
+import DatabaseIntro from "../components/DatabaseIntro/DatabaseIntro.component";
+import SchemaEditor from "../components/SchemaEditor/SchemaEditor.component";
 
 const Redirect = () => {
   const navigate = useNavigate();
@@ -25,8 +27,11 @@ export default function () {
           <Route path="database" element={<DatabaseBaseLayout />}>
             <Route index element={<Redirect />} />
             <Route path=":id" element={<DatabaseLayout />}>
-              <Route index element={"indexd"} />
-              <Route path=":name" element={"name"} />
+              <Route index element={<DatabaseIntro />} />
+              <Route
+                path=":driver/:collectonORtable"
+                element={<SchemaEditor />}
+              />
             </Route>
           </Route>
         </Route>
