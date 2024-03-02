@@ -6,7 +6,7 @@ import DatabaseData from "./DatabaseData/DatabaseData.component";
 
 export default function SchemaEditor() {
   const navigate = useNavigate();
-  const { id, driver, collectonORtable } = useParams();
+  const { driver, collectonORtable } = useParams();
 
   useEffect(() => {
     if (driver === "knex" || driver === "mongo") return;

@@ -3,6 +3,7 @@ import React, { useEffect } from "react";
 import { LuRefreshCcwDot } from "react-icons/lu";
 import {
   Button,
+  Divider,
   FlexboxGrid,
   Input,
   Panel,
@@ -19,6 +20,9 @@ import CustomCell from "./DatabaseDataTable/CustomCell.component";
 import { DatabaseDataResult } from "@eco-flow/types";
 import { GrTableAdd } from "react-icons/gr";
 import { FaGears } from "react-icons/fa6";
+import { useAtom } from "jotai";
+import { openDrawer } from "../../../store/schemaEditor.store";
+import Drawer, { DrawerMode } from "../Drawer/Drawer.component";
 const { Column, HeaderCell } = Table;
 
 export default function DatabaseData() {
@@ -33,6 +37,10 @@ export default function DatabaseData() {
   const [databaseColumns, setDatabaseColumns] = React.useState<
     DatabaseDataResult["columns"]
   >([]);
+
+  const [_isOpen, setOpen] = useAtom(openDrawer);
+  const [drawerMode, setDrawerMode] = React.useState<DrawerMode>("insert");
+  const [drawerEditValues, setDrawerEditValues] = React.useState<any>({});
 
   useEffect(() => {
     (async () => await fetchDatabaseData())();
@@ -95,83 +103,104 @@ export default function DatabaseData() {
   };
 
   return (
-    <Panel>
-      <FlexboxGrid
-        justify="end"
-        align="middle"
-        style={{ paddingBottom: "1rem" }}
-      >
-        {/* <FlexboxGrid.Item>
-          <Stack spacing={10}>
-            <SelectPicker
-              searchable={false}
-              data={[
-                { value: "id", label: "id" },
-                { value: "abc", label: "abc" },
-              ]}
-            />
-            <Input />
-            <Button>filter</Button>
-          </Stack>
-        </FlexboxGrid.Item> */}
-        <FlexboxGrid.Item>
-          <Button
-            appearance="subtle"
-            size="sm"
-            startIcon={<IconWrapper icon={GrTableAdd} />}
-            onClick={() => {}}
-          >
-            Insert
-          </Button>
-          <Button
-            appearance="subtle"
-            size="sm"
-            startIcon={<IconWrapper icon={LuRefreshCcwDot} />}
-            onClick={() => fetchDatabaseData()}
-          >
-            Refresh
-          </Button>
-        </FlexboxGrid.Item>
-      </FlexboxGrid>
-      {driver === "knex" ? (
-        <Table
-          height={400}
-          data={ProcessData(databaseData)}
-          bordered
-          loading={isLoading}
-          sortColumn={sortColumn}
-          sortType={sortType}
-          onSortColumn={handleSortColumn}
+    <>
+      <Panel>
+        <FlexboxGrid
+          justify="space-between"
+          align="middle"
+          style={{ paddingBottom: "1rem" }}
         >
-          {databaseColumns!.map((column) => {
-            return (
-              <Column key={column.name} flexGrow={1} resizable sortable>
-                <HeaderCell>{column.name}</HeaderCell>
-                <CustomCell dataKey={column.name} />
-              </Column>
-            );
-          })}
-          <Column width={110}>
-            <HeaderCell align="center" style={{ fontSize: "1.3rem" }}>
-              <FaGears />
-            </HeaderCell>
-            <CellActionButton
-              onClickEdit={console.log}
-              onClickDelete={console.log}
-            />
-          </Column>
-        </Table>
-      ) : driver === "mongo" ? (
-        <PanelGroup>
-          {databaseData.map((data) => (
-            <Panel>
-              <pre>{JSON.stringify(data, null, 2)}</pre>
-            </Panel>
-          ))}
-        </PanelGroup>
-      ) : (
-        <></>
-      )}
-    </Panel>
+          <FlexboxGrid.Item>
+            <Stack spacing={10}>
+              <SelectPicker
+                searchable={false}
+                data={databaseColumns!.map((column) => {
+                  return { value: column.name, label: column.name };
+                })}
+                style={{ minWidth: 150 }}
+              />
+              <Input />
+              <Button>filter</Button>
+            </Stack>
+          </FlexboxGrid.Item>
+          <FlexboxGrid.Item>
+            <Button
+              appearance="subtle"
+              size="sm"
+              startIcon={<IconWrapper icon={GrTableAdd} />}
+              onClick={() => {
+                setOpen(true);
+                setDrawerMode("insert");
+              }}
+            >
+              Insert
+            </Button>
+            <Divider vertical />
+            <Button
+              appearance="subtle"
+              size="sm"
+              startIcon={<IconWrapper icon={LuRefreshCcwDot} />}
+              onClick={() => fetchDatabaseData()}
+            >
+              Refresh
+            </Button>
+          </FlexboxGrid.Item>
+        </FlexboxGrid>
+        {driver === "knex" ? (
+          <Table
+            height={400}
+            data={ProcessData(databaseData)}
+            bordered
+            loading={isLoading}
+            sortColumn={sortColumn}
+            sortType={sortType}
+            onSortColumn={handleSortColumn}
+          >
+            {databaseColumns!.map((column) => {
+              return (
+                <Column key={column.name} flexGrow={1} resizable sortable>
+                  <HeaderCell>{column.name}</HeaderCell>
+                  <CustomCell dataKey={column.name} />
+                </Column>
+              );
+            })}
+            <Column width={110}>
+              <HeaderCell align="center" style={{ fontSize: "1.3rem" }}>
+                <FaGears />
+              </HeaderCell>
+              <CellActionButton
+                onClickEdit={(id) => {
+                  setOpen(true);
+                  setDrawerMode("edit");
+                  setDrawerEditValues(
+                    (
+                      databaseData.filter(
+                        (value: any) => value.id === id
+                      )[0] as any
+                    ).data
+                  );
+                }}
+                onClickDelete={console.log}
+              />
+            </Column>
+          </Table>
+        ) : driver === "mongo" ? (
+          <PanelGroup>
+            {databaseData.map((data) => (
+              <Panel>
+                <pre>{JSON.stringify(data, null, 2)}</pre>
+              </Panel>
+            ))}
+          </PanelGroup>
+        ) : (
+          <></>
+        )}
+      </Panel>
+      <Drawer
+        columnInfo={databaseColumns}
+        mode={drawerMode}
+        defaultValue={drawerEditValues}
+      />
+    </>
   );
 }
