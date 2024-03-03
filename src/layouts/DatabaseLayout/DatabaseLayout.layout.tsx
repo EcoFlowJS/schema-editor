@@ -1,11 +1,21 @@
 import React, { useLayoutEffect } from "react";
 import { Outlet, useParams } from "react-router-dom";
-import { Container, Content } from "rsuite";
+import {
+  Button,
+  Container,
+  Content,
+  Divider,
+  Modal,
+  Panel,
+  Placeholder,
+} from "rsuite";
 import Header from "../../components/Header/Header";
 import SideNav from "../../components/SideNav/SideNav.component";
+import { useAtom } from "jotai";
 
 export default function DatabaseLayout() {
   const { id } = useParams();
+
   useLayoutEffect(() => {
     document.title = `Schema ${id}`;
     window.history.replaceState(null, document.title, window.location.href);

@@ -1,12 +1,21 @@
 import React, { useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { Panel, Placeholder, Tabs } from "rsuite";
+import {
+  Panel,
+  Placeholder,
+  Tabs,
+  FlexboxGrid,
+  IconButton,
+  Button,
+} from "rsuite";
 import { TbDatabase, TbDatabaseEdit } from "react-icons/tb";
 import DatabaseData from "./DatabaseData/DatabaseData.component";
+import { IconWrapper } from "@eco-flow/components-lib";
+import { GrTrash } from "react-icons/gr";
 
 export default function SchemaEditor() {
   const navigate = useNavigate();
-  const { driver, collectonORtable } = useParams();
+  const { id, driver, collectonORtable } = useParams();
 
   useEffect(() => {
     if (driver === "knex" || driver === "mongo") return;
@@ -16,16 +25,36 @@ export default function SchemaEditor() {
   return (
     <Panel
       header={
-        <div>
-          <h4>
-            {driver === "knex"
-              ? "Table:"
-              : driver === "mongo"
-              ? "Collection :"
-              : ""}{" "}
-            {collectonORtable}
-          </h4>
-        </div>
+        <FlexboxGrid justify="space-between">
+          <FlexboxGrid.Item>
+            <h4>
+              {driver === "knex"
+                ? "Table:"
+                : driver === "mongo"
+                ? "Collection :"
+                : ""}{" "}
+              {collectonORtable}
+            </h4>
+          </FlexboxGrid.Item>
+          <FlexboxGrid.Item>
+            <Button
+              title={`Delete ${collectonORtable}`}
+              appearance="subtle"
+              color="red"
+              onClick={() => {
+                console.log(id, collectonORtable);
+              }}
+              startIcon={<IconWrapper icon={GrTrash} />}
+            >
+              Drop{" "}
+              {driver === "knex"
+                ? "Table"
+                : driver === "mongo"
+                ? "Collection"
+                : ""}
+            </Button>
+          </FlexboxGrid.Item>
+        </FlexboxGrid>
       }
       bordered
       style={{ backgroundColor: "var(--rs-gray-800)" }}
@@ -34,13 +63,17 @@ export default function SchemaEditor() {
         <Tabs.Tab eventKey="1" title="Database Data" icon={<TbDatabase />}>
           <DatabaseData />
         </Tabs.Tab>
-        <Tabs.Tab
-          eventKey="2"
-          title="Database Structure"
-          icon={<TbDatabaseEdit />}
-        >
-          <Placeholder.Paragraph graph="square" />
-        </Tabs.Tab>
+        {driver === "knex" ? (
+          <Tabs.Tab
+            eventKey="2"
+            title="Database Structure"
+            icon={<TbDatabaseEdit />}
+          >
+            <Placeholder.Paragraph graph="square" />
+          </Tabs.Tab>
+        ) : (
+          <></>
+        )}
       </Tabs>
     </Panel>
   );

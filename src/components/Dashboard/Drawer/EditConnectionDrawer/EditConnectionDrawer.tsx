@@ -83,6 +83,7 @@ export default function EditConnectionDrawer() {
       setEditNewConnectionDrawer(false);
       setDatabaseConnectionList(updateResponse.payload.connectionList);
       successUpdateNotification.show();
+      setConnectionName("");
     }
   }, [updateResponse]);
 
@@ -129,11 +130,10 @@ export default function EditConnectionDrawer() {
         <Drawer.Body>
           <DrawerBody
             Ref={formRef}
-            OnSubmit={async (value) => {
-              console.log(value);
+            OnSubmit={(value) => {
               if (Object.keys(value).length > 0) {
                 setUpdateLoading(true);
-                setUpdateResponse(await editConnectionService(value));
+                editConnectionService(value).then(setUpdateResponse);
               }
             }}
             disabled={updateLoading}

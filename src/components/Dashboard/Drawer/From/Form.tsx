@@ -17,6 +17,7 @@ import {
   InputPasswordEnv,
 } from "@eco-flow/components-lib";
 import isEnv from "../../../../utils/isEnv/inEnv";
+import addNewDatabaseConnection from "../../../../defaults/addNewDatabaseConnection.default";
 
 interface FromGroupProps {
   Ref?: MutableRefObject<null>;
@@ -34,19 +35,9 @@ export default function ({
   defaultValue,
 }: FromGroupProps) {
   const [dbDriverValue, setDbDriverValue] = useState("");
-  const [value, setValue] = useState<ConnectionDefinations>({
-    ConnectionName: "",
-    dbDriver: "",
-    mongoConnectionString: "",
-    SqliteFileName: "",
-    SqliteFileLoc: "",
-    Host: "localhost",
-    Port: 0,
-    Username: "",
-    Password: "",
-    isSSL: false,
-    Database: "",
-  });
+  const [value, setValue] = useState<ConnectionDefinations>(
+    addNewDatabaseConnection
+  );
   const [isSSL, setIsSSL] = useState(false);
   const [isEnvMongoConnectionString, setEnvMongoConnectionString] =
     useState(false);

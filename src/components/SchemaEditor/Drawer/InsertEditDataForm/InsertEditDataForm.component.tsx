@@ -72,52 +72,86 @@ export default function InsertEditDataForm({
     >
       {columnInfo!.map((column, index) => {
         return (
-          <FormGroup
-            key={index}
-            name={column.name}
-            label={`${column.name} :`}
-            accepter={
-              column.type === "integer"
-                ? InputNumber
-                : column.type === "varchar"
-                ? Input
-                : column.type === "boolean"
-                ? SelectPicker
-                : column.type === "datetime"
-                ? DatePicker
-                : Input
-            }
-            style={{ width: 300 }}
-            data={
-              column.type === "boolean"
-                ? [
-                    {
-                      label: "true",
-                      value: 1,
-                    },
-                    {
-                      label: "false",
-                      value: 0,
-                    },
-                  ]
-                : undefined
-            }
-            autoComplete={
-              column.type === "integer" || column.type === "varchar"
-                ? "off"
-                : undefined
-            }
-            searchable={column.type === "boolean" ? false : undefined}
-            format={
-              column.type === "datetime" ? "yyyy-MM-dd HH:mm:ss" : undefined
-            }
-            placement={column.type === "datetime" ? "topStart" : undefined}
-            placeholder={
-              column.type === "varchar" || column.type === "integer"
-                ? column.name
-                : undefined
-            }
-          />
+          <>
+            <FormGroup
+              key={index}
+              name={column.name}
+              label={`${column.name} :`}
+              accepter={
+                column.name !== "_id"
+                  ? column.type === "integer"
+                    ? InputNumber
+                    : column.type === "varchar"
+                    ? Input
+                    : column.type === "boolean"
+                    ? SelectPicker
+                    : column.type === "datetime"
+                    ? DatePicker
+                    : Input
+                  : Input
+              }
+              style={{ width: 300 }}
+              disabled={column.name === "_id"}
+              helperText={
+                column.name === "_id"
+                  ? "id is generated automatically and cannot be modified."
+                  : ""
+              }
+              helperTextStyle={{ marginLeft: 240 }}
+              dir={column.name === "_id" ? "rtl" : "ltr"}
+              data={
+                column.name !== "_id"
+                  ? column.type === "boolean"
+                    ? [
+                        {
+                          label: "true",
+                          value: 1,
+                        },
+                        {
+                          label: "false",
+                          value: 0,
+                        },
+                      ]
+                    : undefined
+                  : undefined
+              }
+              autoComplete={
+                column.name !== "_id"
+                  ? column.type === "integer" || column.type === "varchar"
+                    ? "off"
+                    : undefined
+                  : undefined
+              }
+              searchable={
+                column.name !== "_id"
+                  ? column.type === "boolean"
+                    ? false
+                    : undefined
+                  : undefined
+              }
+              format={
+                column.name !== "_id"
+                  ? column.type === "datetime"
+                    ? "yyyy-MM-dd HH:mm:ss"
+                    : undefined
+                  : undefined
+              }
+              placement={
+                column.name !== "_id"
+                  ? column.type === "datetime"
+                    ? "topStart"
+                    : undefined
+                  : undefined
+              }
+              placeholder={
+                column.name !== "_id"
+                  ? column.type === "varchar" || column.type === "integer"
+                    ? column.name
+                    : undefined
+                  : undefined
+              }
+            />
+          </>
         );
       })}
     </Form>

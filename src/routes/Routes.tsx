@@ -4,9 +4,10 @@ import { BrowserRouter, Route, Routes, useNavigate } from "react-router-dom";
 import BaseLayout from "../layouts/BaseLayout/BaseLayout.layout";
 import DashboardLayout from "../layouts/DashboardLayout/DashboardLayout.layout";
 import DatabaseBaseLayout from "../layouts/DatabaseBaseLayout/DatabaseBaseLayout.layout";
-import DatabaseLayout from "../layouts/DatabaseLayout/DatabaseLayout.layout";
 import DatabaseIntro from "../components/DatabaseIntro/DatabaseIntro.component";
 import SchemaEditor from "../components/SchemaEditor/SchemaEditor.component";
+import Database from "../pages/Database/Database.component";
+import CreateTable from "../components/DatabaseTable/CreateTable/CreateTable.component";
 
 const Redirect = () => {
   const navigate = useNavigate();
@@ -26,12 +27,13 @@ export default function () {
           <Route path="dashboard" element={<DashboardLayout />} />
           <Route path="database" element={<DatabaseBaseLayout />}>
             <Route index element={<Redirect />} />
-            <Route path=":id" element={<DatabaseLayout />}>
+            <Route path=":id" element={<Database />}>
               <Route index element={<DatabaseIntro />} />
               <Route
                 path=":driver/:collectonORtable"
                 element={<SchemaEditor />}
               />
+              <Route path="create/:driver" element={<CreateTable />} />
             </Route>
           </Route>
         </Route>

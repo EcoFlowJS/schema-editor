@@ -8,6 +8,8 @@ import "./style.less";
 import getCollectionOrTable from "../../service/database/getCollectionOrTable.service";
 import { ApiResponse } from "@eco-flow/types";
 import { FaTableList } from "react-icons/fa6";
+import { useAtom } from "jotai";
+import { tableList } from "../../store/schemaEditor.store";
 
 export default function SideNav() {
   const loc = useLocation();
@@ -15,7 +17,7 @@ export default function SideNav() {
   const { id } = useParams();
   const [expand, setExpand] = React.useState(true);
   const [isLoading, setLoading] = useState(true);
-  const [collectionORtable, setCollectionORTable] = useState<string[]>([]);
+  const [collectionORtable, setCollectionORTable] = useAtom(tableList);
   const [DB_Type, setDB_Type] = useState("");
   //   const [DBFetchError, setDB_FetchError] = useState(false);
 
@@ -43,6 +45,8 @@ export default function SideNav() {
       const index = Number(eventKey.substring("Table-".length));
       navigate(`${DB_Type.toLowerCase()}/${collectionORtable[index]}`);
     }
+    if (eventKey && eventKey === "addNewTable")
+      navigate(`create/${DB_Type.toLowerCase()}`);
   };
 
   return (
@@ -51,13 +55,18 @@ export default function SideNav() {
       width={expand ? 260 : 56}
       collapsible
     >
-      <Sidenav expanded={expand} style={{ height: "100%" }}>
+      <Sidenav
+        expanded={expand}
+        style={{ height: "100%" }}
+        defaultOpenKeys={["1"]}
+      >
         <Sidenav.Body>
           {isLoading ? (
-            <Placeholder style={{ padding: "1rem" }} rows={4} />
+            <Placeholder active style={{ padding: "1rem" }} rows={4} />
           ) : (
             <Nav onSelect={navigationHandler}>
               <Nav.Menu
+                defaultChecked
                 eventKey="1"
                 trigger="hover"
                 title={
@@ -87,7 +96,12 @@ export default function SideNav() {
                   icon={<IconWrapper icon={CiSquarePlus} />}
                   active={false}
                 >
-                  Add Tables
+                  Add{" "}
+                  {DB_Type === "KNEX"
+                    ? "Tables"
+                    : DB_Type === "MONGO"
+                    ? "Collections"
+                    : DB_Type}
                 </Nav.Item>
               </Nav.Menu>
               {/* To-DO: Implement View Creation
