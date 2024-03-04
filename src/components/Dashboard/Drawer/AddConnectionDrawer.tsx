@@ -8,9 +8,12 @@ import {
 import Form from "./From/Form";
 import { AlertModal } from "@eco-flow/components-lib";
 import "@eco-flow/components-lib/style.css";
-import { useNotification } from "@eco-flow/components-lib";
 import createConnectionService from "../../../service/connections/createConnection.service";
 import { ApiResponse } from "@eco-flow/types";
+import {
+  errorNotification,
+  successNotification,
+} from "../../../store/notification.store";
 
 export default function () {
   const [_databaseConnectionList, setDatabaseConnectionList] = useAtom(
@@ -24,23 +27,28 @@ export default function () {
   const formRef = useRef(null);
   const [response, setResponse] = useState<ApiResponse>({});
 
+  const setSuccessNotification = useAtom(successNotification)[1];
+  const setErrorNotification = useAtom(errorNotification)[1];
+
   useEffect(() => setReaetForm(false), [resetForm]);
   useEffect(() => {
     setIsLoading(false);
-    if (response.error) errorNoti.show();
+    if (response.error)
+      setErrorNotification({
+        show: true,
+        header: "Connection Creation Error",
+        message: response.payload.message,
+      });
     if (response.success) {
       setOpenSuccessModal(true);
       setDatabaseConnectionList(response.payload.connectionList);
+      setSuccessNotification({
+        show: true,
+        header: "Connection Creation success",
+        message: response.payload.message,
+      });
     }
-    // if (Object.keys(response).length > 0) setResponse({});
   }, [response]);
-
-  const errorNoti = useNotification({
-    header: "Connection Creation Error",
-    type: "error",
-    placement: "bottomEnd",
-    children: <>{response.error ? response.payload.message : <></>}</>,
-  });
 
   return (
     <>
@@ -97,9 +105,11 @@ export default function () {
         confirmButtonText="Yes"
         CancelButtonText="No"
       >
-        <h6>Database Connection Added</h6>
-        <Divider />
-        <p>Do you Want To add More Database Connections?</p>
+        <AlertModal.Body>
+          <h6>Database Connection Added</h6>
+          <Divider />
+          <p>Do you Want To add More Database Connections?</p>
+        </AlertModal.Body>
       </AlertModal>
     </>
   );

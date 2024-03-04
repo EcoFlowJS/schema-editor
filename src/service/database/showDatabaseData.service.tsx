@@ -7,7 +7,7 @@ const getDatabaseData = async (
   collectionORtableName: string
 ): Promise<ApiResponse> => {
   const res = await axios.get(
-    `/schema/getDatabaseData/${connectionID}/${collectionORtableName}`
+    `/schema/DatabaseData/${connectionID}/${collectionORtableName}`
   );
 
   if (res instanceof AxiosError) throw res.response?.data as ApiResponse;

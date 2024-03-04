@@ -9,6 +9,11 @@ import initStatusState, {
 } from "../../store/initStatusState.store";
 import { FlexboxGrid } from "rsuite";
 import Loading from "../../components/Loading/Loading.component";
+import { useNotification } from "@eco-flow/components-lib";
+import {
+  errorNotification,
+  successNotification,
+} from "../../store/notification.store";
 
 export default function BaseLayout() {
   const redirect = (url: string) => {
@@ -20,6 +25,47 @@ export default function BaseLayout() {
   const [initStatus, setinitStatus] = useAtom(initStatusState);
   const [loggedOut, setLoggedOut] = useAtom(isLoggedOut);
   const [loggedIn, setLoggedIn] = useAtom(isLoggedIn);
+
+  const [successNotificationMessage, setSuccessNotificationMessage] =
+    useAtom(successNotification);
+  const [errorNotificationMessage, setErrorNotificationMessage] =
+    useAtom(errorNotification);
+
+  const errorNoti = useNotification({
+    type: "error",
+    header: (
+      <>
+        {errorNotificationMessage.header ? errorNotificationMessage.header : ""}
+      </>
+    ),
+    placement: errorNotificationMessage.placement,
+    children: (
+      <>
+        {errorNotificationMessage.message
+          ? errorNotificationMessage.message
+          : ""}
+      </>
+    ),
+  });
+
+  const successNoti = useNotification({
+    type: "success",
+    header: (
+      <>
+        {successNotificationMessage.header
+          ? successNotificationMessage.header
+          : ""}
+      </>
+    ),
+    placement: successNotificationMessage.placement,
+    children: (
+      <>
+        {successNotificationMessage.message
+          ? successNotificationMessage.message
+          : ""}
+      </>
+    ),
+  });
 
   useEffect(() => {
     initService().then((status) => {
@@ -55,6 +101,23 @@ export default function BaseLayout() {
       setinitStatus({ ...initStatus, isLoggedIn: true });
     }
   }, [loggedIn]);
+
+  useEffect(() => {
+    if (successNotificationMessage.show) {
+      setSuccessNotificationMessage({
+        ...successNotificationMessage,
+        show: false,
+      });
+      successNoti.show();
+    }
+  }, [successNotificationMessage]);
+
+  useEffect(() => {
+    if (errorNotificationMessage.show) {
+      setErrorNotificationMessage({ ...errorNotificationMessage, show: false });
+      errorNoti.show();
+    }
+  }, [errorNotificationMessage]);
 
   return (
     <>

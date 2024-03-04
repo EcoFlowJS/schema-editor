@@ -3,12 +3,15 @@ import { Button, FlexboxGrid, Input, Panel, SelectPicker, Tabs } from "rsuite";
 import { useNavigate, useParams } from "react-router-dom";
 import "./style.less";
 import addTableCollectionData from "../../../defaults/addTableCollectionData.default";
-import { useNotification } from "@eco-flow/components-lib";
 import { TbDatabase } from "react-icons/tb";
 import { useAtom } from "jotai";
 import { tableList } from "../../../store/schemaEditor.store";
 import createCollectionTable from "../../../service/database/createCollectionTable.service";
 import { ApiResponse } from "@eco-flow/types";
+import {
+  errorNotification,
+  successNotification,
+} from "../../../store/notification.store";
 
 export default function CreateTable() {
   const { id, driver } = useParams();
@@ -16,39 +19,18 @@ export default function CreateTable() {
 
   const [collectionORtable, setCollectionORTable] = useAtom(tableList);
   const [sendData, setSendData] = React.useState(addTableCollectionData);
-  const [errorMessage, setErrorMessage] = React.useState<{
-    show: boolean;
-    message: string;
-    header?: string;
-  }>({
-    show: false,
-    message: "",
-  });
   const [isLoading, setLoading] = React.useState(false);
 
-  const errorNotification = useNotification({
-    type: "error",
-    placement: "bottomEnd",
-    header: (
-      <>
-        {errorMessage.header
-          ? errorMessage.header
-          : `Error adding ${
-              driver === "knex"
-                ? "Table"
-                : driver === "mongo"
-                ? "Collection "
-                : ""
-            }`}
-      </>
-    ),
-    children: <>{errorMessage.show ? errorMessage.message : ""}</>,
-  });
+  const setSuccessNotification = useAtom(successNotification)[1];
+  const setErrorNotification = useAtom(errorNotification)[1];
 
   const handleSubmit = () => {
     if (sendData.name.trim().length === 0) {
-      setErrorMessage({
+      setErrorNotification({
         show: true,
+        header: `Error adding ${
+          driver === "knex" ? "Table" : driver === "mongo" ? "Collection " : ""
+        }`,
         message: `Enter database ${
           driver === "knex" ? "table" : driver === "mongo" ? "collection " : ""
         } name.`,
@@ -57,8 +39,11 @@ export default function CreateTable() {
     }
 
     if (!/^[a-zA-Z_$][a-zA-Z_$0-9]*$/g.test(sendData.name.trim())) {
-      setErrorMessage({
+      setErrorNotification({
         show: true,
+        header: `Error adding ${
+          driver === "knex" ? "Table" : driver === "mongo" ? "Collection " : ""
+        }`,
         message: `${
           driver === "knex" ? "Table" : driver === "mongo" ? "Collection " : ""
         } name must not contain any spcial characters.`,
@@ -67,8 +52,11 @@ export default function CreateTable() {
     }
 
     if (collectionORtable.includes(sendData.name)) {
-      setErrorMessage({
+      setErrorNotification({
         show: true,
+        header: `Error adding ${
+          driver === "knex" ? "Table" : driver === "mongo" ? "Collection " : ""
+        }`,
         message: `${
           driver === "knex" ? "Table" : driver === "mongo" ? "Collection " : ""
         } already exists in the database.`,
@@ -81,6 +69,17 @@ export default function CreateTable() {
       (response: ApiResponse) => {
         setLoading(false);
         if (response.success) {
+          setSuccessNotification({
+            show: true,
+            header: `Success adding ${
+              driver === "knex"
+                ? "Table"
+                : driver === "mongo"
+                ? "Collection "
+                : ""
+            }`,
+            message: `${response.payload.currentCollectionTableName} added successfully`,
+          });
           setCollectionORTable(response.payload.collectionsORtables);
           navigate(
             `/editor/schema/database/${id}/${driver}/${response.payload.currentCollectionTableName}`
@@ -90,7 +89,7 @@ export default function CreateTable() {
       (reject: ApiResponse) => {
         setLoading(false);
         if (reject.error)
-          setErrorMessage({
+          setErrorNotification({
             show: true,
             header: reject.payload.code,
             message: `Error creating ${
@@ -104,13 +103,6 @@ export default function CreateTable() {
       }
     );
   };
-
-  useEffect(() => {
-    if (errorMessage.show) {
-      errorNotification.show();
-      setErrorMessage({ ...errorMessage, show: false });
-    }
-  }, [errorMessage]);
 
   return (
     <Panel
