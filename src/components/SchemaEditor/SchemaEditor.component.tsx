@@ -1,16 +1,27 @@
 import React, { useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { Panel, Placeholder, Tabs, FlexboxGrid, Button } from "rsuite";
+import {
+  Panel,
+  Placeholder,
+  Tabs,
+  FlexboxGrid,
+  Button,
+  Stack,
+  Divider,
+} from "rsuite";
 import { TbDatabase, TbDatabaseEdit } from "react-icons/tb";
 import DatabaseData from "./DatabaseData/DatabaseData.component";
 import { IconWrapper } from "@eco-flow/components-lib";
-import { GrTrash } from "react-icons/gr";
+import { GrEdit, GrTrash } from "react-icons/gr";
 import DeleteTable from "../DatabaseTable/DeleteTable/DeleteTable.component";
+import RenameTable from "../DatabaseTable/RenameTable/RenameTable.component";
 
 export default function SchemaEditor() {
   const navigate = useNavigate();
   const { id, driver, collectonORtable } = useParams();
   const [deleteCollectionTableAlertModal, setDeleteCollectionTableAlertModal] =
+    React.useState(false);
+  const [renameCollectionTableAlertModal, setRenameCollectionTableAlertModal] =
     React.useState(false);
 
   useEffect(() => {
@@ -34,20 +45,38 @@ export default function SchemaEditor() {
               </h4>
             </FlexboxGrid.Item>
             <FlexboxGrid.Item>
-              <Button
-                title={`Delete ${collectonORtable}`}
-                appearance="subtle"
-                color="red"
-                onClick={() => setDeleteCollectionTableAlertModal(true)}
-                startIcon={<IconWrapper icon={GrTrash} />}
+              <Stack
+                spacing={10}
+                divider={<Divider vertical style={{ margin: 0 }} />}
               >
-                Drop{" "}
-                {driver === "knex"
-                  ? "Table"
-                  : driver === "mongo"
-                  ? "Collection"
-                  : ""}
-              </Button>
+                <Button
+                  title={`Rename ${collectonORtable}`}
+                  appearance="subtle"
+                  onClick={() => setRenameCollectionTableAlertModal(true)}
+                  startIcon={<IconWrapper icon={GrEdit} />}
+                >
+                  Rename{" "}
+                  {driver === "knex"
+                    ? "Table"
+                    : driver === "mongo"
+                    ? "Collection"
+                    : ""}
+                </Button>
+                <Button
+                  title={`Delete ${collectonORtable}`}
+                  appearance="subtle"
+                  color="red"
+                  onClick={() => setDeleteCollectionTableAlertModal(true)}
+                  startIcon={<IconWrapper icon={GrTrash} />}
+                >
+                  Drop{" "}
+                  {driver === "knex"
+                    ? "Table"
+                    : driver === "mongo"
+                    ? "Collection"
+                    : ""}
+                </Button>
+              </Stack>
             </FlexboxGrid.Item>
           </FlexboxGrid>
         }
@@ -75,6 +104,12 @@ export default function SchemaEditor() {
         openCloseState={[
           deleteCollectionTableAlertModal,
           setDeleteCollectionTableAlertModal,
+        ]}
+      />
+      <RenameTable
+        openCloseState={[
+          renameCollectionTableAlertModal,
+          setRenameCollectionTableAlertModal,
         ]}
       />
     </>
