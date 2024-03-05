@@ -5,7 +5,7 @@ import "./style.less";
 import addTableCollectionData from "../../../defaults/addTableCollectionData.default";
 import { TbDatabase } from "react-icons/tb";
 import { useAtom } from "jotai";
-import { tableList } from "../../../store/schemaEditor.store";
+import { editStructure, tableList } from "../../../store/schemaEditor.store";
 import createCollectionTable from "../../../service/database/createCollectionTable.service";
 import { ApiResponse } from "@eco-flow/types";
 import {
@@ -23,6 +23,7 @@ export default function CreateTable() {
 
   const setSuccessNotification = useAtom(successNotification)[1];
   const setErrorNotification = useAtom(errorNotification)[1];
+  const setEditStructure = useAtom(editStructure)[1];
 
   const handleSubmit = () => {
     if (sendData.name.trim().length === 0) {
@@ -80,6 +81,7 @@ export default function CreateTable() {
             }`,
             message: `${response.payload.currentCollectionTableName} added successfully`,
           });
+          setEditStructure(true);
           setCollectionORTable(response.payload.collectionsORtables);
           navigate(
             `/editor/schema/database/${id}/${driver}/${response.payload.currentCollectionTableName}`

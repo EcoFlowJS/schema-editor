@@ -149,7 +149,9 @@ export default function RenameTable({ openCloseState }: RenameTableProps) {
           to rename it.
         </p>
         <Input
-          placeholder={collectonORtable}
+          placeholder={`New ${
+            driver === "knex" ? "table" : driver === "mongo" ? "collection" : ""
+          } name`}
           style={{ margin: "10px 0" }}
           onChange={setRenameCollectionTableInput}
         />

@@ -13,8 +13,10 @@ import { TbDatabase, TbDatabaseEdit } from "react-icons/tb";
 import DatabaseData from "./DatabaseData/DatabaseData.component";
 import { IconWrapper } from "@eco-flow/components-lib";
 import { GrEdit, GrTrash } from "react-icons/gr";
-import DeleteTable from "../DatabaseTable/DeleteTable/DeleteTable.component";
-import RenameTable from "../DatabaseTable/RenameTable/RenameTable.component";
+import DeleteTableCollection from "../DatabaseTableCollection/DeleteTableCollection/DeleteTableCollection.component";
+import RenameTableCollection from "../DatabaseTableCollection/RenameTableCollection/RenameTableCollection.component";
+import { useAtom } from "jotai";
+import { editStructure } from "../../store/schemaEditor.store";
 
 export default function SchemaEditor() {
   const navigate = useNavigate();
@@ -23,11 +25,21 @@ export default function SchemaEditor() {
     React.useState(false);
   const [renameCollectionTableAlertModal, setRenameCollectionTableAlertModal] =
     React.useState(false);
+  const [isEditStructure, setEditStructure] = useAtom(editStructure);
+  const [tabKey, setTabKey] = React.useState("1");
 
   useEffect(() => {
     if (driver === "knex" || driver === "mongo") return;
     else navigate("/editor/schema/404");
   }, [driver]);
+
+  useEffect(() => {
+    if (isEditStructure) {
+      setEditStructure(false);
+      setTabKey("2");
+      console.log(isEditStructure);
+    }
+  }, [isEditStructure]);
 
   return (
     <>
@@ -83,7 +95,11 @@ export default function SchemaEditor() {
         bordered
         style={{ backgroundColor: "var(--rs-gray-800)" }}
       >
-        <Tabs defaultActiveKey="1">
+        <Tabs
+          defaultActiveKey="1"
+          activeKey={tabKey}
+          onSelect={(key) => setTabKey(key!)}
+        >
           <Tabs.Tab eventKey="1" title="Database Data" icon={<TbDatabase />}>
             <DatabaseData />
           </Tabs.Tab>
@@ -100,13 +116,13 @@ export default function SchemaEditor() {
           )}
         </Tabs>
       </Panel>
-      <DeleteTable
+      <DeleteTableCollection
         openCloseState={[
           deleteCollectionTableAlertModal,
           setDeleteCollectionTableAlertModal,
         ]}
       />
-      <RenameTable
+      <RenameTableCollection
         openCloseState={[
           renameCollectionTableAlertModal,
           setRenameCollectionTableAlertModal,

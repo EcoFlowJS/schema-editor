@@ -7,7 +7,7 @@ import DatabaseBaseLayout from "../layouts/DatabaseBaseLayout/DatabaseBaseLayout
 import DatabaseIntro from "../components/DatabaseIntro/DatabaseIntro.component";
 import SchemaEditor from "../components/SchemaEditor/SchemaEditor.component";
 import Database from "../pages/Database/Database.component";
-import CreateTable from "../components/DatabaseTable/CreateTable/CreateTable.component";
+import CreateTableCollection from "../components/DatabaseTableCollection/CreateTableCollection/CreateTableCollection.component";
 
 const Redirect = () => {
   const navigate = useNavigate();
@@ -33,7 +33,10 @@ export default function () {
                 path=":driver/:collectonORtable"
                 element={<SchemaEditor />}
               />
-              <Route path="create/:driver" element={<CreateTable />} />
+              <Route
+                path="create/:driver"
+                element={<CreateTableCollection />}
+              />
             </Route>
           </Route>
         </Route>
