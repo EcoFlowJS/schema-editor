@@ -272,9 +272,11 @@ export default function DatabaseStructure() {
                       style={{ padding: "0 1rem" }}
                     >
                       {databaseTableTypes
-                        .filter(
-                          (t) =>
-                            t.alias.toUpperCase() === column.alias.toUpperCase()
+                        .filter((t) =>
+                          column.alias !== null
+                            ? t.alias.toUpperCase() ===
+                              column.alias.toUpperCase()
+                            : false
                         )
                         .map((t, index) => (
                           <p key={index}>

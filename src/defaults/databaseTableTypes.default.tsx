@@ -53,13 +53,6 @@ const databaseTableTypes: DatabaseTableTypesConfig[] = [
     icon: TbJson,
     alias: "Json",
   },
-  {
-    type: "foreign",
-    name: "Foreign Key",
-    hint: "Refers to a Table",
-    icon: TbLink,
-    alias: "Foreign",
-  },
 ];
 
 export default databaseTableTypes;
