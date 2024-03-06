@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import {
   Button,
   Divider,
@@ -11,6 +11,7 @@ import {
 import databaseTableTypes from "../../../../defaults/databaseTableTypes.default";
 import {
   DatabaseColumnInfo,
+  DatabaseCreateEditModel,
   DatabaseTableTypes as DatabaseTypes,
 } from "@eco-flow/types";
 import TypeConfig from "./TypeConfig/TypeConfig.component";
@@ -21,26 +22,25 @@ import { FaPlus } from "react-icons/fa";
 import { DatabaseCreateColumnSendData } from "../../../../defaults/databaseCreateColumnSendData.default";
 import processDatabaseTypeAlias from "../../../../utils/processDatabaseTypeAlias/processDatabaseTypeAlias.util";
 import { useAtom } from "jotai";
-import {
-  errorNotification,
-  successNotification,
-} from "../../../../store/notification.store";
+import { errorNotification } from "../../../../store/notification.store";
 
 interface CreateModifyColumnModalProps {
   modalCreateModify: [
     {
       open: boolean;
       type: "CREATE" | "MODIFY";
+      editData?: DatabaseColumnInfo;
     },
     React.Dispatch<
       React.SetStateAction<{
         open: boolean;
         type: "CREATE" | "MODIFY";
+        editData?: DatabaseColumnInfo;
       }>
     >
   ];
   databaseColumns: DatabaseColumnInfo[];
-  onDone?: (result: DatabaseColumnInfo) => void;
+  onDone?: (type: "CREATE" | "MODIFY", result: DatabaseColumnInfo) => void;
 }
 
 export default function CreateModifyColumnModal({
@@ -55,7 +55,6 @@ export default function CreateModifyColumnModal({
   const [databseData, setDatabaseData] =
     React.useState<DatabaseCreateColumnSendData>({});
 
-  const successNotificationShow = useAtom(successNotification)[1];
   const errorNotificationShow = useAtom(errorNotification)[1];
 
   const handleNext = (type: DatabaseTypes) => {
@@ -133,7 +132,7 @@ export default function CreateModifyColumnModal({
     }
 
     if (databseData.columnData && databseData.type) {
-      onDone({
+      onDone(_modalCreateModify.type, {
         name: databseData.columnData.columnName,
         type: databseData.type,
         alias: processDatabaseTypeAlias(databseData.type),
@@ -143,6 +142,14 @@ export default function CreateModifyColumnModal({
       else setOpen(false);
     }
   };
+
+  useEffect(() => {
+    if (_modalCreateModify.type === "MODIFY" && _modalCreateModify.editData)
+      setDatabaseData({
+        ...databseData,
+        columnData: _modalCreateModify.editData!.actualData!.columnData,
+      });
+  }, [_modalCreateModify.type]);
 
   return (
     <Modal
@@ -197,7 +204,7 @@ export default function CreateModifyColumnModal({
         </Modal.Title>
       </Modal.Header>
       <Modal.Body>
-        {!typeSelected ? (
+        {!typeSelected && _modalCreateModify.type === "CREATE" ? (
           <Panel bodyFill style={{ padding: "0 20px" }}>
             <h6 style={{ paddingLeft: "1rem" }}>
               Select a field for your table
@@ -253,13 +260,26 @@ export default function CreateModifyColumnModal({
           <></>
         )}
 
-        {typeSelected ? (
+        {typeSelected || _modalCreateModify.type === "MODIFY" ? (
           <TypeConfig
             config={
-              databaseTableTypes.filter((t) => t.type === databseData.type)[0]
+              _modalCreateModify.type === "MODIFY"
+                ? databaseTableTypes.filter(
+                    (t) =>
+                      t.alias.toUpperCase() ===
+                      _modalCreateModify.editData!.alias.toUpperCase()
+                  )[0]
+                : databaseTableTypes.filter(
+                    (t) => t.type === databseData.type
+                  )[0]
             }
             onChange={(value) =>
               setDatabaseData({ ...databseData, columnData: value })
+            }
+            defaultValue={
+              _modalCreateModify.type === "MODIFY"
+                ? _modalCreateModify.editData!.actualData!.columnData
+                : undefined
             }
           />
         ) : (

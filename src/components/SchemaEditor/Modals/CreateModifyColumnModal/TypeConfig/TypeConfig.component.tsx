@@ -5,21 +5,30 @@ import { DatabaseTableTypesConfig } from "../../../../../defaults/databaseTableT
 import BasicSettings from "./BasicSettings/BasicSettings.component";
 import AdvancedSettings from "./AdvancedSettings/AdvancedSettings.component";
 import databaseCreateEditModel from "../../../../../defaults/databaseCreateEditModel.default";
+import { DatabaseCreateEditModel } from "@eco-flow/types";
 
 interface TypeConfigProps {
   config: DatabaseTableTypesConfig;
   onChange?: (formValue: typeof databaseCreateEditModel) => void;
+  defaultValue?: DatabaseCreateEditModel;
 }
 
 export default function TypeConfig({
   config,
   onChange = () => {},
+  defaultValue,
 }: TypeConfigProps) {
   const [formData, setFormData] = React.useState(databaseCreateEditModel);
 
   useEffect(() => {
     onChange(formData);
   }, [formData]);
+
+  useEffect(() => {
+    if (typeof defaultValue !== "undefined") {
+      setFormData({ ...defaultValue });
+    }
+  }, []);
 
   return (
     <Panel bodyFill style={{ padding: 20, paddingTop: 0 }}>

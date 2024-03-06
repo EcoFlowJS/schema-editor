@@ -47,6 +47,7 @@ export default function AdvancedSettings({
           label="Default Value"
           helperText="Default Value for this column"
           autoComplete="off"
+          placeholder="Default Value for this column"
           style={{ width: "100%" }}
           {...(type === "integer"
             ? {
@@ -61,11 +62,11 @@ export default function AdvancedSettings({
                   data: [
                     {
                       label: "true",
-                      value: 1,
+                      value: "1",
                     },
                     {
                       label: "false",
-                      value: 0,
+                      value: "0",
                     },
                   ],
                   searchable: false,

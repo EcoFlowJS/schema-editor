@@ -15,11 +15,11 @@ interface BasicSettingsProps {
 
 export default function BasicSettings({ type = "string" }: BasicSettingsProps) {
   const SelectTextFormat = ({ ...props }: any) => (
-    <RadioTileGroup defaultValue="varChar" {...props}>
+    <RadioTileGroup defaultValue="varchar" {...props}>
       <RadioTile
         icon={<IconWrapper icon={PiTextTFill} />}
         label="Short text"
-        value="varChar"
+        value="varchar"
       >
         Best for titles, names, links (URL). It create a field with
         varchar(255).
@@ -59,6 +59,7 @@ export default function BasicSettings({ type = "string" }: BasicSettingsProps) {
           autoComplete="off"
           helperText="No special character is allowed for the name of the attribute"
           style={{ width: "100%" }}
+          placeholder="Name"
         />
       </FlexboxGrid.Item>
       {type === "string" || type === "integer" || type === "datetime" ? (

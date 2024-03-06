@@ -15,12 +15,14 @@ import { IconWrapper } from "@eco-flow/components-lib";
 import {
   DatabaseColumnData,
   DatabaseColumnInfo,
-  DatabaseTableTypes as DatabaseTypes,
+  DatabaseCreateEditModel,
 } from "@eco-flow/types";
 import CreateModifyColumnModal from "../Modals/CreateModifyColumnModal/CreateModifyColumnModal.component";
 import "./style.less";
 import databaseCreateModifySendData from "../../../defaults/databaseCreateModifySendData.default";
 import commitSaveTables from "../../../service/database/commitSaveTables.service";
+import getColumnInfo from "../../../service/database/getColumnInfo.service";
+import databaseTableTypes from "../../../defaults/databaseTableTypes.default";
 
 export default function DatabaseStructure() {
   const { id, driver, collectonORtable } = useParams();
@@ -30,13 +32,7 @@ export default function DatabaseStructure() {
   const [isFetching, setFetching] = React.useState(false);
   const [databaseColumns, setDatabaseColumns] = React.useState<
     DatabaseColumnInfo[]
-  >([
-    {
-      name: "database",
-      type: "string",
-      alias: "text",
-    },
-  ]);
+  >([]);
   const [sendData, setSendData] = React.useState<DatabaseColumnData>(
     databaseCreateModifySendData
   );
@@ -44,6 +40,7 @@ export default function DatabaseStructure() {
   const [modalCreateModify, setModalCreateModify] = React.useState<{
     open: boolean;
     type: "CREATE" | "MODIFY";
+    editData?: DatabaseColumnInfo;
   }>({ open: false, type: "CREATE" });
 
   const addColumnHandler = (result: DatabaseColumnInfo) => {
@@ -67,7 +64,7 @@ export default function DatabaseStructure() {
     });
   };
 
-  const modifyDatabaseColumnsHandler = (id: number) => {};
+  const modifyDatabaseColumnsHandler = (result: DatabaseColumnInfo) => {};
 
   const deleteDatabaseColumnHandler = (id: number) => {
     const databaseColumnsData = [...databaseColumns];
@@ -95,15 +92,35 @@ export default function DatabaseStructure() {
     setSendData({ ...sendData, deleteDatabaseColumns: deleted });
   };
 
+  const onDoneHandler = (
+    type: "CREATE" | "MODIFY",
+    result: DatabaseColumnInfo
+  ) => {
+    if (type === "CREATE") addColumnHandler(result);
+    if (type === "MODIFY") modifyDatabaseColumnsHandler(result);
+  };
+
   const commitSavehandler = () => {
-    // setLoading(true);
-    commitSaveTables(id!, collectonORtable!, sendData).then((value) => {
+    setLoading(true);
+    commitSaveTables(id!, collectonORtable!, sendData).then((response) => {
       setLoading(false);
-      console.log(value);
+      if (response.success) {
+        setDatabaseColumns(response.payload.columnInfo);
+        setSendData(databaseCreateModifySendData);
+      }
     });
   };
 
-  useEffect(() => console.log(sendData), [sendData]);
+  useEffect(() => {
+    setFetching(true);
+    getColumnInfo(id!, collectonORtable!).then((response) => {
+      setFetching(false);
+      if (response.success) {
+        setDatabaseColumns(response.payload.columnInfo);
+      }
+    });
+  }, [collectonORtable]);
+
   return (
     <>
       <Panel>
@@ -240,14 +257,36 @@ export default function DatabaseStructure() {
               databaseColumns.map((column, index) => (
                 <List.Item
                   key={index}
-                  onDoubleClick={() => modifyDatabaseColumnsHandler(index)}
+                  onDoubleClick={() =>
+                    setModalCreateModify({
+                      open: true,
+                      type: "MODIFY",
+                      editData: column,
+                    })
+                  }
                 >
                   <FlexboxGrid justify="space-between" align="middle">
                     <FlexboxGrid.Item
                       colspan={12}
                       style={{ padding: "0 1rem" }}
                     >
-                      {column.name}
+                      {databaseTableTypes
+                        .filter(
+                          (t) =>
+                            t.alias.toUpperCase() === column.alias.toUpperCase()
+                        )
+                        .map((t, index) => (
+                          <p key={index}>
+                            <span
+                              style={{ fontSize: "1.4rem", marginRight: 10 }}
+                            >
+                              <IconWrapper icon={t.icon} />
+                            </span>
+                            <span style={{ fontSize: "1rem" }}>
+                              {column.name}
+                            </span>
+                          </p>
+                        ))}
                     </FlexboxGrid.Item>
                     <FlexboxGrid.Item colspan={9}>
                       {column.alias}
@@ -259,7 +298,13 @@ export default function DatabaseStructure() {
                       >
                         <IconButton
                           appearance="link"
-                          onClick={() => modifyDatabaseColumnsHandler(index)}
+                          onClick={() =>
+                            setModalCreateModify({
+                              open: true,
+                              type: "MODIFY",
+                              editData: column,
+                            })
+                          }
                           icon={<IconWrapper icon={FaPencil} />}
                         />
                         <IconButton
@@ -282,7 +327,7 @@ export default function DatabaseStructure() {
         <CreateModifyColumnModal
           modalCreateModify={[modalCreateModify, setModalCreateModify]}
           databaseColumns={databaseColumns}
-          onDone={addColumnHandler}
+          onDone={onDoneHandler}
         />
       ) : (
         <></>
