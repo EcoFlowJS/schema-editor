@@ -1,4 +1,3 @@
-import React from "react";
 import { Panel, Placeholder } from "rsuite";
 
 export default function DatabaseIntro() {
@@ -10,7 +9,9 @@ export default function DatabaseIntro() {
         </div>
       }
       bordered
-      style={{ backgroundColor: "var(--rs-gray-800)" }}
+      style={{
+        backgroundColor: "var(--dashboard-subcontent-background-color)",
+      }}
     >
       <Placeholder.Paragraph />
     </Panel>
