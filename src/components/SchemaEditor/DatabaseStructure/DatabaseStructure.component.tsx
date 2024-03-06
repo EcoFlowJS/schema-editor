@@ -117,6 +117,7 @@ export default function DatabaseStructure() {
       setFetching(false);
       if (response.success) {
         setDatabaseColumns(response.payload.columnInfo);
+        setSendData(databaseCreateModifySendData);
       }
     });
   }, [collectonORtable]);
