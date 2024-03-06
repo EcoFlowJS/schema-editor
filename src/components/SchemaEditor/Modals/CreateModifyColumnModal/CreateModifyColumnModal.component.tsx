@@ -1,0 +1,312 @@
+import React from "react";
+import {
+  Button,
+  Divider,
+  FlexboxGrid,
+  IconButton,
+  Modal,
+  Panel,
+  Stack,
+} from "rsuite";
+import databaseTableTypes from "../../../../defaults/databaseTableTypes.default";
+import {
+  DatabaseColumnInfo,
+  DatabaseTableTypes as DatabaseTypes,
+} from "@eco-flow/types";
+import TypeConfig from "./TypeConfig/TypeConfig.component";
+import { TiArrowLeft } from "react-icons/ti";
+import { useParams } from "react-router-dom";
+import { IconWrapper } from "@eco-flow/components-lib";
+import { FaPlus } from "react-icons/fa";
+import { DatabaseCreateColumnSendData } from "../../../../defaults/databaseCreateColumnSendData.default";
+import processDatabaseTypeAlias from "../../../../utils/processDatabaseTypeAlias/processDatabaseTypeAlias.util";
+import { useAtom } from "jotai";
+import {
+  errorNotification,
+  successNotification,
+} from "../../../../store/notification.store";
+
+interface CreateModifyColumnModalProps {
+  modalCreateModify: [
+    {
+      open: boolean;
+      type: "CREATE" | "MODIFY";
+    },
+    React.Dispatch<
+      React.SetStateAction<{
+        open: boolean;
+        type: "CREATE" | "MODIFY";
+      }>
+    >
+  ];
+  databaseColumns: DatabaseColumnInfo[];
+  onDone?: (result: DatabaseColumnInfo) => void;
+}
+
+export default function CreateModifyColumnModal({
+  modalCreateModify,
+  databaseColumns = [],
+  onDone = () => {},
+}: CreateModifyColumnModalProps) {
+  const [_modalCreateModify, setModalCreateModify] = modalCreateModify;
+  const [open, setOpen] = React.useState(true);
+  const { id, driver, collectonORtable } = useParams();
+  const [typeSelected, setTypeSelected] = React.useState(false);
+  const [databseData, setDatabaseData] =
+    React.useState<DatabaseCreateColumnSendData>({});
+
+  const successNotificationShow = useAtom(successNotification)[1];
+  const errorNotificationShow = useAtom(errorNotification)[1];
+
+  const handleNext = (type: DatabaseTypes) => {
+    setTypeSelected(true);
+    setDatabaseData({
+      type: type,
+    });
+  };
+
+  const handlePrevious = () => {
+    setTypeSelected(false);
+    setDatabaseData({});
+  };
+
+  const handleClose = (event?: React.SyntheticEvent<Element, Event>) => {
+    if (!confirm("Are you sure? Your changes will be lost.")) {
+      if (event) event.preventDefault();
+      return;
+    }
+    setOpen(false);
+  };
+
+  const handleAdd = (finish: boolean = false) => {
+    if (typeof databseData.type === "undefined") {
+      errorNotificationShow({
+        show: true,
+        header: "Adding Table Error",
+        message: "Column type not selected",
+      });
+      return;
+    }
+    if (typeof databseData.columnData === "undefined") {
+      errorNotificationShow({
+        show: true,
+        header: "Adding Table Error",
+        message: "Error fetching column data",
+      });
+      return;
+    }
+    if (databseData.columnData.columnName.trim().length === 0) {
+      errorNotificationShow({
+        show: true,
+        header: "Adding Table Error",
+        message: "Enter column name.",
+      });
+      return;
+    }
+
+    if (
+      !/^[a-zA-Z_$][a-zA-Z_$0-9]*$/g.test(
+        databseData.columnData.columnName.trim()
+      )
+    ) {
+      errorNotificationShow({
+        show: true,
+        header: "Adding Table Error",
+        message:
+          "No special character is allowed for the name of the attribute",
+      });
+      return;
+    }
+
+    if (
+      databaseColumns.filter(
+        (columnName) =>
+          columnName.name.trim() === databseData.columnData!.columnName.trim()
+      ).length > 0
+    ) {
+      errorNotificationShow({
+        show: true,
+        header: "Adding Table Error",
+        message: "Column already exists.",
+      });
+      return;
+    }
+
+    if (databseData.columnData && databseData.type) {
+      onDone({
+        name: databseData.columnData.columnName,
+        type: databseData.type,
+        alias: processDatabaseTypeAlias(databseData.type),
+        actualData: databseData,
+      });
+      if (!finish) handlePrevious();
+      else setOpen(false);
+    }
+  };
+
+  return (
+    <Modal
+      open={_modalCreateModify.open && open}
+      onClose={handleClose}
+      onExited={() =>
+        setModalCreateModify({ ..._modalCreateModify, open: false })
+      }
+      overflow
+      size="lg"
+    >
+      <Modal.Header
+        style={{
+          paddingBottom: 24,
+          borderBottom: "1px solid var(--rs-divider-border)",
+        }}
+      >
+        <Modal.Title>
+          <Stack spacing={5}>
+            {typeSelected ? (
+              <>
+                <IconButton
+                  size="lg"
+                  style={{ padding: 0 }}
+                  appearance="subtle"
+                  icon={
+                    <div style={{ fontSize: "2.5rem" }}>
+                      <IconWrapper icon={TiArrowLeft} />
+                    </div>
+                  }
+                  onClick={handlePrevious}
+                />
+                {databaseTableTypes
+                  .filter((t) => t.type === databseData.type)
+                  .map((t, index) => (
+                    <div key={index} style={{ fontSize: "1.5rem" }}>
+                      <IconWrapper icon={t.icon} />
+                    </div>
+                  ))}
+                {collectonORtable}
+              </>
+            ) : (
+              <>
+                {_modalCreateModify.type === "CREATE"
+                  ? "Create Table"
+                  : _modalCreateModify.type === "MODIFY"
+                  ? "Edit Table"
+                  : ""}
+              </>
+            )}
+          </Stack>
+        </Modal.Title>
+      </Modal.Header>
+      <Modal.Body>
+        {!typeSelected ? (
+          <Panel bodyFill style={{ padding: "0 20px" }}>
+            <h6 style={{ paddingLeft: "1rem" }}>
+              Select a field for your table
+            </h6>
+            <Divider />
+            <FlexboxGrid>
+              {databaseTableTypes.map((databaseType, index) => (
+                <FlexboxGrid.Item
+                  key={index}
+                  colspan={12}
+                  style={{ padding: 15, paddingTop: 0 }}
+                >
+                  <Button
+                    startIcon={
+                      <div style={{ fontSize: "1.8rem" }}>
+                        <IconWrapper icon={databaseType.icon} />
+                      </div>
+                    }
+                    appearance="subtle"
+                    style={{
+                      justifyContent: "start",
+                      width: "100%",
+                      padding: "1.2rem 1.5rem",
+                      border: "1px solid var(--dashboard-navbar-border-color)",
+                      fontSize: "1rem",
+                      color: "var(--rs-text-primary)",
+                      fontWeight: "bold",
+                    }}
+                    onClick={() => handleNext(databaseType.type)}
+                  >
+                    <FlexboxGrid
+                      style={{
+                        marginLeft: 18,
+                        flexDirection: "column",
+                      }}
+                    >
+                      {databaseType.name.toUpperCase()}
+                      <small
+                        style={{
+                          fontWeight: "normal",
+                          color: "var(--text-info-color)",
+                        }}
+                      >
+                        {databaseType.hint}
+                      </small>
+                    </FlexboxGrid>
+                  </Button>
+                </FlexboxGrid.Item>
+              ))}
+            </FlexboxGrid>
+          </Panel>
+        ) : (
+          <></>
+        )}
+
+        {typeSelected ? (
+          <TypeConfig
+            config={
+              databaseTableTypes.filter((t) => t.type === databseData.type)[0]
+            }
+            onChange={(value) =>
+              setDatabaseData({ ...databseData, columnData: value })
+            }
+          />
+        ) : (
+          <></>
+        )}
+      </Modal.Body>
+      {typeSelected ? (
+        <Modal.Footer
+          style={{
+            paddingTop: 24,
+            borderTop: "1px solid var(--rs-divider-border)",
+          }}
+        >
+          <FlexboxGrid justify="space-between">
+            <FlexboxGrid.Item>
+              <Button
+                style={{ minWidth: 130 }}
+                appearance="ghost"
+                onClick={handleClose}
+              >
+                Cancel
+              </Button>
+            </FlexboxGrid.Item>
+            <FlexboxGrid.Item>
+              <Stack spacing={15}>
+                <Button
+                  style={{ minWidth: 130 }}
+                  appearance="ghost"
+                  startIcon={<IconWrapper icon={FaPlus} />}
+                  onClick={() => handleAdd()}
+                >
+                  Add another field
+                </Button>
+                <Button
+                  style={{ minWidth: 130 }}
+                  appearance="primary"
+                  onClick={() => handleAdd(true)}
+                >
+                  Finish
+                </Button>
+              </Stack>
+            </FlexboxGrid.Item>
+          </FlexboxGrid>
+        </Modal.Footer>
+      ) : (
+        <></>
+      )}
+    </Modal>
+  );
+}

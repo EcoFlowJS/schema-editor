@@ -17,6 +17,7 @@ import DeleteTableCollection from "../DatabaseTableCollection/DeleteTableCollect
 import RenameTableCollection from "../DatabaseTableCollection/RenameTableCollection/RenameTableCollection.component";
 import { useAtom } from "jotai";
 import { editStructure } from "../../store/schemaEditor.store";
+import DatabaseStructure from "./DatabaseStructure/DatabaseStructure.component";
 
 export default function SchemaEditor() {
   const navigate = useNavigate();
@@ -26,7 +27,7 @@ export default function SchemaEditor() {
   const [renameCollectionTableAlertModal, setRenameCollectionTableAlertModal] =
     React.useState(false);
   const [isEditStructure, setEditStructure] = useAtom(editStructure);
-  const [tabKey, setTabKey] = React.useState("1");
+  const [tabKey, setTabKey] = React.useState("2");
 
   useEffect(() => {
     if (driver === "knex" || driver === "mongo") return;
@@ -93,7 +94,9 @@ export default function SchemaEditor() {
           </FlexboxGrid>
         }
         bordered
-        style={{ backgroundColor: "var(--rs-gray-800)" }}
+        style={{
+          backgroundColor: "var(--dashboard-subcontent-background-color)",
+        }}
       >
         <Tabs
           defaultActiveKey="1"
@@ -101,7 +104,7 @@ export default function SchemaEditor() {
           onSelect={(key) => setTabKey(key!)}
         >
           <Tabs.Tab eventKey="1" title="Database Data" icon={<TbDatabase />}>
-            <DatabaseData />
+            {tabKey === "1" ? <DatabaseData /> : <></>}
           </Tabs.Tab>
           {driver === "knex" ? (
             <Tabs.Tab
@@ -109,7 +112,7 @@ export default function SchemaEditor() {
               title="Database Structure"
               icon={<TbDatabaseEdit />}
             >
-              <Placeholder.Paragraph graph="square" />
+              {tabKey === "2" ? <DatabaseStructure /> : <></>}
             </Tabs.Tab>
           ) : (
             <></>

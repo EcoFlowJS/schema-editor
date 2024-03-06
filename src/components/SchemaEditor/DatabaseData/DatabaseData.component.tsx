@@ -147,43 +147,51 @@ export default function DatabaseData() {
           </FlexboxGrid.Item>
         </FlexboxGrid>
         {driver === "knex" ? (
-          <Table
-            height={400}
-            data={ProcessData(databaseData)}
-            bordered
-            loading={isLoading}
-            sortColumn={sortColumn}
-            sortType={sortType}
-            onSortColumn={handleSortColumn}
-          >
-            {databaseColumns!.map((column) => {
-              return (
-                <Column key={column.name} flexGrow={1} resizable sortable>
-                  <HeaderCell>{column.name}</HeaderCell>
-                  <CustomCell dataKey={column.name} />
-                </Column>
-              );
-            })}
-            <Column width={110}>
-              <HeaderCell align="center" style={{ fontSize: "1.3rem" }}>
-                <FaGears />
-              </HeaderCell>
-              <CellActionButton
-                onClickEdit={(id) => {
-                  setOpen(true);
-                  setDrawerMode("edit");
-                  setDrawerEditValues(
-                    (
-                      databaseData.filter(
-                        (value: any) => value.id === id
-                      )[0] as any
-                    ).data
-                  );
-                }}
-                onClickDelete={console.log}
-              />
-            </Column>
-          </Table>
+          <>
+            <Table
+              height={400}
+              data={ProcessData(databaseData)}
+              bordered
+              loading={isLoading}
+              sortColumn={sortColumn}
+              sortType={sortType}
+              onSortColumn={handleSortColumn}
+            >
+              {databaseColumns!.map((column) => {
+                return (
+                  <Column key={column.name} flexGrow={1} resizable sortable>
+                    <HeaderCell>{column.name}</HeaderCell>
+                    <CustomCell dataKey={column.name} />
+                  </Column>
+                );
+              })}
+              <Column width={110}>
+                <HeaderCell align="center" style={{ fontSize: "1.3rem" }}>
+                  <FaGears />
+                </HeaderCell>
+                <CellActionButton
+                  onClickEdit={(id) => {
+                    setOpen(true);
+                    setDrawerMode("edit");
+                    setDrawerEditValues(
+                      (
+                        databaseData.filter(
+                          (value: any) => value.id === id
+                        )[0] as any
+                      ).data
+                    );
+                  }}
+                  onClickDelete={console.log}
+                />
+              </Column>
+            </Table>
+            <Panel
+              bodyFill
+              style={{ color: "var(--text-info-color)", padding: "5px" }}
+            >
+              <small>{databaseData.length} entries found</small>
+            </Panel>
+          </>
         ) : driver === "mongo" ? (
           <PanelGroup>
             {databaseData.map((data) => (

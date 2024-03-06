@@ -1,17 +1,8 @@
-import React, { useLayoutEffect } from "react";
+import { useLayoutEffect } from "react";
 import { Outlet, useParams } from "react-router-dom";
-import {
-  Button,
-  Container,
-  Content,
-  Divider,
-  Modal,
-  Panel,
-  Placeholder,
-} from "rsuite";
+import { Container, Content } from "rsuite";
 import Header from "../../components/Header/Header";
 import SideNav from "../../components/SideNav/SideNav.component";
-import { useAtom } from "jotai";
 
 export default function DatabaseLayout() {
   const { id } = useParams();

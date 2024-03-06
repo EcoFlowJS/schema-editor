@@ -81,7 +81,7 @@ export default function CreateTable() {
             }`,
             message: `${response.payload.currentCollectionTableName} added successfully`,
           });
-          setEditStructure(true);
+          if (driver === "knex") setEditStructure(true);
           setCollectionORTable(response.payload.collectionsORtables);
           navigate(
             `/editor/schema/database/${id}/${driver}/${response.payload.currentCollectionTableName}`
@@ -121,7 +121,9 @@ export default function CreateTable() {
           </h4>
         </div>
       }
-      style={{ backgroundColor: "var(--rs-gray-800)" }}
+      style={{
+        backgroundColor: "var(--dashboard-subcontent-background-color)",
+      }}
     >
       <Tabs defaultActiveKey="1">
         <Tabs.Tab
