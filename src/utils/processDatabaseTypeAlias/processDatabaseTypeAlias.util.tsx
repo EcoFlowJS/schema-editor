@@ -1,21 +1,21 @@
-import { DatabaseTableTypes } from "@eco-flow/types";
+import { DatabaseTableAlias, DatabaseTableTypes } from "@eco-flow/types";
 
-const processDatabaseTypeAlias = (type: DatabaseTableTypes): string => {
+const processDatabaseTypeAlias = (
+  type: DatabaseTableTypes
+): DatabaseTableAlias | null => {
   switch (type) {
     case "boolean":
-      return "boolean";
+      return "Boolean";
     case "integer":
-      return "number";
+      return "Number";
     case "string":
-      return "text";
+      return "Text";
     case "datetime":
-      return "date";
-    case "foreign":
-      return "foreign";
+      return "Date";
     case "json":
-      return "json";
+      return "Json";
     default:
-      return "";
+      return null;
   }
 };
 

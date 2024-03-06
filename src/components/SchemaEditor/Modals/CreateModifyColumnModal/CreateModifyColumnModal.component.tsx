@@ -11,7 +11,6 @@ import {
 import databaseTableTypes from "../../../../defaults/databaseTableTypes.default";
 import {
   DatabaseColumnInfo,
-  DatabaseCreateEditModel,
   DatabaseTableTypes as DatabaseTypes,
 } from "@eco-flow/types";
 import TypeConfig from "./TypeConfig/TypeConfig.component";
@@ -77,11 +76,14 @@ export default function CreateModifyColumnModal({
     setOpen(false);
   };
 
-  const handleAdd = (finish: boolean = false) => {
+  const handleAddModify = (finish: boolean = false) => {
     if (typeof databseData.type === "undefined") {
       errorNotificationShow({
         show: true,
-        header: "Adding Table Error",
+        header:
+          _modalCreateModify.type === "MODIFY"
+            ? "Modifing Table Error"
+            : "Adding Table Error",
         message: "Column type not selected",
       });
       return;
@@ -89,7 +91,10 @@ export default function CreateModifyColumnModal({
     if (typeof databseData.columnData === "undefined") {
       errorNotificationShow({
         show: true,
-        header: "Adding Table Error",
+        header:
+          _modalCreateModify.type === "MODIFY"
+            ? "Modifing Table Error"
+            : "Adding Table Error",
         message: "Error fetching column data",
       });
       return;
@@ -97,7 +102,10 @@ export default function CreateModifyColumnModal({
     if (databseData.columnData.columnName.trim().length === 0) {
       errorNotificationShow({
         show: true,
-        header: "Adding Table Error",
+        header:
+          _modalCreateModify.type === "MODIFY"
+            ? "Modifing Table Error"
+            : "Adding Table Error",
         message: "Enter column name.",
       });
       return;
@@ -110,32 +118,46 @@ export default function CreateModifyColumnModal({
     ) {
       errorNotificationShow({
         show: true,
-        header: "Adding Table Error",
+        header:
+          _modalCreateModify.type === "MODIFY"
+            ? "Modifing Table Error"
+            : "Adding Table Error",
         message:
           "No special character is allowed for the name of the attribute",
       });
       return;
     }
 
-    if (
+    const isExist =
       databaseColumns.filter(
         (columnName) =>
           columnName.name.trim() === databseData.columnData!.columnName.trim()
-      ).length > 0
+      ).length > 0;
+
+    if (
+      (isExist && _modalCreateModify.type === "CREATE") ||
+      (isExist &&
+        _modalCreateModify.type === "MODIFY" &&
+        databseData.columnData!.columnName.trim() !==
+          _modalCreateModify.editData?.actualData?.columnData?.columnName.trim())
     ) {
       errorNotificationShow({
         show: true,
-        header: "Adding Table Error",
+        header:
+          _modalCreateModify.type === "MODIFY"
+            ? "Modifing Table Error"
+            : "Adding Table Error",
         message: "Column already exists.",
       });
       return;
     }
 
     if (databseData.columnData && databseData.type) {
+      const alias = processDatabaseTypeAlias(databseData.type);
       onDone(_modalCreateModify.type, {
         name: databseData.columnData.columnName,
         type: databseData.type,
-        alias: processDatabaseTypeAlias(databseData.type),
+        alias: alias !== null ? alias : "",
         actualData: databseData,
       });
       if (!finish) handlePrevious();
@@ -147,6 +169,7 @@ export default function CreateModifyColumnModal({
     if (_modalCreateModify.type === "MODIFY" && _modalCreateModify.editData)
       setDatabaseData({
         ...databseData,
+        type: _modalCreateModify.editData.type,
         columnData: _modalCreateModify.editData!.actualData!.columnData,
       });
   }, [_modalCreateModify.type]);
@@ -286,7 +309,7 @@ export default function CreateModifyColumnModal({
           <></>
         )}
       </Modal.Body>
-      {typeSelected ? (
+      {typeSelected || _modalCreateModify.type === "MODIFY" ? (
         <Modal.Footer
           style={{
             paddingTop: 24,
@@ -305,18 +328,22 @@ export default function CreateModifyColumnModal({
             </FlexboxGrid.Item>
             <FlexboxGrid.Item>
               <Stack spacing={15}>
-                <Button
-                  style={{ minWidth: 130 }}
-                  appearance="ghost"
-                  startIcon={<IconWrapper icon={FaPlus} />}
-                  onClick={() => handleAdd()}
-                >
-                  Add another field
-                </Button>
+                {_modalCreateModify.type === "CREATE" ? (
+                  <Button
+                    style={{ minWidth: 130 }}
+                    appearance="ghost"
+                    startIcon={<IconWrapper icon={FaPlus} />}
+                    onClick={() => handleAddModify()}
+                  >
+                    Add another field
+                  </Button>
+                ) : (
+                  <></>
+                )}
                 <Button
                   style={{ minWidth: 130 }}
                   appearance="primary"
-                  onClick={() => handleAdd(true)}
+                  onClick={() => handleAddModify(true)}
                 >
                   Finish
                 </Button>
