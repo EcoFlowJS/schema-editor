@@ -12,7 +12,11 @@ import {
 } from "rsuite";
 import { FaPlus, FaCheck, FaTrash, FaPencil } from "react-icons/fa6";
 import { IconWrapper } from "@eco-flow/components-lib";
-import { DatabaseColumnData, DatabaseColumnInfo } from "@eco-flow/types";
+import {
+  ApiResponse,
+  DatabaseColumnData,
+  DatabaseColumnInfo,
+} from "@eco-flow/types";
 import CreateModifyColumnModal from "../Modals/CreateModifyColumnModal/CreateModifyColumnModal.component";
 import "./style.less";
 import databaseCreateModifySendData from "../../../defaults/databaseCreateModifySendData.default";
@@ -20,6 +24,16 @@ import commitSaveTables from "../../../service/database/commitSaveTables.service
 import getColumnInfo from "../../../service/database/getColumnInfo.service";
 import databaseTableTypes from "../../../defaults/databaseTableTypes.default";
 import isSameTableColumn from "../../../utils/isSameTableColumn/isSameTableColumn.util";
+import { useAtom } from "jotai";
+import {
+  errorNotification,
+  successNotification,
+} from "../../../store/notification.store";
+
+interface ModifyDatabaseColumns {
+  oldDatabaseColumns: DatabaseColumnInfo;
+  newDatabaseColumns: DatabaseColumnInfo;
+}
 
 export default function DatabaseStructure() {
   const { id, driver, collectonORtable } = useParams();
@@ -38,7 +52,11 @@ export default function DatabaseStructure() {
     open: boolean;
     type: "CREATE" | "MODIFY";
     editData?: DatabaseColumnInfo;
+    id?: number;
   }>({ open: false, type: "CREATE" });
+
+  const suceessNoti = useAtom(successNotification)[1];
+  const errorNoti = useAtom(errorNotification)[1];
 
   const addColumnHandler = (result: DatabaseColumnInfo) => {
     setDatabaseColumns([...databaseColumns, { ...result }]);
@@ -62,16 +80,18 @@ export default function DatabaseStructure() {
   };
 
   const modifyDatabaseColumnsHandler = (
-    previousData: DatabaseColumnInfo | null,
+    tableData: {
+      id: number;
+      previousData: DatabaseColumnInfo;
+    } | null,
     result: DatabaseColumnInfo
   ) => {
-    if (previousData === null) return;
+    if (tableData === null) return;
+    const { id, previousData } = tableData;
     const createDatabaseColumns = [...sendData.createDatabaseColumns];
 
-    setDatabaseColumns([
-      ...databaseColumns.filter((c) => c.name !== previousData.name),
-      result,
-    ]);
+    databaseColumns.splice(id, 1, result);
+    setDatabaseColumns(databaseColumns);
 
     const isExistCreate =
       createDatabaseColumns.filter((t) => t.name === previousData.name).length >
@@ -92,36 +112,25 @@ export default function DatabaseStructure() {
     const isExistUpdateData = sendData.modifyDatabaseColumns.filter(
       (updateData) => updateData.newDatabaseColumns.name === previousData.name
     );
-
-    let newmodifyDatabaseColumns: {
-      oldDatabaseColumns: DatabaseColumnInfo;
-      newDatabaseColumns: DatabaseColumnInfo;
-    }[];
-    let newModify: [
-      {
-        oldDatabaseColumns: DatabaseColumnInfo;
-        newDatabaseColumns: DatabaseColumnInfo;
-      }
-    ];
-
+    const newmodifyDatabaseColumns: ModifyDatabaseColumns[] = [];
+    const newModify: ModifyDatabaseColumns[] = [];
     if (isExistUpdateData.length > 0) {
-      newmodifyDatabaseColumns = sendData.modifyDatabaseColumns.filter(
-        (updateData) => updateData.newDatabaseColumns.name !== previousData.name
+      newmodifyDatabaseColumns.concat(
+        sendData.modifyDatabaseColumns.filter(
+          (updateData) =>
+            updateData.newDatabaseColumns.name !== previousData.name
+        )
       );
-      newModify = [
-        {
-          oldDatabaseColumns: isExistUpdateData[0].oldDatabaseColumns,
-          newDatabaseColumns: result,
-        },
-      ];
+      newModify.push({
+        oldDatabaseColumns: isExistUpdateData[0].oldDatabaseColumns,
+        newDatabaseColumns: result,
+      });
     } else {
-      newmodifyDatabaseColumns = sendData.modifyDatabaseColumns;
-      newModify = [
-        {
-          oldDatabaseColumns: previousData,
-          newDatabaseColumns: result,
-        },
-      ];
+      newmodifyDatabaseColumns.concat(sendData.modifyDatabaseColumns);
+      newModify.push({
+        oldDatabaseColumns: previousData,
+        newDatabaseColumns: result,
+      });
     }
 
     const isSame =
@@ -131,7 +140,6 @@ export default function DatabaseStructure() {
           columnInfo.newDatabaseColumns
         )
       ).length > 0;
-
     if (isSame) {
       setSendData({
         ...sendData,
@@ -139,6 +147,7 @@ export default function DatabaseStructure() {
       });
       return;
     }
+
     setSendData({
       ...sendData,
       modifyDatabaseColumns: [...newmodifyDatabaseColumns, ...newModify],
@@ -155,7 +164,6 @@ export default function DatabaseStructure() {
       sendData.createDatabaseColumns.filter(
         (t: any) => t.name === result[0].name
       ).length > 0;
-
     if (isExistCreate) {
       setSendData({
         ...sendData,
@@ -169,7 +177,6 @@ export default function DatabaseStructure() {
     const isExistDeleteData = sendData.modifyDatabaseColumns.filter(
       (t) => t.newDatabaseColumns.name === result[0].name
     );
-
     if (isExistDeleteData.length > 0) {
       setSendData({
         ...sendData,
@@ -195,23 +202,40 @@ export default function DatabaseStructure() {
   const onDoneHandler = (
     type: "CREATE" | "MODIFY",
     result: DatabaseColumnInfo,
-    previousData: DatabaseColumnInfo | null
+    tableData: {
+      id: number;
+      previousData: DatabaseColumnInfo;
+    } | null
   ) => {
     if (type === "CREATE") addColumnHandler(result);
-    if (type === "MODIFY") modifyDatabaseColumnsHandler(previousData, result);
+    if (type === "MODIFY") modifyDatabaseColumnsHandler(tableData, result);
   };
 
   const commitSavehandler = () => {
     setLoading(true);
-    commitSaveTables(id!, collectonORtable!, sendData).then((response) => {
-      setLoading(false);
-      if (response.success) {
-        console.log(response.payload);
-
-        setDatabaseColumns(response.payload.columnInfo);
-        setSendData(databaseCreateModifySendData);
+    commitSaveTables(id!, collectonORtable!, sendData).then(
+      (response) => {
+        setLoading(false);
+        if (response.success) {
+          suceessNoti({
+            show: true,
+            header: "Structure saved",
+            message: "Database structure altered and saved successfully",
+          });
+          setDatabaseColumns(response.payload.columnInfo);
+          setSendData(databaseCreateModifySendData);
+        }
+      },
+      (reject: ApiResponse) => {
+        setLoading(false);
+        if (reject.error)
+          errorNoti({
+            show: true,
+            header: "Structure saved Error",
+            message: reject.payload.toString(),
+          });
       }
-    });
+    );
   };
 
   useEffect(() => {
@@ -219,15 +243,11 @@ export default function DatabaseStructure() {
     getColumnInfo(id!, collectonORtable!).then((response) => {
       setFetching(false);
       if (response.success) {
-        console.log(response.payload.columnInfo);
-
         setDatabaseColumns(response.payload.columnInfo);
         setSendData(databaseCreateModifySendData);
       }
     });
   }, [collectonORtable]);
-
-  useEffect(() => console.log(sendData), [sendData]);
 
   return (
     <>
@@ -342,7 +362,6 @@ export default function DatabaseStructure() {
                 justify="center"
                 align="middle"
               >
-                <FlexboxGrid.Item></FlexboxGrid.Item>
                 <FlexboxGrid.Item style={{ padding: "1rem" }}>
                   <Button
                     disabled={isLoading}
@@ -404,6 +423,7 @@ export default function DatabaseStructure() {
                               open: true,
                               type: "MODIFY",
                               editData: column,
+                              id: index,
                             })
                           }
                           icon={<IconWrapper icon={FaPencil} />}
@@ -433,7 +453,10 @@ export default function DatabaseStructure() {
               type,
               result,
               modalCreateModify.type === "MODIFY"
-                ? modalCreateModify.editData!
+                ? {
+                    id: modalCreateModify.id!,
+                    previousData: modalCreateModify.editData!,
+                  }
                 : null
             )
           }
