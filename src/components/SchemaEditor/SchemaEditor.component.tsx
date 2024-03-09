@@ -27,7 +27,7 @@ export default function SchemaEditor() {
   const [renameCollectionTableAlertModal, setRenameCollectionTableAlertModal] =
     React.useState(false);
   const [isEditStructure, setEditStructure] = useAtom(editStructure);
-  const [tabKey, setTabKey] = React.useState("2");
+  const [tabKey, setTabKey] = React.useState("1");
 
   useEffect(() => {
     if (driver === "knex" || driver === "mongo") return;

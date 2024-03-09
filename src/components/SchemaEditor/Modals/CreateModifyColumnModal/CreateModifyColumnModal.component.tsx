@@ -157,7 +157,7 @@ export default function CreateModifyColumnModal({
       onDone(_modalCreateModify.type, {
         name: databseData.columnData.columnName,
         type: databseData.type,
-        alias: alias !== null ? alias : "",
+        alias: alias!,
         actualData: databseData,
       });
       if (!finish) handlePrevious();

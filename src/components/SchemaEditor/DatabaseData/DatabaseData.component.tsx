@@ -1,28 +1,20 @@
 import { IconWrapper } from "@eco-flow/components-lib";
 import React, { useEffect } from "react";
 import { LuRefreshCcwDot } from "react-icons/lu";
-import {
-  Button,
-  Divider,
-  FlexboxGrid,
-  Input,
-  Panel,
-  PanelGroup,
-  SelectPicker,
-  Stack,
-  Table,
-} from "rsuite";
+import { Button, Divider, FlexboxGrid, Panel, PanelGroup, Table } from "rsuite";
 import { SortType } from "rsuite/esm/Table";
 import getDatabaseData from "../../../service/database/showDatabaseData.service";
 import { useNavigate, useParams } from "react-router-dom";
 import CellActionButton from "./DatabaseDataTable/CellActionButton.component";
 import CustomCell from "./DatabaseDataTable/CustomCell.component";
-import { DatabaseDataResult } from "@eco-flow/types";
+import { DatabaseColumnInfo, DatabaseDataResult } from "@eco-flow/types";
 import { GrTableAdd } from "react-icons/gr";
 import { FaGears } from "react-icons/fa6";
 import { useAtom } from "jotai";
-import { openDrawer } from "../../../store/schemaEditor.store";
-import Drawer, { DrawerMode } from "../Drawer/Drawer.component";
+import { openInsertModifyModal } from "../../../store/schemaEditor.store";
+import InsertModifyModal, {
+  InsertModifyModalMode,
+} from "../Modals/InsertModifyModal/InsertModifyModal.component";
 const { Column, HeaderCell } = Table;
 
 export default function DatabaseData() {
@@ -35,12 +27,13 @@ export default function DatabaseData() {
 
   const [databaseData, setDatabaseData] = React.useState([]);
   const [databaseColumns, setDatabaseColumns] = React.useState<
-    DatabaseDataResult["columns"]
+    DatabaseColumnInfo[]
   >([]);
 
-  const [_isOpen, setOpen] = useAtom(openDrawer);
-  const [drawerMode, setDrawerMode] = React.useState<DrawerMode>("insert");
-  const [drawerEditValues, setDrawerEditValues] = React.useState<any>({});
+  const setOpen = useAtom(openInsertModifyModal)[1];
+  const [modalMode, setModalMode] =
+    React.useState<InsertModifyModalMode>("insert");
+  const [modalEditValues, setModalEditValues] = React.useState<any>({});
 
   useEffect(() => {
     (async () => await fetchDatabaseData())();
@@ -53,7 +46,12 @@ export default function DatabaseData() {
       if (response.success) {
         setLoading(false);
         setDatabaseColumns(
-          response.payload.columns ? response.payload.columns : []
+          response.payload.columns
+            ? [
+                { name: "_id", type: "integer", alias: "Number" },
+                ...response.payload.columns,
+              ]
+            : []
         );
         setDatabaseData(
           response.payload.data.map((value: any, index: number) => {
@@ -111,17 +109,20 @@ export default function DatabaseData() {
           style={{ paddingBottom: "1rem" }}
         >
           <FlexboxGrid.Item>
-            <Stack spacing={10}>
-              <SelectPicker
-                searchable={false}
-                data={databaseColumns!.map((column) => {
-                  return { value: column.name, label: column.name };
-                })}
-                style={{ minWidth: 150 }}
-              />
-              <Input />
-              <Button>filter</Button>
-            </Stack>
+            <p
+              style={{
+                padding: "0 10px",
+                fontSize: "large",
+                color: "var(--text-info-color)",
+              }}
+            >
+              All datas available in the{" "}
+              {driver === "knex"
+                ? "table"
+                : driver === "mongo"
+                ? "collection"
+                : ""}
+            </p>
           </FlexboxGrid.Item>
           <FlexboxGrid.Item>
             <Button
@@ -130,7 +131,8 @@ export default function DatabaseData() {
               startIcon={<IconWrapper icon={GrTableAdd} />}
               onClick={() => {
                 setOpen(true);
-                setDrawerMode("insert");
+                setModalMode("insert");
+                setModalEditValues({});
               }}
             >
               Insert
@@ -172,8 +174,8 @@ export default function DatabaseData() {
                 <CellActionButton
                   onClickEdit={(id) => {
                     setOpen(true);
-                    setDrawerMode("edit");
-                    setDrawerEditValues(
+                    setModalMode("edit");
+                    setModalEditValues(
                       (
                         databaseData.filter(
                           (value: any) => value.id === id
@@ -204,10 +206,10 @@ export default function DatabaseData() {
           <></>
         )}
       </Panel>
-      <Drawer
+      <InsertModifyModal
         columnInfo={databaseColumns}
-        mode={drawerMode}
-        defaultValue={drawerEditValues}
+        mode={modalMode}
+        defaultValue={modalEditValues}
       />
     </>
   );

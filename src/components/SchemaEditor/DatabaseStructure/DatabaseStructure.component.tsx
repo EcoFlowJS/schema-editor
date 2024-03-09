@@ -254,7 +254,13 @@ export default function DatabaseStructure() {
       <Panel>
         <FlexboxGrid justify="space-between" align="middle">
           <FlexboxGrid.Item>
-            <p style={{ fontSize: "large", color: "var(--text-info-color)" }}>
+            <p
+              style={{
+                padding: "0 10px",
+                fontSize: "large",
+                color: "var(--text-info-color)",
+              }}
+            >
               Build the data architecture of your{" "}
               {driver === "knex"
                 ? "table"
