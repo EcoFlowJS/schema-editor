@@ -25,7 +25,12 @@ export default function DatabaseData() {
   const [sortColumn, setSortColumn] = React.useState<string>();
   const [sortType, setSortType] = React.useState<SortType>();
 
-  const [databaseData, setDatabaseData] = React.useState([]);
+  const [databaseData, setDatabaseData] = React.useState<
+    {
+      id: number;
+      data: any;
+    }[]
+  >([]);
   const [databaseColumns, setDatabaseColumns] = React.useState<
     DatabaseColumnInfo[]
   >([]);
@@ -176,11 +181,11 @@ export default function DatabaseData() {
                     setOpen(true);
                     setModalMode("edit");
                     setModalEditValues(
-                      (
-                        databaseData.filter(
-                          (value: any) => value.id === id
-                        )[0] as any
-                      ).data
+                      databaseData[Number(id)].id === Number(id)
+                        ? databaseData[Number(id)].data
+                        : databaseData.filter(
+                            (value: any) => value.id === id
+                          )[0].data
                     );
                   }}
                   onClickDelete={console.log}
