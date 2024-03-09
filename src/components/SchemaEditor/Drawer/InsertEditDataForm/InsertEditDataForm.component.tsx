@@ -41,7 +41,7 @@ export default function InsertEditDataForm({
 
     if (
       defaultValue[columnn.name] === null &&
-      (columnn.type === "varchar" || columnn.type === "integer")
+      (columnn.type === "string" || columnn.type === "integer")
     )
       defaultValue[columnn.name] = "";
   });
@@ -81,7 +81,7 @@ export default function InsertEditDataForm({
                 column.name !== "_id"
                   ? column.type === "integer"
                     ? InputNumber
-                    : column.type === "varchar"
+                    : column.type === "string"
                     ? Input
                     : column.type === "boolean"
                     ? SelectPicker
@@ -117,7 +117,7 @@ export default function InsertEditDataForm({
               }
               autoComplete={
                 column.name !== "_id"
-                  ? column.type === "integer" || column.type === "varchar"
+                  ? column.type === "integer" || column.type === "string"
                     ? "off"
                     : undefined
                   : undefined
@@ -145,7 +145,7 @@ export default function InsertEditDataForm({
               }
               placeholder={
                 column.name !== "_id"
-                  ? column.type === "varchar" || column.type === "integer"
+                  ? column.type === "string" || column.type === "integer"
                     ? column.name
                     : undefined
                   : undefined
