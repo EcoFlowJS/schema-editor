@@ -1,7 +1,6 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { TbPlus } from "react-icons/tb";
-import getConnectionsPromise from "../../../../service/connections/getConnectionsPromise.service";
-import { Stack, Tooltip, Whisper } from "rsuite";
+import { Stack } from "rsuite";
 import Button from "../Button/Button";
 import styles from "../style";
 import DbButton from "../DbButton/DbButton";
