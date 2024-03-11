@@ -37,6 +37,9 @@ export default function InsertModifyKnex({
     Object.keys(defaultValue).forEach((key) => {
       const column = columnInfo.filter((col) => col.name === key)[0];
       switch (column.alias) {
+        case "Text":
+          values[key] = values[key] === null ? "" : values[key].toString();
+          break;
         case "Json":
           values[key] = {
             value: values[key],
@@ -54,7 +57,7 @@ export default function InsertModifyKnex({
               : new Date(values[key].toString());
           break;
         default:
-          values[key] = values[key].toString();
+          values[key] = values[key] === null ? null : values[key].toString();
       }
     });
     defaultValue = values;
@@ -85,6 +88,15 @@ export default function InsertModifyKnex({
                     : `Value for column ${column.name}`
                 }
                 label={`Value for column ${column.name}`}
+                helperText={
+                  column.actualData?.columnData?.notNull &&
+                  (typeof column.actualData.columnData.defaultValue ===
+                    "undefined" ||
+                    column.actualData.columnData.defaultValue.toString().trim()
+                      .length === 0)
+                    ? "Required"
+                    : ""
+                }
                 columnType={column}
                 accepter={FormTypeInputs}
                 autoComplete="off"

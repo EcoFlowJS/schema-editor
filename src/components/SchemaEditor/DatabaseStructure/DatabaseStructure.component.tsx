@@ -232,7 +232,10 @@ export default function DatabaseStructure() {
           errorNoti({
             show: true,
             header: "Structure saved Error",
-            message: reject.payload.toString(),
+            message:
+              typeof reject.payload === "object"
+                ? reject.payload.sqlMessage
+                : reject.payload,
           });
       }
     );
