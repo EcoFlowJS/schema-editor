@@ -96,6 +96,7 @@ export default function SchemaEditor() {
         bordered
         style={{
           backgroundColor: "var(--dashboard-subcontent-background-color)",
+          overflow: "visible",
         }}
       >
         <Tabs
