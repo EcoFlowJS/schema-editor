@@ -1,7 +1,7 @@
 import { atom } from "jotai";
 import { PlacementType } from "rsuite/esm/toaster/ToastContainer";
 
-interface Notification {
+export interface Notification {
   show?: boolean;
   header?: string;
   message?: string;

@@ -95,7 +95,7 @@ export default function DatabaseData() {
             setModalEditValues={setModalEditValues}
           />
         ) : driver === "mongo" ? (
-          <DatabaseDataMongo databaseData={databaseData} />
+          <DatabaseDataMongo />
         ) : (
           <></>
         )}

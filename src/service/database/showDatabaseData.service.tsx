@@ -4,10 +4,14 @@ import { AxiosError } from "axios";
 
 const getDatabaseData = async (
   connectionID: string,
-  collectionORtableName: string
+  collectionORtableName: string,
+  documentID?: string,
+  subKey?: string
 ): Promise<ApiResponse> => {
   const res = await axios.get(
-    `/schema/DatabaseData/${connectionID}/${collectionORtableName}`
+    `/schema/DatabaseData/${connectionID}/${collectionORtableName}${
+      documentID && subKey ? `/${subKey}/${documentID}` : ""
+    }`
   );
 
   if (res instanceof AxiosError) throw res.response?.data as ApiResponse;
