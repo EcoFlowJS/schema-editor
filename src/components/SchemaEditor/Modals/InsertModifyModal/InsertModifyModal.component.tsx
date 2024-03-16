@@ -14,6 +14,7 @@ import updateDatabaseData from "../../../../service/database/updateDatabaseData.
 import {
   errorNotification,
   successNotification,
+  warningNotification,
 } from "../../../../store/notification.store";
 
 export type InsertModifyModalMode = "insert" | "edit";
@@ -35,6 +36,7 @@ export default function InsertModifyModal({
 
   const successNoti = useAtom(successNotification)[1];
   const errorNoti = useAtom(errorNotification)[1];
+  const warningNoti = useAtom(warningNotification)[1];
 
   const [isLoading, setLoading] = React.useState(false);
   const [modalData, setModalData] = useState<{ [key: string]: any }>({});
@@ -47,8 +49,80 @@ export default function InsertModifyModal({
     setOpen(false);
   };
 
+  const handleSuccessInserUpdates = (response: ApiResponse) => {
+    setLoading(false);
+    if (response.success) {
+      if (
+        typeof response.payload.modifiedCount !== "undefined" &&
+        response.payload.modifiedCount === 0
+      )
+        warningNoti({
+          show: true,
+          header: "Insertion Warning",
+          message:
+            "Nothing was updated as the old record and the new record are same.",
+        });
+      else
+        successNoti({
+          show: true,
+          header: "Insertion Success",
+          message: "Data insertion into database successful",
+        });
+      setDatabaseData(
+        response.payload.data.map((value: any, index: number) => {
+          return {
+            id: index,
+            data: value,
+          };
+        })
+      );
+      setOpen(false);
+    }
+  };
+
+  const handleErrorInserUpdates = (reject: ApiResponse) => {
+    setLoading(false);
+    if (reject.error)
+      errorNoti({
+        show: true,
+        header: "Insertion Error",
+        message:
+          typeof reject.payload === "object"
+            ? reject.payload.sqlMessage
+            : reject.payload,
+      });
+  };
+
   const handelInsertUpdate = () => {
-    const sendData = { ...modalData };
+    const sendData =
+      driver === "knex"
+        ? handelInsertUpdateKnex({ ...modalData })
+        : handelInsertUpdateMongo({ ...modalData });
+
+    if (typeof sendData !== "undefined" && mode === "insert") {
+      setLoading(true);
+      insertDatabaseData(id!, collectonORtable!, sendData).then(
+        handleSuccessInserUpdates,
+        handleErrorInserUpdates
+      );
+    }
+
+    if (typeof sendData !== "undefined" && mode === "edit") {
+      const oldData = { ...defaultValue };
+      if (oldData && oldData.data && typeof oldData.data === "string")
+        oldData.data = JSON.parse(oldData.data);
+
+      setLoading(true);
+      updateDatabaseData(id!, collectonORtable!, { ...oldData }, sendData).then(
+        handleSuccessInserUpdates,
+        handleErrorInserUpdates
+      );
+    }
+  };
+
+  const handelInsertUpdateKnex = (sendData: {
+    [x: string]: any;
+  }): { [x: string]: any } => {
     if (sendData.hasOwnProperty("_id")) delete sendData._id;
     Object.keys(sendData).forEach((key) => {
       if (typeof sendData[key] === "object" && sendData[key] !== null)
@@ -60,56 +134,28 @@ export default function InsertModifyModal({
             : sendData[key];
     });
 
-    const handleSuccessInserUpdates = (response: ApiResponse) => {
-      setLoading(false);
-      if (response.success) {
-        successNoti({
-          show: true,
-          header: "Insertion Success",
-          message: "Data insertion into database successful",
-        });
-        setDatabaseData(
-          response.payload.data.map((value: any, index: number) => {
-            return {
-              id: index,
-              data: value,
-            };
-          })
-        );
-        setOpen(false);
-      }
-    };
+    return sendData;
+  };
 
-    const handleErrorInserUpdates = (reject: ApiResponse) => {
-      setLoading(false);
-      if (reject.error)
-        errorNoti({
-          show: true,
-          header: "Insertion Error",
-          message:
-            typeof reject.payload === "object"
-              ? reject.payload.sqlMessage
-              : reject.payload,
-        });
-    };
-
-    if (mode === "insert") {
-      setLoading(true);
-      insertDatabaseData(id!, collectonORtable!, sendData).then(
-        handleSuccessInserUpdates,
-        handleErrorInserUpdates
-      );
+  const handelInsertUpdateMongo = (sendData: {
+    [x: string]: any;
+  }): { [x: string]: any } | undefined => {
+    const { id, editorValue } = sendData;
+    const { value, validate } = editorValue;
+    if (!validate) {
+      errorNoti({
+        show: true,
+        header: "Error Validating",
+        message: "Validation database data failed.",
+      });
+      return;
     }
 
-    if (mode === "edit") {
-      setLoading(true);
-      updateDatabaseData(
-        id!,
-        collectonORtable!,
-        { ...defaultValue },
-        sendData
-      ).then(handleSuccessInserUpdates, handleErrorInserUpdates);
-    }
+    const formattedValue = JSON.parse(value);
+    return {
+      id: id,
+      value: formattedValue,
+    };
   };
 
   return (
@@ -134,7 +180,6 @@ export default function InsertModifyModal({
         {driver === "mongo" ? (
           <InsertModifyMongo
             mode={mode}
-            columnInfo={columnInfo}
             defaultValue={{ ...defaultValue }}
             onChange={setModalData}
             onLoad={() => setModalData({})}

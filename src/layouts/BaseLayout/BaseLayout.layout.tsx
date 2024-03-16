@@ -13,6 +13,7 @@ import { useNotification } from "@eco-flow/components-lib";
 import {
   errorNotification,
   successNotification,
+  warningNotification,
 } from "../../store/notification.store";
 
 export default function BaseLayout() {
@@ -30,6 +31,8 @@ export default function BaseLayout() {
     useAtom(successNotification);
   const [errorNotificationMessage, setErrorNotificationMessage] =
     useAtom(errorNotification);
+  const [warningNotificationMessage, setWarningNotificationMessage] =
+    useAtom(warningNotification);
 
   const errorNoti = useNotification({
     type: "error",
@@ -62,6 +65,25 @@ export default function BaseLayout() {
       <>
         {successNotificationMessage.message
           ? successNotificationMessage.message
+          : ""}
+      </>
+    ),
+  });
+
+  const warningNoti = useNotification({
+    type: "warning",
+    header: (
+      <>
+        {warningNotificationMessage.header
+          ? warningNotificationMessage.header
+          : ""}
+      </>
+    ),
+    placement: warningNotificationMessage.placement,
+    children: (
+      <>
+        {warningNotificationMessage.message
+          ? warningNotificationMessage.message
           : ""}
       </>
     ),
@@ -118,6 +140,16 @@ export default function BaseLayout() {
       errorNoti.show();
     }
   }, [errorNotificationMessage]);
+
+  useEffect(() => {
+    if (warningNotificationMessage.show) {
+      setErrorNotificationMessage({
+        ...warningNotificationMessage,
+        show: false,
+      });
+      warningNoti.show();
+    }
+  }, [warningNotificationMessage]);
 
   return (
     <>

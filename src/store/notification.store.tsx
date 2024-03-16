@@ -10,5 +10,6 @@ export interface Notification {
 
 const errorNotification = atom<Notification>({ show: false });
 const successNotification = atom<Notification>({ show: false });
+const warningNotification = atom<Notification>({ show: false });
 
-export { errorNotification, successNotification };
+export { errorNotification, successNotification, warningNotification };
