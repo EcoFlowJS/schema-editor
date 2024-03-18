@@ -5,7 +5,6 @@ import {
   Panel,
   Placeholder,
   Stack,
-  Tree,
 } from "rsuite";
 import { useAtom } from "jotai";
 import {
@@ -22,7 +21,6 @@ import { useParams } from "react-router-dom";
 import "./style.less";
 import { InsertModifyModalMode } from "../../Modals/InsertModifyModal/InsertModifyModal.component";
 import React, { useEffect, useState } from "react";
-import dataProcessorMongo from "../../../../helpers/dataProcessorMongo";
 import { Editor } from "@monaco-editor/react";
 import { ApiResponse } from "@eco-flow/types";
 import deleteDatabaseData from "../../../../service/database/deleteDatabaseData.service";
@@ -113,25 +111,17 @@ export default function DatabaseDataMongo({
 
   useEffect(() => {
     setLoading(true);
-    (async () => {
-      const DBData = [];
-      for await (const { data } of databaseData) {
-        const _id = data.values["_id"];
-        delete data.values["_id"];
-        DBData.push({
+    setDBData(
+      databaseData.map(({ data }) => {
+        const _id = data["_id"];
+        delete data["_id"];
+        return {
           id: _id,
-          data: JSON.stringify(
-            await dataProcessorMongo(urlParams, data, _id),
-            null,
-            2
-          ),
-        });
-      }
-      return DBData;
-    })().then((response) => {
-      setLoading(false);
-      setDBData(response);
-    });
+          data: JSON.stringify(data, null, 2),
+        };
+      })
+    );
+    setLoading(false);
   }, [databaseData]);
 
   return (

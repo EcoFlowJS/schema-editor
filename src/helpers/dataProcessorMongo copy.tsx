@@ -1,36 +1,51 @@
-import { CollectionInfo } from "@eco-flow/types";
-import { ItemDataType } from "rsuite/esm/@types/common";
+// import { CollectionInfo } from "@eco-flow/types";
+// import getDatabaseData from "../service/database/showDatabaseData.service";
+// import { Params } from "react-router-dom";
 
-const dataProcessorMongo = (
-  data: CollectionInfo,
-  parent = ""
-): ItemDataType[] => {
-  return data.keys.map((key) => {
-    const processedData: ItemDataType = Object.create({});
-    processedData.label = `${key} : ${data.values[key]}`;
-    processedData.value = JSON.stringify({
-      key: key,
-      value: data.values[key],
-    });
+// const dataProcessorMongo = async (
+//   urlParams: Readonly<Params<string>>,
+//   data: CollectionInfo,
+//   documentID = "",
+//   parent = ""
+// ) => {
+//   const { id, collectonORtable } = urlParams;
+//   const values = Object.create({});
+//   for await (const key of data.keys) {
+//     if (data.types[key] === "array" || data.types[key] === "object") {
+//       try {
+//         const result = await dataProcessorMongo(
+//           urlParams,
+//           (
+//             await getDatabaseData(
+//               id!,
+//               collectonORtable!,
+//               documentID,
+//               parent.length > 0 ? parent + "." + key : key
+//             ).catch((err) => {
+//               throw err;
+//             })
+//           ).payload.data[0],
+//           documentID,
+//           parent.length > 0 ? parent + "." + key : key
+//         );
 
-    if (data.types[key] === "array" || data.types[key] === "object") {
-      processedData.label = `${key} : ${(data.types[key] as string)
-        .charAt(0)
-        .toUpperCase()}${(data.types[key] as string).slice(1)}`;
-      processedData.value = JSON.stringify({
-        key: key,
-        value: parent.length > 0 ? parent + "." + key : key,
-        type: data.types[key],
-      });
-      processedData.children = [];
-    }
+//         values[key] =
+//           data.types[key] === "array"
+//             ? Object.keys(result).map((key) => result[key])
+//             : result;
+//       } catch {
+//         continue;
+//       }
+//     } else if (data.types[key] === "binData") {
+//       values[key] = `Binary(${data.values[key]})`;
+//     } else if (data.types[key] === "date")
+//       values[key] = `Date(${data.values[key]})`;
+//     else if (data.types[key] === "decimal")
+//       values[key] = `MongoDecimal(${data.values[key]["$numberDecimal"]})`;
+//     else values[key] = data.values[key];
+//   }
 
-    if (data.types[key] === "null")
-      processedData.value = JSON.stringify({
-        key: key,
-        value: "null",
-      });
+//   return values;
+// };
 
-    return processedData;
-  });
-};
+// export default dataProcessorMongo;
