@@ -1,4 +1,3 @@
-import _ from "lodash";
 import axios from "../../utils/axios/axios";
 import { ApiResponse } from "@eco-flow/types";
 
@@ -13,7 +12,7 @@ const promise = async (): Promise<any> => {
   result.isAuth = res.isAuth;
 
   if (!res.isAuth) {
-    if (_.has(res, "getAccessToken"))
+    if (res.hasOwnProperty("getAccessToken"))
       axios.defaults.headers.common[
         "Authorization"
       ] = `Bearer ${res.getAccessToken}`;
