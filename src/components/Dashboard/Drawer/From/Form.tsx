@@ -25,6 +25,7 @@ interface FromGroupProps {
   disabled?: boolean;
   reset?: boolean;
   defaultValue?: ConnectionDefinations;
+  isUpdate?: boolean;
 }
 
 export default function ({
@@ -32,6 +33,7 @@ export default function ({
   Ref,
   disabled = false,
   reset = false,
+  isUpdate = false,
   defaultValue,
 }: FromGroupProps) {
   const [dbDriverValue, setDbDriverValue] = useState("");
@@ -138,6 +140,7 @@ export default function ({
             autoComplete="off"
             placeholder="Name"
             size="lg"
+            disabled={disabled || isUpdate}
           />
           <FormGroup
             name="dbDriver"

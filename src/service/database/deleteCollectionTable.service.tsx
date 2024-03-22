@@ -6,10 +6,12 @@ const deleteCollectionTable = async (
   id: string,
   collectionTable: string
 ): Promise<ApiResponse> => {
-  const res = await axios.delete(`schema/collectionsORtables/${id}`, {
-    data: { collectionTable },
-    headers: { "Content-Type": "application/json" },
-  });
+  const res = await axios.delete(
+    `schema/collectionsORtables/${id}/${collectionTable}`,
+    {
+      headers: { "Content-Type": "application/json" },
+    }
+  );
 
   if (res instanceof AxiosError) throw res.response?.data as ApiResponse;
   else return res.data as ApiResponse;

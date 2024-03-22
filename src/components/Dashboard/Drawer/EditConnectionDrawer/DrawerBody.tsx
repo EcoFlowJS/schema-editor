@@ -162,6 +162,7 @@ export default function DrawerBody({
         <Form
           disabled={isDisabled ? isDisabled : disabled}
           defaultValue={formDefaultValue}
+          isUpdate
           {...props}
         />
       )}
