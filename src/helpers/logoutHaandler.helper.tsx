@@ -1,8 +1,8 @@
 import { ApiResponse } from "@eco-flow/types";
-import userLougoutService from "../service/user/userSignout.service";
+import userSignoutService from "../service/user/userSignout.service";
 
 const logoutHandler = (setLogout: any) => {
-  userLougoutService().then((response: ApiResponse) => {
+  userSignoutService().then((response: ApiResponse) => {
     if (response.success) setLogout(true);
   });
 };
