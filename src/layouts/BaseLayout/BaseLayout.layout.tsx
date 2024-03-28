@@ -233,7 +233,8 @@ export default function BaseLayout() {
 
   return (
     <>
-      {isLoading || !isPermissionsFetched ? (
+      {isLoading ||
+      (!initStatus.isNew && initStatus.isLoggedIn && !isPermissionsFetched) ? (
         <Loading />
       ) : (!initStatus.isNew && initStatus.isLoggedIn) ||
         (initStatus.isNew && initStatus.isLoggedIn) ? (
