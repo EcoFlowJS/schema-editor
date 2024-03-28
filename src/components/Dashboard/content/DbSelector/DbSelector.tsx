@@ -8,13 +8,15 @@ import { useAtom } from "jotai";
 import {
   createConnectionDrawerOpenClose,
   databaseGetConnectionList,
-  editConnectionDrawerOpenClose,
-  editConnectionName,
 } from "../../../../store/Connections.store";
 import getConnectionsService from "../../../../service/connections/getConnections.service";
 import Loading from "../Loading/Loading";
+import { userPermissions as permissionList } from "../../../../store/users.store";
 
 export default function DbSelector() {
+  //user Perissions
+  const [userPermissions] = useAtom(permissionList);
+
   const [isLoading, setLoading] = useState(true);
   const [getConnectionsList, setGetConnectionsList] = useAtom(
     databaseGetConnectionList
@@ -22,10 +24,6 @@ export default function DbSelector() {
   const [_openNewConnectionDraawer, setOpenNewConnectionDrawer] = useAtom(
     createConnectionDrawerOpenClose
   );
-  const [_editNewConnectionDraawer, setEditNewConnectionDrawer] = useAtom(
-    editConnectionDrawerOpenClose
-  );
-  const [_connectionName, setConnectionName] = useAtom(editConnectionName);
 
   useEffect(() => {
     getConnectionsService().then((val) => {
@@ -34,14 +32,6 @@ export default function DbSelector() {
     });
   }, []);
 
-  let timeout: NodeJS.Timeout = setTimeout(() => {});
-
-  const triggerEditConnections = (connectionName: string) => {
-    timeout = setTimeout(() => {
-      setEditNewConnectionDrawer(true);
-      setConnectionName(connectionName);
-    }, 3000);
-  };
   return (
     <>
       {isLoading ? (
@@ -56,22 +46,28 @@ export default function DbSelector() {
             return (
               <DbButton
                 key={index}
-                onMouseUp={() => clearTimeout(timeout)}
-                onMouseDown={() => triggerEditConnections(item.connectionsName)}
+                // onMouseUp={() => clearTimeout(timeout)}
+                // onMouseDown={() => triggerEditConnections()}
+                connectionID={item.connectionsName}
                 iconName={item.driver}
                 lable={item.connectionsName}
               />
             );
           })}
 
-          <Button
-            appearance="default"
-            icon={<TbPlus />}
-            style={{ ...styles.IconButton }}
-            circle
-            labletext="New Connection"
-            onClick={() => setOpenNewConnectionDrawer(true)}
-          />
+          {userPermissions.administrator ||
+          userPermissions.createDBConnection ? (
+            <Button
+              appearance="default"
+              icon={<TbPlus />}
+              style={{ ...styles.IconButton }}
+              circle
+              labletext="New Connection"
+              onClick={() => setOpenNewConnectionDrawer(true)}
+            />
+          ) : (
+            <></>
+          )}
         </Stack>
       )}
     </>

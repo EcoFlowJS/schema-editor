@@ -18,6 +18,7 @@ import {
 } from "../../../../store/notification.store";
 import deleteDatabaseData from "../../../../service/database/deleteDatabaseData.service";
 import { useParams } from "react-router-dom";
+import { userPermissions as userPermissionsList } from "../../../../store/users.store";
 
 const { Column, HeaderCell } = Table;
 
@@ -45,6 +46,9 @@ export default function DatabaseDataKnex({
   const [isLoadingRecordDelete, setLoadingRecordDelete] = React.useState(false);
   const [sortColumn, setSortColumn] = React.useState<string>();
   const [sortType, setSortType] = React.useState<SortType>();
+
+  //User permission states
+  const [userPermissions] = useAtom(userPermissionsList);
 
   const [alertModal, setAlertModal] = React.useState<{
     show: boolean;
@@ -178,6 +182,12 @@ export default function DatabaseDataKnex({
               );
             }}
             onClickDelete={(id) => setAlertModal({ show: true, id: id })}
+            editDisabled={
+              !userPermissions.administrator && !userPermissions.modifyDBRecord
+            }
+            dropDisabled={
+              !userPermissions.administrator && !userPermissions.removeDBRecord
+            }
           />
         </Column>
       </Table>

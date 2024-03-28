@@ -4,16 +4,16 @@ import { Drawer, Button, Divider } from "rsuite";
 import {
   createConnectionDrawerOpenClose,
   databaseGetConnectionList,
-} from "../../../store/Connections.store";
-import Form from "./From/Form";
+} from "../../../../store/Connections.store";
+import Form from "../From/Form.component";
 import { AlertModal } from "@eco-flow/components-lib";
 import "@eco-flow/components-lib/style.css";
-import createConnectionService from "../../../service/connections/createConnection.service";
+import createConnectionService from "../../../../service/connections/createConnection.service";
 import { ApiResponse } from "@eco-flow/types";
 import {
   errorNotification,
   successNotification,
-} from "../../../store/notification.store";
+} from "../../../../store/notification.store";
 
 export default function () {
   const [_databaseConnectionList, setDatabaseConnectionList] = useAtom(

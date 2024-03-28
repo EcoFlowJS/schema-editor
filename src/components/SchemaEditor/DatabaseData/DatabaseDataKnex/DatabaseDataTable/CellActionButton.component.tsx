@@ -7,7 +7,7 @@ interface CellActionButtonProps {
   dataKey?: string;
   onClickEdit?: (rowID: string) => void;
   onClickDelete?: (rowID: string) => void;
-  deleteDisabled?: boolean;
+  dropDisabled?: boolean;
   editDisabled?: boolean;
   [key: string]: any;
 }
@@ -17,7 +17,7 @@ export default function CellActionButton({
   dataKey,
   onClickEdit = () => {},
   onClickDelete = () => {},
-  deleteDisabled = false,
+  dropDisabled = false,
   editDisabled = false,
   ...props
 }: CellActionButtonProps) {
@@ -46,7 +46,7 @@ export default function CellActionButton({
       />
       <IconButton
         title="Remove Row"
-        disabled={deleteDisabled}
+        disabled={dropDisabled}
         appearance="subtle"
         color="red"
         onClick={() => {

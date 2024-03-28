@@ -1,5 +1,5 @@
 import React, { MutableRefObject, useEffect, useState } from "react";
-import Form from "../From/Form";
+import Form from "../From/Form.component";
 import { useNotification } from "@eco-flow/components-lib";
 import {
   ConnectionDefinations,

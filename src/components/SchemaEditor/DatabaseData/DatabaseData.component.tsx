@@ -1,7 +1,7 @@
 import { IconWrapper } from "@eco-flow/components-lib";
 import React, { useEffect } from "react";
 import { LuRefreshCcwDot } from "react-icons/lu";
-import { Panel } from "rsuite";
+import { FlexboxGrid, Panel } from "rsuite";
 import getDatabaseData from "../../../service/database/showDatabaseData.service";
 import { useNavigate, useParams } from "react-router-dom";
 import { DatabaseColumnInfo, DatabaseDataResult } from "@eco-flow/types";
@@ -17,6 +17,7 @@ import InsertModifyModal, {
 import DatabaseDataKnex from "./DatabaseDataKnex/DatabaseDataKnex.component";
 import DatabaseDataMongo from "./DatabaseDataMongo/DatabaseDataMongo.component";
 import DatabaseDataHeader from "./DatabaseDataHeader/DatabaseDataHeader.component";
+import { userPermissions as userPermissionsList } from "../../../store/users.store";
 
 export default function DatabaseData() {
   const navigate = useNavigate();
@@ -32,6 +33,9 @@ export default function DatabaseData() {
   const [modalMode, setModalMode] =
     React.useState<InsertModifyModalMode>("insert");
   const [modalEditValues, setModalEditValues] = React.useState<any>({});
+
+  //User permission states
+  const [userPermissions] = useAtom(userPermissionsList);
 
   useEffect(() => {
     (async () => await fetchDatabaseData())();
@@ -78,6 +82,8 @@ export default function DatabaseData() {
               setModalMode("insert");
               setModalEditValues({});
             },
+            disabled:
+              !userPermissions.administrator && !userPermissions.insertDBRecord,
           }}
           refreshButtonProps={{
             appearance: "subtle",
@@ -86,21 +92,31 @@ export default function DatabaseData() {
             onClick: () => fetchDatabaseData(),
           }}
         />
-        {driver === "knex" ? (
-          <DatabaseDataKnex
-            loading={isLoading}
-            databaseData={databaseData}
-            databaseColumns={databaseColumns}
-            setModalMode={setModalMode}
-            setModalEditValues={setModalEditValues}
-          />
-        ) : driver === "mongo" ? (
-          <DatabaseDataMongo
-            setModalMode={setModalMode}
-            setModalEditValues={setModalEditValues}
-          />
+        {userPermissions.displayDBRecord ||
+        userPermissions.modifyDBRecord ||
+        userPermissions.removeDBRecord ? (
+          <>
+            {driver === "knex" ? (
+              <DatabaseDataKnex
+                loading={isLoading}
+                databaseData={databaseData}
+                databaseColumns={databaseColumns}
+                setModalMode={setModalMode}
+                setModalEditValues={setModalEditValues}
+              />
+            ) : driver === "mongo" ? (
+              <DatabaseDataMongo
+                setModalMode={setModalMode}
+                setModalEditValues={setModalEditValues}
+              />
+            ) : (
+              <></>
+            )}
+          </>
         ) : (
-          <></>
+          <FlexboxGrid justify="center" align="middle" style={{ height: 400 }}>
+            You don't have permission to preview the database records.
+          </FlexboxGrid>
         )}
       </Panel>
       <InsertModifyModal

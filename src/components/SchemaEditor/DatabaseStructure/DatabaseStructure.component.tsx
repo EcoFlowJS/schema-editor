@@ -29,6 +29,7 @@ import {
   errorNotification,
   successNotification,
 } from "../../../store/notification.store";
+import { userPermissions as userPermissionsList } from "../../../store/users.store";
 
 interface ModifyDatabaseColumns {
   oldDatabaseColumns: DatabaseColumnInfo;
@@ -57,6 +58,9 @@ export default function DatabaseStructure() {
 
   const suceessNoti = useAtom(successNotification)[1];
   const errorNoti = useAtom(errorNotification)[1];
+
+  //User permission states
+  const [userPermissions] = useAtom(userPermissionsList);
 
   const addColumnHandler = (result: DatabaseColumnInfo) => {
     setDatabaseColumns([...databaseColumns, { ...result }]);
@@ -279,7 +283,11 @@ export default function DatabaseStructure() {
               spacing={10}
             >
               <Button
-                disabled={isLoading}
+                disabled={
+                  isLoading ||
+                  (!userPermissions.administrator &&
+                    !userPermissions.modifyDBStructure)
+                }
                 loading={isFetching}
                 appearance="ghost"
                 style={{ minWidth: 80 }}
@@ -296,7 +304,9 @@ export default function DatabaseStructure() {
                     sendData.createDatabaseColumns.length > 0 ||
                     sendData.deleteDatabaseColumns.length > 0 ||
                     sendData.modifyDatabaseColumns.length > 0
-                  )
+                  ) ||
+                  (!userPermissions.administrator &&
+                    !userPermissions.modifyDBStructure)
                 }
                 loading={isLoading}
                 appearance="primary"
@@ -373,7 +383,11 @@ export default function DatabaseStructure() {
               >
                 <FlexboxGrid.Item style={{ padding: "1rem" }}>
                   <Button
-                    disabled={isLoading}
+                    disabled={
+                      isLoading ||
+                      (!userPermissions.administrator &&
+                        !userPermissions.modifyDBStructure)
+                    }
                     loading={isFetching}
                     appearance="ghost"
                     style={{ minWidth: 80 }}
@@ -426,6 +440,7 @@ export default function DatabaseStructure() {
                         spacing={5}
                       >
                         <IconButton
+                          className="DatabaseStructureIconButton"
                           appearance="link"
                           onClick={() =>
                             setModalCreateModify({
@@ -438,6 +453,7 @@ export default function DatabaseStructure() {
                           icon={<IconWrapper icon={FaPencil} />}
                         />
                         <IconButton
+                          className="DatabaseStructureIconButton"
                           appearance="link"
                           onClick={() => deleteDatabaseColumnHandler(index)}
                           icon={<IconWrapper icon={FaTrash} />}

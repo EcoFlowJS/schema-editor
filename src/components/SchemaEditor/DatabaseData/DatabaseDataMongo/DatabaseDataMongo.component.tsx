@@ -24,6 +24,7 @@ import React, { useEffect, useState } from "react";
 import { Editor } from "@monaco-editor/react";
 import { ApiResponse } from "@eco-flow/types";
 import deleteDatabaseData from "../../../../service/database/deleteDatabaseData.service";
+import { userPermissions as userPermissionsList } from "../../../../store/users.store";
 
 interface DatabaseDataMongoProps {
   setModalMode?: React.Dispatch<React.SetStateAction<InsertModifyModalMode>>;
@@ -41,6 +42,9 @@ export default function DatabaseDataMongo({
   const successNoti = useAtom(successNotification)[1];
   const [isLoading, setLoading] = useState(false);
   const [isLoadingRecordDelete, setLoadingRecordDelete] = React.useState(false);
+
+  //User permission states
+  const [userPermissions] = useAtom(userPermissionsList);
 
   const [alertModal, setAlertModal] = React.useState<{
     show: boolean;
@@ -155,6 +159,10 @@ export default function DatabaseDataMongo({
                               color="cyan"
                               icon={<IconWrapper icon={BiPencil} />}
                               onClick={() => handleModify(id)}
+                              disabled={
+                                !userPermissions.administrator &&
+                                !userPermissions.modifyDBRecord
+                              }
                             />
                             <IconButton
                               appearance="subtle"
@@ -162,6 +170,10 @@ export default function DatabaseDataMongo({
                               icon={<IconWrapper icon={BiTrash} />}
                               onClick={() =>
                                 setAlertModal({ show: true, id: id })
+                              }
+                              disabled={
+                                !userPermissions.administrator &&
+                                !userPermissions.removeDBRecord
                               }
                             />
                           </Stack>

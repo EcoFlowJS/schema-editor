@@ -1,6 +1,6 @@
 import { useAtom } from "jotai";
-import React, { Suspense, memo, useEffect, useRef, useState } from "react";
-import { Button, Divider, Drawer, Placeholder } from "rsuite";
+import { useEffect, useRef, useState } from "react";
+import { Button, Divider, Drawer } from "rsuite";
 import {
   databaseGetConnectionList,
   editConnectionDrawerOpenClose,
@@ -22,42 +22,16 @@ export default function EditConnectionDrawer() {
   const [editNewConnectionDraawer, setEditNewConnectionDrawer] = useAtom(
     editConnectionDrawerOpenClose
   );
-  const [_databaseConnectionList, setDatabaseConnectionList] = useAtom(
-    databaseGetConnectionList
-  );
+  const setDatabaseConnectionList = useAtom(databaseGetConnectionList)[1];
 
   const [isConfigloading, setIsConfigloading] = useState(false);
   const [connectionName, setConnectionName] = useAtom(editConnectionName);
   const [updateResponse, setUpdateResponse] = useState<ApiResponse>({});
   const [updateLoading, setUpdateLoading] = useState(false);
-  const [deleteResponse, setDeleteResponse] = useState<ApiResponse>({});
-  const [deleteLoading, setDeleteLoading] = useState(false);
   const formRef = useRef(null);
-  const [openDeleteConfirmModal, setOpenDeleteConfirmModal] = useState(false);
 
   const setSuccessNotification = useAtom(successNotification)[1];
   const setErrorNotification = useAtom(errorNotification)[1];
-
-  useEffect(() => {
-    if (deleteResponse.success) {
-      setOpenDeleteConfirmModal(false);
-      setEditNewConnectionDrawer(false);
-      setDatabaseConnectionList(deleteResponse.payload.connectionList);
-      setSuccessNotification({
-        show: true,
-        message: deleteResponse.payload.message,
-        header: "Connection Removal Success",
-      });
-    }
-    if (deleteResponse.error) {
-      setOpenDeleteConfirmModal(false);
-      setErrorNotification({
-        show: true,
-        message: deleteResponse.payload.message,
-        header: "Connection Removal Error",
-      });
-    }
-  }, [deleteResponse]);
 
   useEffect(() => {
     setUpdateLoading(false);
@@ -79,20 +53,12 @@ export default function EditConnectionDrawer() {
     }
   }, [updateResponse]);
 
-  const connectionDeleteHandler = () => {
-    setDeleteLoading(true);
-    deleteConnectionService(connectionName).then((val) => {
-      setDeleteLoading(false);
-      setDeleteResponse(val);
-    });
-  };
-
   return (
     <>
       <Drawer
         backdrop="static"
         open={editNewConnectionDraawer}
-        onClose={async () => {
+        onClose={() => {
           setEditNewConnectionDrawer(false);
           setConnectionName("");
         }}
@@ -101,12 +67,13 @@ export default function EditConnectionDrawer() {
           <Drawer.Title>Edit Connection</Drawer.Title>
           <Drawer.Actions>
             <Button
-              appearance="primary"
-              color="red"
-              onClick={() => setOpenDeleteConfirmModal(true)}
-              disabled={!isConfigloading}
+              appearance="ghost"
+              onClick={() => {
+                setEditNewConnectionDrawer(false);
+                setConnectionName("");
+              }}
             >
-              Delete
+              Cancel
             </Button>
             <Button
               loading={updateLoading}
@@ -134,30 +101,6 @@ export default function EditConnectionDrawer() {
           />
         </Drawer.Body>
       </Drawer>
-      <AlertModal
-        open={openDeleteConfirmModal}
-        confirmButtonText="Comfirm"
-        CancelButtonText="Cancel"
-        confirmButtonProps={{
-          color: "red",
-          onClick: connectionDeleteHandler,
-          disabled: deleteLoading,
-        }}
-        CancelButtonProps={{ onClick: () => setOpenDeleteConfirmModal(false) }}
-        size="sm"
-      >
-        <AlertModal.Body>
-          <h6>Do you Want Remove Database Connections?</h6>
-          <Divider />
-          <p>
-            Removing Database connection{" "}
-            <u>
-              <strong>{connectionName}</strong>
-            </u>{" "}
-            will also stop function of nodes connected with this connection.
-          </p>
-        </AlertModal.Body>
-      </AlertModal>
     </>
   );
 }

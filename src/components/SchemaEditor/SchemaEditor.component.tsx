@@ -1,14 +1,6 @@
 import React, { useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import {
-  Panel,
-  Placeholder,
-  Tabs,
-  FlexboxGrid,
-  Button,
-  Stack,
-  Divider,
-} from "rsuite";
+import { Panel, Tabs, FlexboxGrid, Button, Stack, Divider } from "rsuite";
 import { TbDatabase, TbDatabaseEdit } from "react-icons/tb";
 import DatabaseData from "./DatabaseData/DatabaseData.component";
 import { IconWrapper } from "@eco-flow/components-lib";
@@ -18,16 +10,20 @@ import RenameTableCollection from "../DatabaseTableCollection/RenameTableCollect
 import { useAtom } from "jotai";
 import { editStructure } from "../../store/schemaEditor.store";
 import DatabaseStructure from "./DatabaseStructure/DatabaseStructure.component";
+import { userPermissions as userPermissionsList } from "../../store/users.store";
 
 export default function SchemaEditor() {
   const navigate = useNavigate();
-  const { id, driver, collectonORtable } = useParams();
+  const { driver, collectonORtable } = useParams();
   const [deleteCollectionTableAlertModal, setDeleteCollectionTableAlertModal] =
     React.useState(false);
   const [renameCollectionTableAlertModal, setRenameCollectionTableAlertModal] =
     React.useState(false);
   const [isEditStructure, setEditStructure] = useAtom(editStructure);
   const [tabKey, setTabKey] = React.useState("1");
+
+  //User permission states
+  const [userPermissions] = useAtom(userPermissionsList);
 
   useEffect(() => {
     if (driver === "knex" || driver === "mongo") return;
@@ -67,6 +63,10 @@ export default function SchemaEditor() {
                   appearance="subtle"
                   onClick={() => setRenameCollectionTableAlertModal(true)}
                   startIcon={<IconWrapper icon={GrEdit} />}
+                  disabled={
+                    !userPermissions.administrator &&
+                    !userPermissions.modifyCollectionTable
+                  }
                 >
                   Rename{" "}
                   {driver === "knex"
@@ -81,6 +81,10 @@ export default function SchemaEditor() {
                   color="red"
                   onClick={() => setDeleteCollectionTableAlertModal(true)}
                   startIcon={<IconWrapper icon={GrTrash} />}
+                  disabled={
+                    !userPermissions.administrator &&
+                    !userPermissions.removeCollectionTable
+                  }
                 >
                   Drop{" "}
                   {driver === "knex"

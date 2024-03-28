@@ -12,6 +12,10 @@ import {
   errorNotification,
   successNotification,
 } from "../../../store/notification.store";
+import {
+  permissionFetched,
+  userPermissions as userPermissionsList,
+} from "../../../store/users.store";
 
 export default function CreateTable() {
   const { id, driver } = useParams();
@@ -24,6 +28,10 @@ export default function CreateTable() {
   const setSuccessNotification = useAtom(successNotification)[1];
   const setErrorNotification = useAtom(errorNotification)[1];
   const setEditStructure = useAtom(editStructure)[1];
+
+  //User permission states
+  const [userPermissions] = useAtom(userPermissionsList);
+  const [isPermissionsFetched] = useAtom(permissionFetched);
 
   const handleSubmit = () => {
     if (sendData.name.trim().length === 0) {
@@ -105,6 +113,15 @@ export default function CreateTable() {
       }
     );
   };
+
+  useEffect(() => {
+    if (
+      isPermissionsFetched &&
+      !userPermissions.administrator &&
+      !userPermissions.createCollectionTable
+    )
+      navigate(`/editor/schema/database/${id}`);
+  }, [userPermissions]);
 
   return (
     <Panel

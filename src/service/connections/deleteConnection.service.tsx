@@ -1,9 +1,14 @@
+import { ApiResponse } from "@eco-flow/types";
 import axios from "../../utils/axios/axios";
+import { AxiosError } from "axios";
 
 const deleteConnectionService = async (
   ConnectionName: string
-): Promise<any> => {
-  return (await axios.delete(`schema/connection/${ConnectionName}`)).data;
+): Promise<ApiResponse> => {
+  const res = await axios.delete(`schema/connection/${ConnectionName}`);
+
+  if (res instanceof AxiosError) throw res.response?.data as ApiResponse;
+  else return res.data as ApiResponse;
 };
 
 export default deleteConnectionService;

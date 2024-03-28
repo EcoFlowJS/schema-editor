@@ -10,6 +10,7 @@ import { ApiResponse } from "@eco-flow/types";
 import { FaTableList } from "react-icons/fa6";
 import { useAtom } from "jotai";
 import { tableList } from "../../store/schemaEditor.store";
+import { userPermissions as userPermissionsList } from "../../store/users.store";
 
 export default function SideNav() {
   const loc = useLocation();
@@ -19,7 +20,9 @@ export default function SideNav() {
   const [isLoading, setLoading] = useState(true);
   const [collectionORtable, setCollectionORTable] = useAtom(tableList);
   const [DB_Type, setDB_Type] = useState("");
-  //   const [DBFetchError, setDB_FetchError] = useState(false);
+
+  //User permission states
+  const [userPermissions] = useAtom(userPermissionsList);
 
   useEffect(() => {
     (async () => {
@@ -91,18 +94,23 @@ export default function SideNav() {
                     </Nav.Item>
                   );
                 })}
-                <Nav.Item
-                  eventKey="addNewTable"
-                  icon={<IconWrapper icon={CiSquarePlus} />}
-                  active={false}
-                >
-                  Add{" "}
-                  {DB_Type === "KNEX"
-                    ? "Tables"
-                    : DB_Type === "MONGO"
-                    ? "Collections"
-                    : DB_Type}
-                </Nav.Item>
+                {userPermissions.administrator ||
+                userPermissions.createCollectionTable ? (
+                  <Nav.Item
+                    eventKey="addNewTable"
+                    icon={<IconWrapper icon={CiSquarePlus} />}
+                    active={false}
+                  >
+                    Add{" "}
+                    {DB_Type === "KNEX"
+                      ? "Tables"
+                      : DB_Type === "MONGO"
+                      ? "Collections"
+                      : DB_Type}
+                  </Nav.Item>
+                ) : (
+                  <></>
+                )}
               </Nav.Menu>
               {/* To-DO: Implement View Creation
               <Nav.Menu
