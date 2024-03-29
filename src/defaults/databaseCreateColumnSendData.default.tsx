@@ -1,4 +1,4 @@
-import { DatabaseCreateEditModel, DatabaseTableTypes } from "@eco-flow/types";
+import { DatabaseCreateEditModel, DatabaseTableTypes } from "@ecoflow/types";
 
 export interface DatabaseCreateColumnSendData {
   type?: DatabaseTableTypes;

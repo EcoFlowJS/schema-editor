@@ -1,10 +1,10 @@
 import React, { MutableRefObject, useEffect, useState } from "react";
 import Form from "../From/Form.component";
-import { useNotification } from "@eco-flow/components-lib";
+import { useNotification } from "@ecoflow/components-lib";
 import {
   ConnectionDefinations,
   DatabaseConnectionConfig,
-} from "@eco-flow/types";
+} from "@ecoflow/types";
 import { Placeholder } from "rsuite";
 
 interface DrawerBodyProps {

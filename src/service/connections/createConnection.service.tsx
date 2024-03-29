@@ -1,4 +1,4 @@
-import { ConnectionDefinations } from "@eco-flow/types";
+import { ConnectionDefinations } from "@ecoflow/types";
 import axios from "../../utils/axios/axios";
 
 const createConnectionService = async (connections: ConnectionDefinations) => {

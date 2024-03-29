@@ -1,4 +1,4 @@
-import { IconWrapper } from "@eco-flow/components-lib";
+import { IconWrapper } from "@ecoflow/components-lib";
 import React, { useEffect, useState } from "react";
 import { FaCaretLeft, FaCaretRight } from "react-icons/fa6";
 import { CiViewTable, CiSquarePlus } from "react-icons/ci";
@@ -6,7 +6,7 @@ import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { Nav, Navbar, Placeholder, Sidebar, Sidenav } from "rsuite";
 import "./style.less";
 import getCollectionOrTable from "../../service/database/getCollectionOrTable.service";
-import { ApiResponse } from "@eco-flow/types";
+import { ApiResponse } from "@ecoflow/types";
 import { FaTableList } from "react-icons/fa6";
 import { useAtom } from "jotai";
 import { tableList } from "../../store/schemaEditor.store";

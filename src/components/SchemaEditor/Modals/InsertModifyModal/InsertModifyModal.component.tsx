@@ -1,4 +1,4 @@
-import { ApiResponse, DatabaseColumnInfo } from "@eco-flow/types";
+import { ApiResponse, DatabaseColumnInfo } from "@ecoflow/types";
 import { useAtom } from "jotai";
 import React, { useState } from "react";
 import { useParams } from "react-router-dom";

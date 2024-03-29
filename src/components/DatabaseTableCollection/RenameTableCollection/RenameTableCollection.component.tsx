@@ -1,4 +1,4 @@
-import { AlertModal } from "@eco-flow/components-lib";
+import { AlertModal } from "@ecoflow/components-lib";
 import { useAtom } from "jotai";
 import React, { useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
@@ -9,7 +9,7 @@ import {
   successNotification,
 } from "../../../store/notification.store";
 import renameCollectionTable from "../../../service/database/renameCollectionTable.service";
-import { ApiResponse } from "@eco-flow/types";
+import { ApiResponse } from "@ecoflow/types";
 
 interface RenameTableProps {
   openCloseState: [boolean, React.Dispatch<React.SetStateAction<boolean>>];

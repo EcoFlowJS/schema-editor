@@ -1,4 +1,4 @@
-import { DatabaseColumnData } from "@eco-flow/types";
+import { DatabaseColumnData } from "@ecoflow/types";
 
 const databaseCreateModifySendData: DatabaseColumnData = {
   deleteDatabaseColumns: [],

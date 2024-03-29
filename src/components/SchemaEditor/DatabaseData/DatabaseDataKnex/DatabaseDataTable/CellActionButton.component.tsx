@@ -1,7 +1,7 @@
 import React from "react";
 import { Table, Button, Divider, IconButton } from "rsuite";
 import { GrEdit, GrTrash } from "react-icons/gr";
-import { IconWrapper } from "@eco-flow/components-lib";
+import { IconWrapper } from "@ecoflow/components-lib";
 
 interface CellActionButtonProps {
   dataKey?: string;

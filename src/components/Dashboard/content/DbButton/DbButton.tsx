@@ -22,7 +22,7 @@ import {
 } from "../../../../store/Connections.store";
 import { useAtom } from "jotai";
 import { userPermissions as permissionList } from "../../../../store/users.store";
-import { AlertModal, IconWrapper } from "@eco-flow/components-lib";
+import { AlertModal, IconWrapper } from "@ecoflow/components-lib";
 import { TbDatabaseEdit, TbDatabaseX } from "react-icons/tb";
 import "./style.less";
 import deleteConnectionService from "../../../../service/connections/deleteConnection.service";

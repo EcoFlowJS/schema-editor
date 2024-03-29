@@ -1,4 +1,4 @@
-import { ApiResponse } from "@eco-flow/types";
+import { ApiResponse } from "@ecoflow/types";
 import { AxiosError } from "axios";
 import axios from "../../utils/axios/axios";
 

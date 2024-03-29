@@ -3,7 +3,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { Panel, Tabs, FlexboxGrid, Button, Stack, Divider } from "rsuite";
 import { TbDatabase, TbDatabaseEdit } from "react-icons/tb";
 import DatabaseData from "./DatabaseData/DatabaseData.component";
-import { IconWrapper } from "@eco-flow/components-lib";
+import { IconWrapper } from "@ecoflow/components-lib";
 import { GrEdit, GrTrash } from "react-icons/gr";
 import DeleteTableCollection from "../DatabaseTableCollection/DeleteTableCollection/DeleteTableCollection.component";
 import RenameTableCollection from "../DatabaseTableCollection/RenameTableCollection/RenameTableCollection.component";

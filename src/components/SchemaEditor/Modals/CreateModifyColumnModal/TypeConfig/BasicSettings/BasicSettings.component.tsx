@@ -1,6 +1,6 @@
-import { FormGroup } from "@eco-flow/components-lib";
+import { FormGroup } from "@ecoflow/components-lib";
 import { FlexboxGrid } from "rsuite";
-import { DatabaseTableTypes } from "@eco-flow/types";
+import { DatabaseTableTypes } from "@ecoflow/types";
 import databaseNumberFormat from "../../../../../../defaults/databaseNumberFormat.default";
 import databaseDateTimeFormat from "../../../../../../defaults/databaseDateTimeFormat.default";
 import databaseCreateEditModel from "../../../../../../defaults/databaseCreateEditModel.default";

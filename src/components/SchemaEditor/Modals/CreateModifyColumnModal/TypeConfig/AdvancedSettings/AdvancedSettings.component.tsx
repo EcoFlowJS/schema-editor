@@ -1,5 +1,5 @@
-import { FormGroup } from "@eco-flow/components-lib";
-import { DatabaseTableTypes } from "@eco-flow/types";
+import { FormGroup } from "@ecoflow/components-lib";
+import { DatabaseTableTypes } from "@ecoflow/types";
 import { Checkbox, FlexboxGrid, InputNumber, SelectPicker } from "rsuite";
 import databaseCreateEditModel from "../../../../../../defaults/databaseCreateEditModel.default";
 

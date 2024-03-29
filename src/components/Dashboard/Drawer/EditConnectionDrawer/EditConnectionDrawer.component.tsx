@@ -6,11 +6,11 @@ import {
   editConnectionDrawerOpenClose,
   editConnectionName,
 } from "../../../../store/Connections.store";
-import { ApiResponse } from "@eco-flow/types";
+import { ApiResponse } from "@ecoflow/types";
 import DrawerBody from "./DrawerBody";
 import getConnectionConfigService from "../../../../service/connections/getConnectionConfig.service";
-import { AlertModal } from "@eco-flow/components-lib";
-import "@eco-flow/components-lib/style.css";
+import { AlertModal } from "@ecoflow/components-lib";
+import "@ecoflow/components-lib/style.css";
 import deleteConnectionService from "../../../../service/connections/deleteConnection.service";
 import editConnectionService from "../../../../service/connections/editConnection.service";
 import {

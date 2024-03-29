@@ -6,10 +6,10 @@ import {
   databaseGetConnectionList,
 } from "../../../../store/Connections.store";
 import Form from "../From/Form.component";
-import { AlertModal } from "@eco-flow/components-lib";
-import "@eco-flow/components-lib/style.css";
+import { AlertModal } from "@ecoflow/components-lib";
+import "@ecoflow/components-lib/style.css";
 import createConnectionService from "../../../../service/connections/createConnection.service";
-import { ApiResponse } from "@eco-flow/types";
+import { ApiResponse } from "@ecoflow/types";
 import {
   errorNotification,
   successNotification,

@@ -7,7 +7,7 @@ import { TbDatabase } from "react-icons/tb";
 import { useAtom } from "jotai";
 import { editStructure, tableList } from "../../../store/schemaEditor.store";
 import createCollectionTable from "../../../service/database/createCollectionTable.service";
-import { ApiResponse } from "@eco-flow/types";
+import { ApiResponse } from "@ecoflow/types";
 import {
   errorNotification,
   successNotification,

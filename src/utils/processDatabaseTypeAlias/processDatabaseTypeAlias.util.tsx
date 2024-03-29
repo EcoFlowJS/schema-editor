@@ -1,4 +1,4 @@
-import { DatabaseTableAlias, DatabaseTableTypes } from "@eco-flow/types";
+import { DatabaseTableAlias, DatabaseTableTypes } from "@ecoflow/types";
 
 const processDatabaseTypeAlias = (
   type: DatabaseTableTypes

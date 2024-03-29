@@ -12,11 +12,11 @@ import databaseTableTypes from "../../../../defaults/databaseTableTypes.default"
 import {
   DatabaseColumnInfo,
   DatabaseTableTypes as DatabaseTypes,
-} from "@eco-flow/types";
+} from "@ecoflow/types";
 import TypeConfig from "./TypeConfig/TypeConfig.component";
 import { TiArrowLeft } from "react-icons/ti";
 import { useParams } from "react-router-dom";
-import { IconWrapper } from "@eco-flow/components-lib";
+import { IconWrapper } from "@ecoflow/components-lib";
 import { FaPlus } from "react-icons/fa";
 import { DatabaseCreateColumnSendData } from "../../../../defaults/databaseCreateColumnSendData.default";
 import processDatabaseTypeAlias from "../../../../utils/processDatabaseTypeAlias/processDatabaseTypeAlias.util";

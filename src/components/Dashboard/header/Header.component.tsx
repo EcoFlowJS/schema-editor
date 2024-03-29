@@ -11,7 +11,7 @@ import {
 import themeMode from "../../../store/theme.mode";
 import styles from "./style";
 import initStatus, { isLoggedOut } from "../../../store/initStatusState.store";
-import { IconWrapper } from "@eco-flow/components-lib";
+import { IconWrapper } from "@ecoflow/components-lib";
 import { LuLogOut } from "react-icons/lu";
 import logoutHandler from "../../../helpers/logoutHaandler.helper";
 import { MdSpaceDashboard } from "react-icons/md";

@@ -9,13 +9,13 @@ import {
 } from "rsuite";
 import Validator from "./Validator";
 import DB_DriverList from "./DB_DriverList";
-import { ConnectionDefinations } from "@eco-flow/types";
+import { ConnectionDefinations } from "@ecoflow/types";
 import {
   Form,
   FormGroup,
   InputEnv,
   InputPasswordEnv,
-} from "@eco-flow/components-lib";
+} from "@ecoflow/components-lib";
 import isEnv from "../../../../utils/isEnv/inEnv";
 import addNewDatabaseConnection from "../../../../defaults/addNewDatabaseConnection.default";
 

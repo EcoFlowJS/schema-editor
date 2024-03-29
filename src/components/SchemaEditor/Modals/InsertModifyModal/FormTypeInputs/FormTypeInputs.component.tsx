@@ -1,4 +1,4 @@
-import { DatabaseColumnInfo } from "@eco-flow/types";
+import { DatabaseColumnInfo } from "@ecoflow/types";
 import { DatePicker, Input, InputNumber, Panel, SelectPicker } from "rsuite";
 import Editor from "@monaco-editor/react";
 import React, { useEffect } from "react";

@@ -8,10 +8,10 @@ import {
   databaseDatas,
   openInsertModifyModal,
 } from "../../../../store/schemaEditor.store";
-import { ApiResponse, DatabaseColumnInfo } from "@eco-flow/types";
+import { ApiResponse, DatabaseColumnInfo } from "@ecoflow/types";
 import CustomCell from "./DatabaseDataTable/CustomCell.component";
 import { InsertModifyModalMode } from "../../Modals/InsertModifyModal/InsertModifyModal.component";
-import { AlertModal } from "@eco-flow/components-lib";
+import { AlertModal } from "@ecoflow/components-lib";
 import {
   errorNotification,
   successNotification,

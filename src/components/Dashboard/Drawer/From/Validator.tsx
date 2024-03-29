@@ -1,4 +1,4 @@
-import { ConnectionDefinations } from "@eco-flow/types";
+import { ConnectionDefinations } from "@ecoflow/types";
 import { Schema } from "rsuite";
 
 const { StringType, NumberType } = Schema.Types;

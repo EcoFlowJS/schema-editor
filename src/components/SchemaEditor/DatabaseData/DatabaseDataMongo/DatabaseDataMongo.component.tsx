@@ -11,7 +11,7 @@ import {
   databaseDatas,
   openInsertModifyModal,
 } from "../../../../store/schemaEditor.store";
-import { AlertModal, IconWrapper } from "@eco-flow/components-lib";
+import { AlertModal, IconWrapper } from "@ecoflow/components-lib";
 import { BiPencil, BiTrash } from "react-icons/bi";
 import {
   errorNotification,
@@ -22,7 +22,7 @@ import "./style.less";
 import { InsertModifyModalMode } from "../../Modals/InsertModifyModal/InsertModifyModal.component";
 import React, { useEffect, useState } from "react";
 import { Editor } from "@monaco-editor/react";
-import { ApiResponse } from "@eco-flow/types";
+import { ApiResponse } from "@ecoflow/types";
 import deleteDatabaseData from "../../../../service/database/deleteDatabaseData.service";
 import { userPermissions as userPermissionsList } from "../../../../store/users.store";
 

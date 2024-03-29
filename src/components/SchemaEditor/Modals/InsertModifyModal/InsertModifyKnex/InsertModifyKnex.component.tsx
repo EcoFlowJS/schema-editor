@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import { InsertModifyModalMode } from "../InsertModifyModal.component";
-import { DatabaseColumnInfo } from "@eco-flow/types";
-import { Form, FormGroup } from "@eco-flow/components-lib";
+import { DatabaseColumnInfo } from "@ecoflow/types";
+import { Form, FormGroup } from "@ecoflow/components-lib";
 import FormTypeInputs from "../FormTypeInputs/FormTypeInputs.component";
 import { FlexboxGrid } from "rsuite";
 import "./style.less";

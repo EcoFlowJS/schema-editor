@@ -1,4 +1,4 @@
-import { DatabaseCreateEditModel } from "@eco-flow/types";
+import { DatabaseCreateEditModel } from "@ecoflow/types";
 
 const databaseCreateEditModel: DatabaseCreateEditModel = {
   columnName: "",

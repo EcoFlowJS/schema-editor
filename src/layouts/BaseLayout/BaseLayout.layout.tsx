@@ -9,7 +9,7 @@ import initStatusState, {
 } from "../../store/initStatusState.store";
 import { FlexboxGrid } from "rsuite";
 import Loading from "../../components/Loading/Loading.component";
-import { useNotification } from "@eco-flow/components-lib";
+import { useNotification } from "@ecoflow/components-lib";
 import {
   errorNotification,
   successNotification,

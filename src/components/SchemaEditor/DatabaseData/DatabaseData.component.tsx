@@ -1,10 +1,10 @@
-import { IconWrapper } from "@eco-flow/components-lib";
+import { IconWrapper } from "@ecoflow/components-lib";
 import React, { useEffect } from "react";
 import { LuRefreshCcwDot } from "react-icons/lu";
 import { FlexboxGrid, Panel } from "rsuite";
 import getDatabaseData from "../../../service/database/showDatabaseData.service";
 import { useNavigate, useParams } from "react-router-dom";
-import { DatabaseColumnInfo, DatabaseDataResult } from "@eco-flow/types";
+import { DatabaseColumnInfo, DatabaseDataResult } from "@ecoflow/types";
 import { GrTableAdd } from "react-icons/gr";
 import { useAtom } from "jotai";
 import {

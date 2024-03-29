@@ -7,7 +7,7 @@ import { PiKeyFill } from "react-icons/pi";
 import {
   DatabaseTableAlias,
   DatabaseTableTypes as DatabaseTypes,
-} from "@eco-flow/types";
+} from "@ecoflow/types";
 
 export interface DatabaseTableTypesConfig {
   icon: React.FC<React.HTMLAttributes<SVGElement>>;

@@ -11,12 +11,12 @@ import {
   Stack,
 } from "rsuite";
 import { FaPlus, FaCheck, FaTrash, FaPencil } from "react-icons/fa6";
-import { IconWrapper } from "@eco-flow/components-lib";
+import { IconWrapper } from "@ecoflow/components-lib";
 import {
   ApiResponse,
   DatabaseColumnData,
   DatabaseColumnInfo,
-} from "@eco-flow/types";
+} from "@ecoflow/types";
 import CreateModifyColumnModal from "../Modals/CreateModifyColumnModal/CreateModifyColumnModal.component";
 import "./style.less";
 import databaseCreateModifySendData from "../../../defaults/databaseCreateModifySendData.default";

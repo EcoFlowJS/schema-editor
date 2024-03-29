@@ -1,6 +1,6 @@
 import { AxiosError } from "axios";
 import axios from "../../utils/axios/axios";
-import { ApiResponse } from "@eco-flow/types";
+import { ApiResponse } from "@ecoflow/types";
 
 const updateDatabaseData = async (
   id: string,

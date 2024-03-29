@@ -1,4 +1,4 @@
-import { DatabaseColumnInfo } from "@eco-flow/types";
+import { DatabaseColumnInfo } from "@ecoflow/types";
 
 const isSameTableColumn = (
   previousData: DatabaseColumnInfo | null,

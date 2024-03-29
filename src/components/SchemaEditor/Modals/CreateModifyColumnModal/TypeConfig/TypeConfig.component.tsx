@@ -1,11 +1,11 @@
 import React, { useEffect } from "react";
-import { Form } from "@eco-flow/components-lib";
+import { Form } from "@ecoflow/components-lib";
 import { Panel, Placeholder, Tabs } from "rsuite";
 import { DatabaseTableTypesConfig } from "../../../../../defaults/databaseTableTypes.default";
 import BasicSettings from "./BasicSettings/BasicSettings.component";
 import AdvancedSettings from "./AdvancedSettings/AdvancedSettings.component";
 import databaseCreateEditModel from "../../../../../defaults/databaseCreateEditModel.default";
-import { DatabaseCreateEditModel } from "@eco-flow/types";
+import { DatabaseCreateEditModel } from "@ecoflow/types";
 
 interface TypeConfigProps {
   config: DatabaseTableTypesConfig;

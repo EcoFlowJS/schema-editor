@@ -1,6 +1,6 @@
 import { AxiosError } from "axios";
 import axios from "../../utils/axios/axios";
-import { ApiResponse, DatabaseColumnData } from "@eco-flow/types";
+import { ApiResponse, DatabaseColumnData } from "@ecoflow/types";
 
 const commitSaveTables = async (
   id: string,

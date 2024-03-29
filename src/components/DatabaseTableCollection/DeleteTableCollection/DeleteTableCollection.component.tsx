@@ -1,10 +1,10 @@
-import { AlertModal } from "@eco-flow/components-lib";
+import { AlertModal } from "@ecoflow/components-lib";
 import { useAtom } from "jotai";
 import React, { useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { tableList } from "../../../store/schemaEditor.store";
 import deleteCollectionTable from "../../../service/database/deleteCollectionTable.service";
-import { ApiResponse } from "@eco-flow/types";
+import { ApiResponse } from "@ecoflow/types";
 import {
   errorNotification,
   successNotification,
