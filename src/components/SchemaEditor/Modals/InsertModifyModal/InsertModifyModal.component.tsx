@@ -6,7 +6,7 @@ import {
   databaseDatas,
   openInsertModifyModal,
 } from "../../../../store/schemaEditor.store";
-import { Button, Divider, Modal } from "rsuite";
+import { Button, Modal } from "rsuite";
 import InsertModifyKnex from "./InsertModifyKnex/InsertModifyKnex.component";
 import InsertModifyMongo from "./InsertModifyMongo/InsertModifyMongo.component";
 import insertDatabaseData from "../../../../service/database/insertDatabaseData.service";

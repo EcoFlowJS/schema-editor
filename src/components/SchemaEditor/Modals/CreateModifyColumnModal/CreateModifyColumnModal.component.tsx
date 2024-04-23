@@ -49,7 +49,7 @@ export default function CreateModifyColumnModal({
 }: CreateModifyColumnModalProps) {
   const [_modalCreateModify, setModalCreateModify] = modalCreateModify;
   const [open, setOpen] = React.useState(true);
-  const { id, driver, collectonORtable } = useParams();
+  const { collectonORtable } = useParams();
   const [typeSelected, setTypeSelected] = React.useState(false);
   const [databseData, setDatabaseData] =
     React.useState<DatabaseCreateColumnSendData>({});

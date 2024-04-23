@@ -1,4 +1,3 @@
-import React from "react";
 import { SelectPicker as RSelectPicker } from "rsuite";
 
 export default function SelectPicker({ onChange, ...props }: any) {

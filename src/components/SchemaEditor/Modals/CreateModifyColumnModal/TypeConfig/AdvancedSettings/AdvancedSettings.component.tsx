@@ -10,7 +10,6 @@ interface AdvancedSettingsProps {
 
 export default function AdvancedSettings({
   type = "string",
-  formValue,
 }: AdvancedSettingsProps) {
   const CheckBox = ({ onChange, value, checkboxLabel, ...props }: any) => (
     <Checkbox
