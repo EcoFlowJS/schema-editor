@@ -1,4 +1,4 @@
-import { Input, Table } from "rsuite";
+import { Table } from "rsuite";
 import { RowDataType, RowKeyType } from "rsuite-table/lib/@types/common";
 import { InnerCellProps } from "rsuite-table/lib/Cell";
 

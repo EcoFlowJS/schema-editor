@@ -1,6 +1,7 @@
-import React, { MutableRefObject, useEffect, useState } from "react";
+import { MutableRefObject, useEffect, useState } from "react";
 import {
   Container,
+  Form,
   Input,
   InputNumber,
   SelectPicker,
@@ -10,12 +11,7 @@ import {
 import Validator from "./Validator";
 import DB_DriverList from "./DB_DriverList";
 import { ConnectionDefinations } from "@ecoflow/types";
-import {
-  Form,
-  FormGroup,
-  InputEnv,
-  InputPasswordEnv,
-} from "@ecoflow/components-lib";
+import { FormGroup, InputEnv, InputPasswordEnv } from "@ecoflow/components-lib";
 import isEnv from "../../../../utils/isEnv/inEnv";
 import addNewDatabaseConnection from "../../../../defaults/addNewDatabaseConnection.default";
 

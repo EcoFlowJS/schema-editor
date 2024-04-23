@@ -1,4 +1,3 @@
-import React from "react";
 import { Placeholder, Stack } from "rsuite";
 
 export default function Loading() {

@@ -1,5 +1,4 @@
 import { IconWrapper } from "@ecoflow/components-lib";
-import React from "react";
 import { PiTextTFill } from "react-icons/pi";
 import { RadioTile, RadioTileGroup } from "rsuite";
 

@@ -2,8 +2,6 @@ import { PiTextTFill } from "react-icons/pi";
 import { BsToggles } from "react-icons/bs";
 import { TbJson, Tb123 } from "react-icons/tb";
 import { SlCalender } from "react-icons/sl";
-import { TbLink } from "react-icons/tb";
-import { PiKeyFill } from "react-icons/pi";
 import {
   DatabaseTableAlias,
   DatabaseTableTypes as DatabaseTypes,

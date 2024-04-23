@@ -1,6 +1,5 @@
 import React, { useEffect } from "react";
-import { Form } from "@ecoflow/components-lib";
-import { Panel, Placeholder, Tabs } from "rsuite";
+import { Form, Panel, Tabs } from "rsuite";
 import { DatabaseTableTypesConfig } from "../../../../../defaults/databaseTableTypes.default";
 import BasicSettings from "./BasicSettings/BasicSettings.component";
 import AdvancedSettings from "./AdvancedSettings/AdvancedSettings.component";

@@ -1,5 +1,5 @@
 import { useAtom } from "jotai";
-import React, { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Drawer, Button, Divider } from "rsuite";
 import {
   createConnectionDrawerOpenClose,

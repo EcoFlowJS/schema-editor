@@ -1,9 +1,9 @@
 import React, { useEffect } from "react";
 import { InsertModifyModalMode } from "../InsertModifyModal.component";
 import { DatabaseColumnInfo } from "@ecoflow/types";
-import { Form, FormGroup } from "@ecoflow/components-lib";
+import { FormGroup } from "@ecoflow/components-lib";
 import FormTypeInputs from "../FormTypeInputs/FormTypeInputs.component";
-import { FlexboxGrid } from "rsuite";
+import { FlexboxGrid, Form } from "rsuite";
 import "./style.less";
 
 interface InsertModifyKnexProps {

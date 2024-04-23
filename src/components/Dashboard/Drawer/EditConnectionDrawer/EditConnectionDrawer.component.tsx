@@ -1,6 +1,6 @@
 import { useAtom } from "jotai";
 import { useEffect, useRef, useState } from "react";
-import { Button, Divider, Drawer } from "rsuite";
+import { Button, Drawer } from "rsuite";
 import {
   databaseGetConnectionList,
   editConnectionDrawerOpenClose,
@@ -9,14 +9,12 @@ import {
 import { ApiResponse } from "@ecoflow/types";
 import DrawerBody from "./DrawerBody";
 import getConnectionConfigService from "../../../../service/connections/getConnectionConfig.service";
-import { AlertModal } from "@ecoflow/components-lib";
-import "@ecoflow/components-lib/style.css";
-import deleteConnectionService from "../../../../service/connections/deleteConnection.service";
 import editConnectionService from "../../../../service/connections/editConnection.service";
 import {
   errorNotification,
   successNotification,
 } from "../../../../store/notification.store";
+import "@ecoflow/components-lib/style.css";
 
 export default function EditConnectionDrawer() {
   const [editNewConnectionDraawer, setEditNewConnectionDrawer] = useAtom(

@@ -1,4 +1,4 @@
-import React, { MutableRefObject, useEffect, useState } from "react";
+import { MutableRefObject, useEffect, useState } from "react";
 import Form from "../From/Form.component";
 import { useNotification } from "@ecoflow/components-lib";
 import {

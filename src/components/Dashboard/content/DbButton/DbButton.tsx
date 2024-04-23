@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { SiMongodb } from "react-icons/si";
 import { SiSqlite } from "react-icons/si";
 import { SiMysql } from "react-icons/si";
