@@ -1,6 +1,6 @@
 import { AlertModal } from "@ecoflow/components-lib";
 import { useAtom } from "jotai";
-import React, { useEffect } from "react";
+import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { tableList } from "../../../store/schemaEditor.store";
 import deleteCollectionTable from "../../../service/database/deleteCollectionTable.service";
@@ -12,11 +12,11 @@ import {
 import { Divider, Input } from "rsuite";
 
 interface DeleteTableProps {
-  openCloseState?: [boolean, React.Dispatch<React.SetStateAction<boolean>>];
+  openCloseState?: [boolean, Dispatch<SetStateAction<boolean>>];
 }
 
 export default function DeleteTable({
-  openCloseState = React.useState(false),
+  openCloseState = useState(false),
 }: DeleteTableProps) {
   const [deleteCollectionTableAlertModal, setDeleteCollectionTableAlertModal] =
     openCloseState;
@@ -24,8 +24,8 @@ export default function DeleteTable({
   const { id, driver, collectonORtable } = useParams();
   const setCollectionORTable = useAtom(tableList)[1];
   const [deleteCollectionTableInput, setDeleteCollectionTableInput] =
-    React.useState("");
-  const [isLoading, setLoading] = React.useState(false);
+    useState("");
+  const [isLoading, setLoading] = useState(false);
 
   const setSuccessNotification = useAtom(successNotification)[1];
   const setErrorNotification = useAtom(errorNotification)[1];

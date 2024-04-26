@@ -6,9 +6,10 @@ import {
   DatabaseTableAlias,
   DatabaseTableTypes as DatabaseTypes,
 } from "@ecoflow/types";
+import { FC, HTMLAttributes } from "react";
 
 export interface DatabaseTableTypesConfig {
-  icon: React.FC<React.HTMLAttributes<SVGElement>>;
+  icon: FC<HTMLAttributes<SVGElement>>;
   name: string;
   hint: string;
   type: DatabaseTypes;

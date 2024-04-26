@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import {
   Button,
@@ -39,17 +39,17 @@ interface ModifyDatabaseColumns {
 export default function DatabaseStructure() {
   const { id, driver, collectonORtable } = useParams();
 
-  const [isLoading, setLoading] = React.useState(false);
+  const [isLoading, setLoading] = useState(false);
 
-  const [isFetching, setFetching] = React.useState(false);
-  const [databaseColumns, setDatabaseColumns] = React.useState<
-    DatabaseColumnInfo[]
-  >([]);
-  const [sendData, setSendData] = React.useState<DatabaseColumnData>(
+  const [isFetching, setFetching] = useState(false);
+  const [databaseColumns, setDatabaseColumns] = useState<DatabaseColumnInfo[]>(
+    []
+  );
+  const [sendData, setSendData] = useState<DatabaseColumnData>(
     databaseCreateModifySendData
   );
 
-  const [modalCreateModify, setModalCreateModify] = React.useState<{
+  const [modalCreateModify, setModalCreateModify] = useState<{
     open: boolean;
     type: "CREATE" | "MODIFY";
     editData?: DatabaseColumnInfo;

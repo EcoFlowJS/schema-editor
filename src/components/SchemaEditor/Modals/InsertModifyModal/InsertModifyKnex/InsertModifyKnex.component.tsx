@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { InsertModifyModalMode } from "../InsertModifyModal.component";
 import { DatabaseColumnInfo } from "@ecoflow/types";
 import { FormGroup } from "@ecoflow/components-lib";
@@ -63,7 +63,7 @@ export default function InsertModifyKnex({
     defaultValue = values;
   }
 
-  const [formValue, setFormValue] = React.useState(defaultValue);
+  const [formValue, setFormValue] = useState(defaultValue);
 
   useEffect(onLoad, []);
   useEffect(() => onChange(formValue), [formValue]);

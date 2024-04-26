@@ -1,6 +1,6 @@
 import { ApiResponse, DatabaseColumnInfo } from "@ecoflow/types";
 import { useAtom } from "jotai";
-import React, { useState } from "react";
+import { SyntheticEvent, useState } from "react";
 import { useParams } from "react-router-dom";
 import {
   databaseDatas,
@@ -38,10 +38,10 @@ export default function InsertModifyModal({
   const errorNoti = useAtom(errorNotification)[1];
   const warningNoti = useAtom(warningNotification)[1];
 
-  const [isLoading, setLoading] = React.useState(false);
+  const [isLoading, setLoading] = useState(false);
   const [modalData, setModalData] = useState<{ [key: string]: any }>({});
 
-  const handleModalClose = (event?: React.SyntheticEvent<Element, Event>) => {
+  const handleModalClose = (event?: SyntheticEvent<Element, Event>) => {
     if (!confirm("Are you sure? Your changes will be lost.")) {
       if (event) event.preventDefault();
       return;

@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { Panel, Tabs, FlexboxGrid, Button, Stack, Divider } from "rsuite";
 import { TbDatabase, TbDatabaseEdit } from "react-icons/tb";
@@ -16,11 +16,11 @@ export default function SchemaEditor() {
   const navigate = useNavigate();
   const { driver, collectonORtable } = useParams();
   const [deleteCollectionTableAlertModal, setDeleteCollectionTableAlertModal] =
-    React.useState(false);
+    useState(false);
   const [renameCollectionTableAlertModal, setRenameCollectionTableAlertModal] =
-    React.useState(false);
+    useState(false);
   const [isEditStructure, setEditStructure] = useAtom(editStructure);
-  const [tabKey, setTabKey] = React.useState("1");
+  const [tabKey, setTabKey] = useState("1");
 
   //User permission states
   const [userPermissions] = useAtom(userPermissionsList);

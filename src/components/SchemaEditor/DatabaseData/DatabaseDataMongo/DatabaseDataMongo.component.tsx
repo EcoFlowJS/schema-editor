@@ -20,20 +20,20 @@ import {
 import { useParams } from "react-router-dom";
 import "./style.less";
 import { InsertModifyModalMode } from "../../Modals/InsertModifyModal/InsertModifyModal.component";
-import React, { useEffect, useState } from "react";
+import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { Editor } from "@monaco-editor/react";
 import { ApiResponse } from "@ecoflow/types";
 import deleteDatabaseData from "../../../../service/database/deleteDatabaseData.service";
 import { userPermissions as userPermissionsList } from "../../../../store/users.store";
 
 interface DatabaseDataMongoProps {
-  setModalMode?: React.Dispatch<React.SetStateAction<InsertModifyModalMode>>;
-  setModalEditValues?: React.Dispatch<any>;
+  setModalMode?: Dispatch<SetStateAction<InsertModifyModalMode>>;
+  setModalEditValues?: Dispatch<any>;
 }
 
 export default function DatabaseDataMongo({
-  setModalMode = React.useState<InsertModifyModalMode>("edit")[1],
-  setModalEditValues = React.useState<any>({})[1],
+  setModalMode = useState<InsertModifyModalMode>("edit")[1],
+  setModalEditValues = useState<any>({})[1],
 }: DatabaseDataMongoProps) {
   const urlParams = useParams();
   const [databaseData, setDatabaseData] = useAtom(databaseDatas);
@@ -41,12 +41,12 @@ export default function DatabaseDataMongo({
   const errorNoti = useAtom(errorNotification)[1];
   const successNoti = useAtom(successNotification)[1];
   const [isLoading, setLoading] = useState(false);
-  const [isLoadingRecordDelete, setLoadingRecordDelete] = React.useState(false);
+  const [isLoadingRecordDelete, setLoadingRecordDelete] = useState(false);
 
   //User permission states
   const [userPermissions] = useAtom(userPermissionsList);
 
-  const [alertModal, setAlertModal] = React.useState<{
+  const [alertModal, setAlertModal] = useState<{
     show: boolean;
     id?: string;
   }>({

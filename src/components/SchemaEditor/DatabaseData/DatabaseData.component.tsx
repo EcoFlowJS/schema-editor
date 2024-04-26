@@ -1,5 +1,5 @@
 import { IconWrapper } from "@ecoflow/components-lib";
-import React, { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { LuRefreshCcwDot } from "react-icons/lu";
 import { FlexboxGrid, Panel } from "rsuite";
 import getDatabaseData from "../../../service/database/showDatabaseData.service";
@@ -23,16 +23,15 @@ export default function DatabaseData() {
   const navigate = useNavigate();
   const { id, driver, collectonORtable } = useParams();
 
-  const [isLoading, setLoading] = React.useState(true);
+  const [isLoading, setLoading] = useState(true);
   const [databaseData, setDatabaseData] = useAtom(databaseDatas);
-  const [databaseColumns, setDatabaseColumns] = React.useState<
-    DatabaseColumnInfo[]
-  >([]);
+  const [databaseColumns, setDatabaseColumns] = useState<DatabaseColumnInfo[]>(
+    []
+  );
 
   const setOpen = useAtom(openInsertModifyModal)[1];
-  const [modalMode, setModalMode] =
-    React.useState<InsertModifyModalMode>("insert");
-  const [modalEditValues, setModalEditValues] = React.useState<any>({});
+  const [modalMode, setModalMode] = useState<InsertModifyModalMode>("insert");
+  const [modalEditValues, setModalEditValues] = useState<any>({});
 
   //User permission states
   const [userPermissions] = useAtom(userPermissionsList);
