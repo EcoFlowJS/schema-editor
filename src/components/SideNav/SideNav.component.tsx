@@ -1,5 +1,5 @@
 import { IconWrapper } from "@ecoflow/components-lib";
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { FaCaretLeft, FaCaretRight } from "react-icons/fa6";
 import { CiViewTable, CiSquarePlus } from "react-icons/ci";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
@@ -16,7 +16,7 @@ export default function SideNav() {
   const loc = useLocation();
   const navigate = useNavigate();
   const { id } = useParams();
-  const [expand, setExpand] = React.useState(true);
+  const [expand, setExpand] = useState(true);
   const [isLoading, setLoading] = useState(true);
   const [collectionORtable, setCollectionORTable] = useAtom(tableList);
   const [DB_Type, setDB_Type] = useState("");

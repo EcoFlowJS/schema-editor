@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { Button, FlexboxGrid, Input, Panel, SelectPicker, Tabs } from "rsuite";
 import { useNavigate, useParams } from "react-router-dom";
 import "./style.less";
@@ -22,8 +22,8 @@ export default function CreateTable() {
   const navigate = useNavigate();
 
   const [collectionORtable, setCollectionORTable] = useAtom(tableList);
-  const [sendData, setSendData] = React.useState(addTableCollectionData);
-  const [isLoading, setLoading] = React.useState(false);
+  const [sendData, setSendData] = useState(addTableCollectionData);
+  const [isLoading, setLoading] = useState(false);
 
   const setSuccessNotification = useAtom(successNotification)[1];
   const setErrorNotification = useAtom(errorNotification)[1];

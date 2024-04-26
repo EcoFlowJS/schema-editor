@@ -1,6 +1,6 @@
 import { AlertModal } from "@ecoflow/components-lib";
 import { useAtom } from "jotai";
-import React, { useEffect } from "react";
+import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { Divider, Input } from "rsuite";
 import { tableList } from "../../../store/schemaEditor.store";
@@ -12,7 +12,7 @@ import renameCollectionTable from "../../../service/database/renameCollectionTab
 import { ApiResponse } from "@ecoflow/types";
 
 interface RenameTableProps {
-  openCloseState: [boolean, React.Dispatch<React.SetStateAction<boolean>>];
+  openCloseState: [boolean, Dispatch<SetStateAction<boolean>>];
 }
 
 export default function RenameTable({ openCloseState }: RenameTableProps) {
@@ -22,8 +22,8 @@ export default function RenameTable({ openCloseState }: RenameTableProps) {
   const { id, driver, collectonORtable } = useParams();
   const [collectionORTable, setCollectionORTable] = useAtom(tableList);
   const [renameCollectionTableInput, setRenameCollectionTableInput] =
-    React.useState("");
-  const [isLoading, setLoading] = React.useState(false);
+    useState("");
+  const [isLoading, setLoading] = useState(false);
 
   const setSuccessNotification = useAtom(successNotification)[1];
   const setErrorNotification = useAtom(errorNotification)[1];

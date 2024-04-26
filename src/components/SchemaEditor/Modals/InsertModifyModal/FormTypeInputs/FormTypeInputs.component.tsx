@@ -1,7 +1,7 @@
 import { DatabaseColumnInfo } from "@ecoflow/types";
 import { DatePicker, Input, InputNumber, Panel, SelectPicker } from "rsuite";
 import Editor from "@monaco-editor/react";
-import React, { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 export default function FormTypeInputs({
   columnType,
@@ -47,7 +47,7 @@ export default function FormTypeInputs({
 
     case "Json":
       const { onChange } = props;
-      const [jsonValue, setJsonValue] = React.useState({
+      const [jsonValue, setJsonValue] = useState({
         value: "{}",
         validate: true,
       });

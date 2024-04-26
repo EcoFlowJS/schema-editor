@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { FaGears } from "react-icons/fa6";
 import { Panel, Table } from "rsuite";
 import { SortType } from "rsuite/esm/Table";
@@ -29,28 +29,28 @@ interface DatabaseDataKnexProps {
     data: any;
   }[];
   databaseColumns?: DatabaseColumnInfo[];
-  setModalMode?: React.Dispatch<React.SetStateAction<InsertModifyModalMode>>;
-  setModalEditValues?: React.Dispatch<any>;
+  setModalMode?: Dispatch<SetStateAction<InsertModifyModalMode>>;
+  setModalEditValues?: Dispatch<any>;
 }
 
 export default function DatabaseDataKnex({
   loading = false,
   databaseData = [],
   databaseColumns = [],
-  setModalMode = React.useState<InsertModifyModalMode>("edit")[1],
-  setModalEditValues = React.useState<any>({})[1],
+  setModalMode = useState<InsertModifyModalMode>("edit")[1],
+  setModalEditValues = useState<any>({})[1],
 }: DatabaseDataKnexProps) {
   const { id, collectonORtable } = useParams();
 
-  const [isLoading, setLoading] = React.useState(true);
-  const [isLoadingRecordDelete, setLoadingRecordDelete] = React.useState(false);
-  const [sortColumn, setSortColumn] = React.useState<string>();
-  const [sortType, setSortType] = React.useState<SortType>();
+  const [isLoading, setLoading] = useState(true);
+  const [isLoadingRecordDelete, setLoadingRecordDelete] = useState(false);
+  const [sortColumn, setSortColumn] = useState<string>();
+  const [sortType, setSortType] = useState<SortType>();
 
   //User permission states
   const [userPermissions] = useAtom(userPermissionsList);
 
-  const [alertModal, setAlertModal] = React.useState<{
+  const [alertModal, setAlertModal] = useState<{
     show: boolean;
     id?: string;
   }>({

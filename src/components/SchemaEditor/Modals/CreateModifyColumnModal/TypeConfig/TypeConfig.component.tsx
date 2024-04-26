@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { Form, Panel, Tabs } from "rsuite";
 import { DatabaseTableTypesConfig } from "../../../../../defaults/databaseTableTypes.default";
 import BasicSettings from "./BasicSettings/BasicSettings.component";
@@ -17,7 +17,7 @@ export default function TypeConfig({
   onChange = () => {},
   defaultValue,
 }: TypeConfigProps) {
-  const [formData, setFormData] = React.useState(databaseCreateEditModel);
+  const [formData, setFormData] = useState(databaseCreateEditModel);
 
   useEffect(() => {
     onChange(formData);

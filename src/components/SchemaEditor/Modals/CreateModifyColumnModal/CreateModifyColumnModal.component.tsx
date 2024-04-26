@@ -1,4 +1,10 @@
-import React, { useEffect } from "react";
+import {
+  Dispatch,
+  SetStateAction,
+  SyntheticEvent,
+  useEffect,
+  useState,
+} from "react";
 import {
   Button,
   Divider,
@@ -30,8 +36,8 @@ interface CreateModifyColumnModalProps {
       type: "CREATE" | "MODIFY";
       editData?: DatabaseColumnInfo;
     },
-    React.Dispatch<
-      React.SetStateAction<{
+    Dispatch<
+      SetStateAction<{
         open: boolean;
         type: "CREATE" | "MODIFY";
         editData?: DatabaseColumnInfo;
@@ -48,11 +54,12 @@ export default function CreateModifyColumnModal({
   onDone = () => {},
 }: CreateModifyColumnModalProps) {
   const [_modalCreateModify, setModalCreateModify] = modalCreateModify;
-  const [open, setOpen] = React.useState(true);
+  const [open, setOpen] = useState(true);
   const { collectonORtable } = useParams();
-  const [typeSelected, setTypeSelected] = React.useState(false);
-  const [databseData, setDatabaseData] =
-    React.useState<DatabaseCreateColumnSendData>({});
+  const [typeSelected, setTypeSelected] = useState(false);
+  const [databseData, setDatabaseData] = useState<DatabaseCreateColumnSendData>(
+    {}
+  );
 
   const errorNotificationShow = useAtom(errorNotification)[1];
 
@@ -68,7 +75,7 @@ export default function CreateModifyColumnModal({
     setDatabaseData({});
   };
 
-  const handleClose = (event?: React.SyntheticEvent<Element, Event>) => {
+  const handleClose = (event?: SyntheticEvent<Element, Event>) => {
     if (!confirm("Are you sure? Your changes will be lost.")) {
       if (event) event.preventDefault();
       return;
