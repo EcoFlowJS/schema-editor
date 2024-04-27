@@ -17,8 +17,8 @@
     "index.d.ts"
   ],
   "dependencies": {
-    "@ecoflow/components-lib": "^0.1.1",
-    "@ecoflow/types": "^0.0.1",
+    "@ecoflow/components-lib": "latest",
+    "@ecoflow/types": "latest",
     "@koa/router": "^11.0.2",
     "@monaco-editor/react": "^4.6.0",
     "axios": "^1.6.5",
