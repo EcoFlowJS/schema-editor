@@ -1,6 +1,6 @@
 import { PiTextTFill } from "react-icons/pi";
 import { BsToggles } from "react-icons/bs";
-import { TbJson, Tb123 } from "react-icons/tb";
+import { TbJson, TbNumber123 } from "react-icons/tb";
 import { SlCalender } from "react-icons/sl";
 import {
   DatabaseTableAlias,
@@ -28,7 +28,7 @@ const databaseTableTypes: DatabaseTableTypesConfig[] = [
     type: "integer",
     name: "Number",
     hint: "Numbers (integer, decimal,floating point)",
-    icon: Tb123,
+    icon: TbNumber123,
     alias: "Number",
   },
   {
