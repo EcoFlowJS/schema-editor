@@ -119,7 +119,7 @@ export default function ({
           onChange={(changed) => setValue({ ...value, ...changed })}
           formValue={value}
           onSubmit={(status, event) => {
-            event.preventDefault();
+            event?.preventDefault();
             const Data: ConnectionDefinations = { ...value };
             if (isEnvMongoConnectionString)
               Data.mongoConnectionString = `env(${Data.mongoConnectionString})`;
