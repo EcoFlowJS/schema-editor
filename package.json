@@ -1,6 +1,6 @@
 {
   "name": "@ecoflow/schema-editor",
-  "version": "0.1.10",
+  "version": "0.1.25",
   "main": "./index.cjs",
   "types": "./index.d.ts",
   "type": "module",
@@ -14,11 +14,13 @@
     "README.md",
     "dist",
     "index.cjs",
-    "index.d.ts"
+    "index.d.ts",
+    "index.html",
+    "public"
   ],
   "dependencies": {
-    "@ecoflow/components-lib": "^0.1.1",
-    "@ecoflow/types": "^0.0.20",
+    "@ecoflow/components-lib": "^0.1.25",
+    "@ecoflow/types": "^0.0.25",
     "@koa/router": "^12.0.1",
     "@monaco-editor/react": "^4.6.0",
     "axios": "^1.6.5",
