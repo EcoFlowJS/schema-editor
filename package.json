@@ -1,6 +1,6 @@
 {
   "name": "@ecoflow/schema-editor",
-  "version": "0.1.10",
+  "version": "0.1.25",
   "main": "./index.cjs",
   "types": "./index.d.ts",
   "type": "module",
