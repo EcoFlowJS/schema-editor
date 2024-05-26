@@ -1,4 +1,4 @@
-import { ItemDataType } from "rsuite/esm/@types/common";
+import { ItemDataType } from "rsuite/esm/internals/types";
 
 const databaseDateTimeFormat: ItemDataType<unknown>[] = [
   { label: "date (ex: 01/01/2024)", value: "date" },
