@@ -1,4 +1,4 @@
-import { ItemDataType } from "rsuite/esm/@types/common";
+import { ItemDataType } from "rsuite/esm/internals/types";
 
 const databaseNumberFormat: ItemDataType<unknown>[] = [
   { label: "integer (ex: 10)", value: "int" },
