@@ -5,7 +5,7 @@ import { SiMysql } from "react-icons/si";
 import { BiLogoPostgresql } from "react-icons/bi";
 import styles from "../style";
 import Button from "../Button/Button";
-import { TypeAttributes } from "rsuite/esm/@types/common";
+import { TypeAttributes } from "rsuite/esm/internals/types";
 import { Link } from "react-router-dom";
 import {
   Divider,
