@@ -112,30 +112,6 @@ export default function SideNav() {
                   <></>
                 )}
               </Nav.Menu>
-              {/* To-DO: Implement View Creation
-              <Nav.Menu
-                eventKey="2"
-                trigger="hover"
-                title="Views"
-                icon={
-                  <IconWrapper className="icon-color" icon={CiViewTimeline} />
-                }
-                placement="rightStart"
-              >
-                <Nav.Item
-                  eventKey="dashboard"
-                  active={loc.pathname.endsWith("/admin/dashboard")}
-                >
-                  Dashboard
-                </Nav.Item>
-                <Nav.Item
-                  eventKey="addNewView"
-                  icon={<IconWrapper icon={CiSquarePlus} />}
-                  active={false}
-                >
-                  Add Views
-                </Nav.Item>
-              </Nav.Menu> */}
             </Nav>
           )}
         </Sidenav.Body>

@@ -12,13 +12,20 @@ import { MdLightMode, MdDarkMode, MdSpaceDashboard } from "react-icons/md";
 import { useAtom } from "jotai";
 import { isLoggedOut } from "../../store/initStatusState.store";
 import themeMode from "../../store/theme.mode";
-import logoutHandler from "../../helpers/logoutHaandler.helper";
 import { LuLogOut } from "react-icons/lu";
+import userSignoutService from "../../service/user/userSignout.service";
+import { ApiResponse } from "@ecoflow/types";
 
 export default function Header() {
   const [darkMode, setDarkMode] = useAtom(themeMode);
   const toogleMode = () => setDarkMode(!darkMode);
   const [_loggedOut, setLogOut] = useAtom(isLoggedOut);
+
+  const logoutHandler = (setLogout: any) => {
+    userSignoutService().then((response: ApiResponse) => {
+      if (response.success) setLogout(true);
+    });
+  };
 
   return (
     <Navbar
@@ -43,7 +50,7 @@ export default function Header() {
                 appearance="subtle"
                 style={{ fontSize: "1.5rem" }}
                 icon={<FaGithub />}
-                href="https://github.com/RomelSikdar/eco-flow"
+                href="https://github.com/EcoFlowJS/eco-flow"
                 target="_blank"
                 as="a"
               />
