@@ -11,9 +11,15 @@ import {
 import Validator from "./Validator";
 import DB_DriverList from "./DB_DriverList";
 import { ConnectionDefinations } from "@ecoflow/types";
-import { FormGroup, InputEnv, InputPasswordEnv } from "@ecoflow/components-lib";
+import {
+  FolderSelector,
+  FormGroup,
+  InputEnv,
+  InputPasswordEnv,
+} from "@ecoflow/components-lib";
 import isEnv from "../../../../utils/isEnv/inEnv";
 import addNewDatabaseConnection from "../../../../defaults/addNewDatabaseConnection.default";
+import directoryFetcher from "../../../../service/common/directoryFetcher.service";
 
 interface FromGroupProps {
   Ref?: MutableRefObject<null>;
@@ -178,10 +184,16 @@ export default function ({
                 <FormGroup
                   name="SqliteFileLoc"
                   label="File Location"
-                  accepter={Input}
+                  accepter={FolderSelector}
                   autoComplete="off"
                   placeholder="Sqlite File Location"
                   size="lg"
+                  fileType="Directory"
+                  showIndentLine
+                  fetchDirectory={(
+                    path?: string,
+                    type?: "Directory" | "File"
+                  ) => directoryFetcher(path, type)}
                 />
               </>
             ) : (
