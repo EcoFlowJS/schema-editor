@@ -1,10 +1,5 @@
-# EcoFlow Schema Editor
+# EcoFLowJS Schema Editor Panel
 
-Database Editor
-
-## Features
-
-- **Create, Update, Remove** multiple database connnections.
-- **Modify** Database structure.
-- **Live database record** previews
-- **Update** and **Remove** database records
+> This Package is responsible for the Schema Editor Template for the EcoFlowJS project.
+>
+> ⚠️ This package is only meant to be used inside EcoFLowJS
