@@ -1,4 +1,4 @@
-import { Panel, Placeholder } from "rsuite";
+import { FlexboxGrid, Panel, Text } from "rsuite";
 
 export default function DatabaseIntro() {
   return (
@@ -13,7 +13,16 @@ export default function DatabaseIntro() {
         backgroundColor: "var(--dashboard-subcontent-background-color)",
       }}
     >
-      <Placeholder.Paragraph />
+      <FlexboxGrid justify="center">
+        <FlexboxGrid.Item colspan={18} style={{ padding: 30 }}>
+          <Text size="xl" align="justify" transform="capitalize" muted>
+            Easily manage your databases within EcoFlowJS. This section allows
+            you to manage database record. Streamline your backend development
+            by integrating and managing your databases efficiently and
+            effectively.
+          </Text>
+        </FlexboxGrid.Item>
+      </FlexboxGrid>
     </Panel>
   );
 }
