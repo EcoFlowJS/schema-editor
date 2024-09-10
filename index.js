@@ -1,7 +1,7 @@
-const mount = require("koa-mount");
-const serve = require("koa-static");
-const koaRouter = require("@koa/router");
-const fs = require("fs");
+import mount from "koa-mount";
+import serve from "koa-static";
+import koaRouter from "@koa/router";
+import fs from "fs";
 
 module.exports = (server) => {
   const router = new koaRouter({ prefix: "/editor/schema" });
