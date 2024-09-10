@@ -34,7 +34,6 @@ export default function SchemaEditor() {
     if (isEditStructure) {
       setEditStructure(false);
       setTabKey("2");
-      console.log(isEditStructure);
     }
   }, [isEditStructure]);
 

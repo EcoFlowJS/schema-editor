@@ -38,7 +38,7 @@ export default function SideNav() {
         }
         setLoading(false);
       } catch (err: any) {
-        console.log(err);
+        console.error(err);
       }
     })();
   }, []);
